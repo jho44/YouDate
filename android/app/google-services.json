@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "427264670490",
+    "firebase_url": "https://youdate.firebaseio.com",
+    "project_id": "youdate",
+    "storage_bucket": "youdate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427264670490:android:8ca2f06e0dae2e05ad4aa3",
+        "android_client_info": {
+          "package_name": "com.youdate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427264670490-jjef1kpkjusoro5nchjn797k31vm5ngp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.youdate",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "427264670490-u0akgnndor5tm3s26i4p8101jq30dopl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWeDZ5yrHX5ZLnu1RD9SpgfX8FbOpMxd4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427264670490-u0akgnndor5tm3s26i4p8101jq30dopl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "427264670490-e6npqifoqfdemaebfc3rvm182tijn43o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.jho.YouDate"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

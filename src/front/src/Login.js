@@ -5,7 +5,7 @@ class Login extends React.Component {
   constructor() {
     super();
     this.state = {
-      redirectToReferrer: false
+      redirectToReferrer: false,
     };
     this.login = this.login.bind(this);
   }
@@ -39,7 +39,7 @@ export const fakeAuth = {
   authenticate(cb) {
     this.isAuthenticated = true;
     setTimeout(cb, 100);
-  }
+  },
 };
 
 export default Login;

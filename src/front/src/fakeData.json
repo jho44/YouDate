@@ -1,0 +1,51 @@
+{
+  "user": {
+    "name": "Bella Hadid",
+    "age": 21,
+    "pronouns": "She/her/hers",
+    "description": "5'10'' if it matters",
+    "img": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Bella_Hadid_Cannes_2018_2.jpg",
+    "desiredRelationship": "Casual",
+    "education": "University of California - Los Angeles",
+    "QAs": [
+      {
+        "Q": "Fact about me that surprises people",
+        "A": "I'm Bella Hadid"
+      },
+      {
+        "Q": "We'll get along if",
+        "A": "You're rich"
+      },
+      {
+        "Q": "Most embarrassing Spotify wrapped",
+        "A": "2016 I was really into Kpop"
+      },
+      {
+        "Q": "Two truths and a lie",
+        "A": "I'm actually Bella Hadid, I like horses, I will match with you"
+      }
+    ],
+    "artists": [
+      {
+        "name": "The Weeknd",
+        "img": "https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36"
+      },
+      {
+        "name": "Doja Cat",
+        "img": "https://i.scdn.co/image/ab67616d0000b27382b243023b937fd579a35533"
+      }
+    ],
+    "songs": [
+      {
+        "name": "Heartless",
+        "artist": "The Weeknd",
+        "img": "https://i.scdn.co/image/ab67616d0000b273f40f63ef9f83ccb287df244e"
+      },
+      {
+        "name": "Like That",
+        "artist": "Doja Cat",
+        "img": "https://i.scdn.co/image/ab67616d0000b27382b243023b937fd579a35533"
+      }
+    ]
+  }
+}

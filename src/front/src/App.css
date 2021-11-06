@@ -1,3 +1,8 @@
+@import "antd/dist/antd.css";
+
+body {
+  background-color: black;
+}
 .App {
   text-align: center;
 }
@@ -35,4 +40,44 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.photo {
+  background-color: "gray";
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 35vh;
+}
+
+h2,
+h3,
+h4,
+p,
+span,
+.ant-descriptions-title {
+  color: white;
+}
+
+.ant-btn > span {
+  color: black;
+}
+
+.ant-btn.ant-btn-primary > span {
+  color: white;
+}
+
+h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.7rem;
+}
+
+.container {
+  margin: 1rem;
+  padding-bottom: 5rem;
+}
+
+.column-flex {
+  display: flex;
+  flex-direction: column;
 }

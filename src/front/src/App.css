@@ -50,11 +50,20 @@ body {
   height: 35vh;
 }
 
+h2,
 h3,
 h4,
 p,
 span,
 .ant-descriptions-title {
+  color: white;
+}
+
+.ant-btn > span {
+  color: black;
+}
+
+.ant-btn.ant-btn-primary > span {
   color: white;
 }
 

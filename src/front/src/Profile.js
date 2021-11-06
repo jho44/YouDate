@@ -1,5 +1,6 @@
-import React from "react";
-import { Descriptions } from "antd";
+import React, { useState } from "react";
+import { Descriptions, Switch, Modal } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import "./App.css";
 import data from "./fakeData.json";
 
@@ -26,6 +27,29 @@ const QA = ({ Q, A }) => {
 };
 
 const Profile = ({ match }) => {
+  const [deleteAccChecked, setDeleteAccChecked] = useState(false);
+
+  function showConfirm() {
+    Modal.confirm({
+      centered: true,
+      title: "Delete Account",
+      icon: <ExclamationCircleOutlined />,
+      content: "Are you sure you want to delete your account?",
+      onOk() {
+        // TODO: delete acc
+      },
+      onCancel() {
+        setDeleteAccChecked(false);
+      },
+    });
+  }
+
+  function deleteAcc() {
+    setDeleteAccChecked(true);
+
+    showConfirm();
+  }
+
   return (
     <>
       <div
@@ -98,6 +122,11 @@ const Profile = ({ match }) => {
         {data.user.QAs.map((qa, ind) => (
           <QA Q={qa.Q} A={qa.A} key={ind} />
         ))}
+
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <p>Delete Account</p>
+          <Switch checked={deleteAccChecked} onChange={deleteAcc} />
+        </div>
       </div>
     </>
   );

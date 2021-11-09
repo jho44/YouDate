@@ -46,7 +46,7 @@ const Navbar = () => {
     >
       <NavbarBtn icon={<HomeOutlined />} link="/" />
       <NavbarBtn icon={<MessageOutlined />} link="/matched" />
-      <NavbarBtn icon={<UserOutlined />} link="/profile" />
+      <NavbarBtn icon={<UserOutlined />} link="/profile" data-testid="profile-btn" />
     </div>
   );
 };

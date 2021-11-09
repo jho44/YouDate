@@ -32,7 +32,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "pretty": "prettier --write .",
-    "doc": "jsdoc -d ../../docs/front --configure jsconf.json --readme ./src/API_README.md -p"
+    "doc": "jsdoc -d ../../docs/front --configure jsconf.json --readme ./src/API_README.md -p",
+    "cy:run": "yarn run cypress run -C cypress.json",
+    "cy:open": "yarn run cypress open",
+    "e2e": "concurrently \"env BROWSER=none yarn start\" \"wait-on http-get://localhost:3000 && yarn cy:run\" --kill-others --success first",
+    "e2e-gui": "concurrently \"env BROWSER=none yarn start\" \"wait-on http-get://localhost:3000 && yarn cy:open\" --kill-others --success first"
   },
   "eslintConfig": {
     "extends": [
@@ -53,6 +57,11 @@
     ]
   },
   "devDependencies": {
-    "jsdoc": "^3.6.7"
+    "@cypress/react": "^5.10.3",
+    "@cypress/webpack-dev-server": "^1.7.0",
+    "concurrently": "^6.3.0",
+    "cypress": "^8.7.0",
+    "jsdoc": "^3.6.7",
+    "wait-on": "^6.0.0"
   }
 }

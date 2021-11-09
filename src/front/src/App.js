@@ -12,16 +12,10 @@ import "./App.css";
  * history path) and navigation bar. Takes no props.
  *
  * @returns {React.Fragment} Wrapper around Routes and Navigation Bar
+ *
+ * @class
  */
-function App() {
-  React.useEffect(() => {
-    fetch("http://localhost:8000/")
-      .then((data) => data.json())
-      .then((stuff) => {
-        console.log(stuff);
-      });
-  }, []);
-
+const App = () => {
   return (
     <>
       <Switch>
@@ -33,6 +27,6 @@ function App() {
       <Navbar />
     </>
   );
-}
+};
 
 export default App;

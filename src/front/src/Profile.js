@@ -4,6 +4,21 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import "./App.css";
 import data from "./fakeData.json";
 
+/**
+ * Tidbit sub-component used exclusively by Profile component.
+ * For things like a user's desired relationship type or education.
+ *
+ * @property {string} imgPath - path to icon's image file
+ * corresponding to tidbit about user
+ * @property {string} alt - `alt` attribute for said icon's image
+ * element
+ * @property {string} content - words for this Tidbit
+ * @returns {HTML} Styled div wrapped around icon `img` and `span`
+ * for `content`
+ *
+ * @package
+ * @class
+ */
 const Tidbit = ({ imgPath, alt, content }) => {
   return (
     <div style={{ marginBottom: "1rem" }}>
@@ -17,6 +32,18 @@ const Tidbit = ({ imgPath, alt, content }) => {
   );
 };
 
+/**
+ * QA sub-component used exclusively by Profile component.
+ * Later, user is to create question and answer pairs to put more of
+ * their information on their profile.
+ *
+ * @property {string} Q - question about the user
+ * @property {string} A - user's answer to that question
+ * @returns {HTML} Styled div wrapped around said `Q` and `A`.
+ *
+ * @package
+ * @class
+ */
 const QA = ({ Q, A }) => {
   return (
     <div style={{ marginBottom: "1rem" }}>
@@ -33,25 +60,68 @@ const QA = ({ Q, A }) => {
  * the PROFILE or MEET page
  * @returns {React.Fragment} Profile page, including a user's photo,
  * basic information, favorite artists and songs
+ *
+ * @class
  */
 const Profile = ({ meet }) => {
+  /**
+   * @typedef {Boolean} deleteAccChecked
+   * @description (Private) state variable controlling whether the
+   * Delete Account Confirmation modal should be open.
+   * @memberof Profile
+   */
+  /**
+   * @typedef {Function} setDeleteAccChecked
+   * @param {Boolean} newState - If `false`, Delete Account
+   * Confirmation modal should be closed.
+   * If `true`, modal should be open.
+   * @description Sets `deleteAccChecked` to `newState`
+   * @returns {void}
+   * @memberof Profile
+   * @private
+   */
+
   const [deleteAccChecked, setDeleteAccChecked] = useState(false);
 
+  /**
+   * Function to open Delete Account Confirmation modal. Includes
+   * `OnOK()` and `onCancel()`.
+   *
+   * @returns {void}
+   */
   function showConfirm() {
     Modal.confirm({
       centered: true,
       title: "Delete Account",
       icon: <ExclamationCircleOutlined />,
       content: "Are you sure you want to delete your account?",
+      /**
+       * @description Function to actually delete account if user hits "OK"
+       * @memberof Profile
+       * @returns {void}
+       * @private
+       */
       onOk() {
         // TODO: delete acc
       },
+      /**
+       * @description Function to set `deleteAccChecked` to `false` to close modal.
+       * @memberof Profile
+       * @returns {void}
+       * @private
+       */
       onCancel() {
         setDeleteAccChecked(false);
       },
     });
   }
 
+  /**
+   * Function to open Delete Account Confirmation modal.
+   *
+   * @memberof Profile
+   * @returns {void}
+   */
   function deleteAcc() {
     setDeleteAccChecked(true);
 

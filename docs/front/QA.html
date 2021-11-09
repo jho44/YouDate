@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Login</title>
+    <title>JSDoc: Class: QA</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Login</h1>
+    <h1 class="page-title">Class: QA</h1>
 
     
 
@@ -28,15 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Login<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h2>
-        
-            <div class="class-description"><p>Class Component that renders our Login page and redirects us to either:</p>
-<ol>
-<li>the page we came from that required authentication</li>
-<li>the &quot;Home&quot; page for now</li>
-</ol>
-<p>(No special reason why this is a Class Component rather than a
-functional component.)</p></div>
+        <h2><span class="attribs"><span class="type-signature">(package) </span></span>QA<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h2>
         
     
 </header>
@@ -47,16 +39,20 @@ functional component.)</p></div>
         
 
     
-    <h2>Constructor</h2>
-    
 
     
-    <h4 class="name" id="Login"><span class="type-signature"></span>new Login<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h4>
+    <h4 class="name" id="QA"><span class="type-signature">(package) </span>new QA<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h4>
     
 
     
 
 
+
+<div class="description">
+    <p>QA sub-component used exclusively by Profile component.
+Later, user is to create question and answer pairs to put more of
+their information on their profile.</p>
+</div>
 
 
 
@@ -96,13 +92,13 @@ functional component.)</p></div>
 
         <tr>
             
-                <td class="name"><code>location</code></td>
+                <td class="name"><code>Q</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">string</span>
 
 
             
@@ -112,7 +108,30 @@ functional component.)</p></div>
 
             
 
-            <td class="description last"><p><code>{ from: { pathname: &quot;path/of/last/page/we/were/on&quot; } }</code></p></td>
+            <td class="description last"><p>question about the user</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>user's answer to that question</p></td>
         </tr>
 
     
@@ -151,7 +170,7 @@ functional component.)</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line15">line 15</a>
+        <a href="Profile.js.html">Profile.js</a>, <a href="Profile.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -180,7 +199,7 @@ functional component.)</p></div>
 
         
 <div class="param-desc">
-    <p>Meet page, soon to include Profile page</p>
+    <p>Styled div wrapped around said <code>Q</code> and <code>A</code>.</p>
 </div>
 
 
@@ -220,101 +239,6 @@ functional component.)</p></div>
 
     
 
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="login"><span class="type-signature">(private) </span>login<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Checks whether user has proper authentication. Takes no
-parameters. For now, uses fake authenticator to set a login
-state to true immediately upon button click. Upon state change,
-redirects to the page user came from.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line32">line 32</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
     
 
     

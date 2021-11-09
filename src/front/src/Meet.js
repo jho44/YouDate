@@ -5,6 +5,8 @@ import React from "react";
  * parameters (yet).
  *
  * @returns {HTML} Meet page, soon to include Profile page
+ *
+ * @class
  */
 const Meet = (props) => (
   <div>

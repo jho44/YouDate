@@ -1,5 +1,6 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
+// import { fakeAuth } from "./fakeAuth";
 
 /**
  * Class Component that renders our Login page and redirects us to either:
@@ -20,6 +21,14 @@ class Login extends React.Component {
     this.login = this.login.bind(this);
   }
 
+  /**
+   * Checks whether user has proper authentication. Takes no
+   * parameters. For now, uses fake authenticator to set a login
+   * state to true immediately upon button click. Upon state change,
+   * redirects to the page user came from.
+   *
+   * @private
+   */
   login() {
     fakeAuth.authenticate(() => {
       this.setState({ redirectToReferrer: true });
@@ -43,9 +52,25 @@ class Login extends React.Component {
   }
 }
 
-/* Temp fake authentication function */
+/**
+ * Temporary fake authentication Object containing `isAuthenticated`
+ * boolean state and `authenticate` function
+ *
+ * @class
+ * @hideconstructor
+ */
 export const fakeAuth = {
   isAuthenticated: false,
+  /**
+   * The `authenticate` function:
+   * Temporary fake `authenticate` function that sets `isAuthenticated`
+   * to true. Returns nothing.
+   *
+   * @param {Function} cb - callback function to run after
+   * setting `isAuthenticated` state
+   *
+   * @public
+   */
   authenticate(cb) {
     this.isAuthenticated = true;
     setTimeout(cb, 100);

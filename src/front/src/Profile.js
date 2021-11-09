@@ -26,7 +26,15 @@ const QA = ({ Q, A }) => {
   );
 };
 
-const Profile = ({ match }) => {
+/**
+ * Component for the Profile page
+ *
+ * @property {boolean} meet - Whether this component is being used for
+ * the PROFILE or MEET page
+ * @returns {React.Fragment} Profile page, including a user's photo,
+ * basic information, favorite artists and songs
+ */
+const Profile = ({ meet }) => {
   const [deleteAccChecked, setDeleteAccChecked] = useState(false);
 
   function showConfirm() {

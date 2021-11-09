@@ -12,6 +12,13 @@ const NavbarBtn = ({ icon, link }) => {
   );
 };
 
+/**
+ * Navbar Component that clings to the bottom of the screen on every
+ * page. Takes no props.
+ *
+ * @returns {HTML} Styled div containing 3 buttons, each of which
+ * lead to a different page of our app.
+ */
 const Navbar = () => {
   return (
     <div

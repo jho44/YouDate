@@ -1,6 +1,16 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 
+/**
+ * Class Component that renders our Login page and redirects us to either:
+ * 1. the page we came from that required authentication
+ * 2. the "Home" page for now
+ *
+ * (No special reason why this is a Class Component rather than a
+ * functional component.)
+ * @property {Object} location - `{ from: { pathname: "path/of/last/page/we/were/on" } }`
+ * @returns {HTML} Meet page, soon to include Profile page
+ */
 class Login extends React.Component {
   constructor() {
     super();

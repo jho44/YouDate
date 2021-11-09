@@ -44,8 +44,6 @@ app.add_middleware(
 
 @app.post("/createArtist")
 async def create_artist(artist: Artist):
-    print(artist)
-    print(artist.name)
     result = neo_db.create_artist(artist)
     return result
 
@@ -56,7 +54,6 @@ async def create_user(user: User):
 
 @app.post("/deleteUser")
 async def delete_user(email: str = Body(..., embed=True)):
-    print(email)
     result = neo_db.delete_user(email)
     return result
 

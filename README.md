@@ -2,6 +2,7 @@
 
 A webapp/PWA dating app (frontend in React, backend in FastAPI) that uses a collaborative filtering ML layer to match users based on the their top artists and songs (provided by the Spotify API).
 
+### Running
 To run backend in one terminal:
 1. Install the necessary Python packages
     ```
@@ -24,3 +25,6 @@ To run frontend in another terminal:
     ```
     yarn start
     ```
+
+### Documentation
+You can find our documentation at our [GitHub Pages](https://jho44.github.io/YouDate/)!

@@ -3,7 +3,7 @@ on:
   # but only for the main branch
   push:
     branches:
-      - frontDocs
+      - main
 
 jobs:
   deploy-docs:
@@ -49,4 +49,4 @@ jobs:
         uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.WORKFLOW_TOKEN }}
-          branch: frontDocs
+          branch: main

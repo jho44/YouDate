@@ -76,6 +76,10 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
     )
     # STATUS 403: Access token does not contain necessary scope
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
+
+    # Uncomment following line, when ready to test actually adding this new user data to neo4j
+    # result = neo_db.create_user(new_spotify_user)
+    
     return new_spotify_user
 
 @app.post("/createUser")

@@ -6,7 +6,12 @@ import neo_config
 import match_pool
 import atexit
 import urllib
+import requests
 from fastapi.middleware.cors import CORSMiddleware
+
+class SpotifyUserRequest(BaseModel):
+    access_token: str
+    refresh_token: str
 
 class User(BaseModel):
     name: str
@@ -62,6 +67,36 @@ async def create_artist(artist: Artist):
     """
     result = neo_db.create_artist(artist)
     return result
+
+# TODO: delete Artist
+
+@app.post("/createUserFromAccessToken")
+async def create_spotify_user(spotify_req: SpotifyUserRequest):
+    # GETS all basic information from user
+    basic_info = requests.get('https://api.spotify.com/v1/me', headers={'Authorization': 'Bearer ' + spotify_req.access_token}).json()
+    name = basic_info["display_name"]
+    email = basic_info["email"]
+    top_artists = []
+    top_songs = []
+    top_artists_req = requests.get('https://api.spotify.com/v1/me/top/artists', headers={'Authorization': 'Bearer ' + spotify_req.access_token}).json()
+    for artist in top_artists_req["items"]:
+        top_artists.append(artist["name"])
+    top_tracks_req = requests.get('https://api.spotify.com/v1/me/top/tracks', headers={'Authorization': 'Bearer ' + spotify_req.access_token}).json()
+    for track in top_tracks_req["items"]:
+        top_songs.append(track["name"])
+    new_spotify_user = User(
+        name=name,
+        email=email,
+        top_artists = top_artists,
+        top_songs = top_songs,
+    )
+    # STATUS 403: Access token does not contain necessary scope
+    # TODO: play around with the limit: number of returned results for both top artists and top top tracks
+
+    # Uncomment following line, when ready to test actually adding this new user data to neo4j
+    # result = neo_db.create_user(new_spotify_user)
+    
+    return new_spotify_user
 
 @app.post("/createUser")
 async def create_user(user: User):

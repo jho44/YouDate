@@ -25,9 +25,17 @@ jobs:
           pip install 'pdoc3==0.10.0'
 
       - name: create pdocs
+        run: python -m pdoc --html --output-dir docs ./src/back/main.py --force
+
+      - name: install jsdoc
         run: |
-          set +x
-          python -m pdoc --html --output-dir docs ./src/back/main.py --force
+          cd ./src/front
+          yarn add jsdoc --dev
+
+      - name: create jsdocs
+        run: |
+          cd ./src/front
+          yarn doc
 
       - name: commit files
         run: |

@@ -43,7 +43,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git update-index -q --refresh
           git add --force docs
-          git diff --exit-code || git commit -m "update docs"
+          git diff --exit-code --cached || git commit -m "update docs"
 
       - name: push changes
         uses: ad-m/github-push-action@v0.6.0

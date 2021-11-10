@@ -1,6 +1,5 @@
-import React from "react";
-import { Redirect } from "react-router-dom";
-// import { fakeAuth } from "./fakeAuth";
+import React, { useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 
 /**
  * Class Component that renders our Login page and redirects us to either:
@@ -12,14 +11,8 @@ import { Redirect } from "react-router-dom";
  * @property {Object} location - `{ from: { pathname: "path/of/last/page/we/were/on" } }`
  * @returns {HTML} Meet page, soon to include Profile page
  */
-class Login extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      redirectToReferrer: false,
-    };
-    this.login = this.login.bind(this);
-  }
+const Login = () => {
+  const [redirectToReferrer, setRedirectToReferrer] = useState(false);
 
   /**
    * Checks whether user has proper authentication. Takes no
@@ -29,28 +22,26 @@ class Login extends React.Component {
    *
    * @private
    */
-  login() {
+  function login() {
     fakeAuth.authenticate(() => {
-      this.setState({ redirectToReferrer: true });
+      setRedirectToReferrer(true);
     });
   }
 
-  render() {
-    const { from } = this.props.location.state || { from: { pathname: "/" } };
-    const { redirectToReferrer } = this.state;
+  const location = useLocation();
+  const { from } = location.state || { from: { pathname: "/" } };
 
-    if (redirectToReferrer) {
-      return <Redirect to={from} />;
-    }
-
-    return (
-      <div>
-        <p>You must log in to view the page at {from.pathname}</p>
-        <button onClick={this.login}>Log in</button>
-      </div>
-    );
+  if (redirectToReferrer) {
+    return <Navigate to={from} />;
   }
-}
+
+  return (
+    <div>
+      <p>You must log in to view the page at {from.pathname}</p>
+      <button onClick={login}>Log in</button>
+    </div>
+  );
+};
 
 /**
  * Temporary fake authentication Object containing `isAuthenticated`

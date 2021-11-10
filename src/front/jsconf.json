@@ -1,0 +1,13 @@
+{
+  "plugins": ["plugins/markdown"],
+  "source": {
+    "include": [
+      "src/App.js",
+      "src/Profile.js",
+      "src/Meet.js",
+      "src/Login.js",
+      "src/Navbar.js",
+      "src/PrivateRoute.js"
+    ]
+  }
+}

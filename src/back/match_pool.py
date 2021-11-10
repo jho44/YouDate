@@ -95,17 +95,12 @@ class MatchPool:
         query = (
             '''
             MATCH (a:User {email: $email_a}), (b:User {email: $email_b})
-            CREATE (a)-[r:DISLIKES]->(b) RETURN r
+            CREATE (a)-[r:DISLIKES]->(b)
             '''
         )
-        result = tx.run(query, email_a=email_a, email_b=email_b)
+        tx.run(query, email_a=email_a, email_b=email_b)
 
-        try:
-            for record in result:
-                return record['r'], 200
-        except ServiceUnavailable as exception:
-            logging.error('{query} raised an error: \n {exception}'.format(query=query, exception=exception))
-            raise
+        return 200
 
     # get matched list
     def get_matched(self, email):
@@ -187,14 +182,9 @@ class MatchPool:
         query = (
             '''
             MATCH (a:User {email: $email_a}), (b:User {email: $email_b})
-            CREATE (a)-[r:LIKES]->(b) RETURN r
+            CREATE (a)-[r:LIKES]->(b)
             '''
         )
-        result = tx.run(query, email_a=email_a, email_b=email_b)
+        tx.run(query, email_a=email_a, email_b=email_b)
 
-        try:
-            for record in result:
-                return record['r'], 200
-        except ServiceUnavailable as exception:
-            logging.error('{query} raised an error: \n {exception}'.format(query=query, exception=exception))
-            raise
+        return 200

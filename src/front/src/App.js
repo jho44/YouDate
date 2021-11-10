@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import Meet from "./Meet";
 import Profile from "./Profile";
@@ -18,11 +18,18 @@ import "./App.css";
 const App = () => {
   return (
     <>
-      <Switch>
-        <Route path="/login" component={Login} />
-        <Route exact path="/" component={Meet} />
-        <PrivateRoute path="/profile" component={Profile} />
-      </Switch>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route exact path="/" element={<Meet />} />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
 
       <Navbar />
     </>

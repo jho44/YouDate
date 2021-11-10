@@ -1,17 +1,11 @@
 /// <reference types="cypress" />
 beforeEach(() => {
-  cy.visit('localhost:3000');
+  cy.visit("localhost:3000");
 });
 
-describe('Navbar', () => {
-  it('Profile page requires login', () => {
+describe("Navbar", () => {
+  it("Navigate to profile page via navbar button", () => {
     cy.get('[href="/profile"]').click();
-    cy.get('button').contains('Log in');
-  });
-
-  it('Profile page requires login', () => {
-    cy.get('[href="/profile"]').click();
-    cy.get('button').contains('Log in').click();
-    cy.contains('Favorite Artists').should('have.length', 1);
+    cy.get("button").contains("Log in");
   });
 });

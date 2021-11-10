@@ -203,7 +203,11 @@ const Profile = ({ meet }) => {
 
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Delete Account</p>
-          <Switch checked={deleteAccChecked} onChange={deleteAcc} />
+          <Switch
+            checked={deleteAccChecked}
+            onChange={deleteAcc}
+            data-testid="delete-acc"
+          />
         </div>
       </div>
     </>

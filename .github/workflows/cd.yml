@@ -1,0 +1,44 @@
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.5' # install the python version needed
+
+      - name: install python package pdoc
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./src/back/requirements.txt
+          pip install 'pdoc3==0.10.0'
+
+      - name: create pdocs
+        run: |
+          set +x
+          python -m pdoc --html --output-dir docs ./src/back/main.py --force
+
+      - name: commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git update-index -q --refresh
+          git add --force docs
+          git diff --exit-code || git commit -m "update docs"
+
+      - name: push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.WORKFLOW_TOKEN }}
+          branch: main

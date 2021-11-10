@@ -88,8 +88,6 @@ async def create_artist(artist: Artist):
         Python dictionary or Javascript Object.
         2. request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
-    print(artist)
-    print(artist.name)
     result = neo_db.create_artist(artist)
     return result
 
@@ -134,7 +132,6 @@ async def delete_user(email: str = Body(..., embed=True)):
         viewed as a Python dictionary or Javascript Object.
         2. int: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
-    print(email)
     result = neo_db.delete_user(email)
     return result
 
@@ -253,8 +250,6 @@ async def create_artist(artist: Artist):
         Python dictionary or Javascript Object.
         2. request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
-    print(artist)
-    print(artist.name)
     result = neo_db.create_artist(artist)
     return result</code></pre>
 </details>
@@ -349,7 +344,6 @@ async def delete_user(email: str = Body(..., embed=True)):
         viewed as a Python dictionary or Javascript Object.
         2. int: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
-    print(email)
     result = neo_db.delete_user(email)
     return result</code></pre>
 </details>

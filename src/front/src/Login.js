@@ -10,6 +10,8 @@ import { Navigate, useLocation } from "react-router-dom";
  * functional component.)
  * @property {Object} location - `{ from: { pathname: "path/of/last/page/we/were/on" } }`
  * @returns {HTML} Meet page, soon to include Profile page
+ *
+ * @class
  */
 const Login = () => {
   const [redirectToReferrer, setRedirectToReferrer] = useState(false);

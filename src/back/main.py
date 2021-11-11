@@ -60,10 +60,10 @@ async def create_artist(artist: Artist):
     Returns:
         Tuple containing:
 
-        1. Neo4j entry object: corresponding to the newly added artist
-        containing the artist's name. This object can be viewed as a
-        Python dictionary or Javascript Object.
-        2. request status code (e.g. `200` means request went fine)
+        * Neo4j entry object: corresponding to the newly added artist
+            containing the artist's name. This object can be viewed as a
+            Python dictionary or Javascript Object.
+        * `int`: request status code (e.g. `200` means request went fine)
     """
     result = neo_db.create_artist(artist)
     return result
@@ -83,10 +83,10 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
     Returns:
         Tuple containing:
 
-        1. Neo4j entry object: corresponding to the newly added user
+        * Neo4j entry object: corresponding to the newly added user
         containing the user's name, email, top artists, and top tracks.
         This object can be viewed as a Python dictionary or Javascript Object.
-        2. request status code (e.g. `200` means request went fine)
+        * `int`: request status code (e.g. `200` means request went fine)
     """
     # GETS all basic information from user
     basic_info = requests.get('https://api.spotify.com/v1/me', headers={'Authorization': 'Bearer ' + spotify_req.access_token}).json()
@@ -131,10 +131,10 @@ async def create_user(user: User):
     Returns:
         Tuple containing:
 
-        1. Neo4j entry object: corresponding to the newly added user
+        * Neo4j entry object: corresponding to the newly added user
         containing the request body's contents. This object can be
         viewed as a Python dictionary or Javascript Object.
-        2. request status code (e.g. `200` means request went fine)
+        * `int`: request status code (e.g. `200` means request went fine)
     """
     result = neo_db.create_user(user)
     return result
@@ -150,10 +150,10 @@ async def delete_user(email: str = Body(..., embed=True)):
     Returns:
         Tuple containing:
 
-        1. Neo4j entry object: corresponding to the newly added user
+        * Neo4j entry object: corresponding to the newly added user
         containing the request body's contents. This object can be
         viewed as a Python dictionary or Javascript Object.
-        2. int: request status code (e.g. `200` means request went fine)
+        * `int`: request status code (e.g. `200` means request went fine)
     """
     result = neo_db.delete_user(email)
     return result
@@ -169,7 +169,7 @@ async def dislike(email_a: str = Body(...), email_b: str = Body(...)):
         `email_b` (str) - userB's email
 
     Returns:
-        int: request status code (e.g. `200` means request went fine)
+        `int`: request status code (e.g. `200` means request went fine)
     """
     result = neo_db.dislike(email_a, email_b)
     return result
@@ -186,8 +186,8 @@ async def get_matched(email):
     Returns:
         Tuple containing:
 
-        1. list: of User objects that userA mutually likes
-        2. int: request status code (e.g. `200` means request went fine)
+        * list: of User objects that userA mutually likes
+        * `int`: request status code (e.g. `200` means request went fine)
     """
     result = neo_db.get_matched(email)
     return result
@@ -204,8 +204,8 @@ async def get_unmet(email):
     Returns:
         Tuple containing:
 
-        1. list: of User objects that userA has never liked/disliked
-        2. int: request status code (e.g. `200` means request went fine)
+        * list: of User objects that userA has never liked/disliked
+        * `int`: request status code (e.g. `200` means request went fine)
     """
     result = neo_db.get_unmet(email)
     return result
@@ -220,7 +220,7 @@ async def like(email_a: str = Body(...), email_b: str = Body(...)):
         `email_b` (str) - userB's email
 
     Returns:
-        int: request status code (e.g. `200` means request went fine)
+        `int`: request status code (e.g. `200` means request went fine)
     """
     result = neo_db.like(email_a, email_b)
     return result

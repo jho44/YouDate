@@ -100,6 +100,22 @@ async def create_artist(artist: Artist):
 
 @app.post(&#34;/createUserFromAccessToken&#34;)
 async def create_spotify_user(spotify_req: SpotifyUserRequest):
+    &#34;&#34;&#34;
+    POST route for adding to the Neo4j database a user with spotify information
+    like top artists and top tracks
+
+    Parameters:
+        `spotify_req` (SpotifyUserRequest): a request body consisting of the
+        access token and the refresh token of the authenticated spotify user
+
+    Returns:
+        Tuple containing:
+
+        1. Neo4j entry object: corresponding to the newly added user
+        containing the user&#39;s name, email, top artists, and top tracks.
+        This object can be viewed as a Python dictionary or Javascript Object.
+        2. request status code (e.g. `200` means request went fine)
+    &#34;&#34;&#34;
     # GETS all basic information from user
     basic_info = requests.get(&#39;https://api.spotify.com/v1/me&#39;, headers={&#39;Authorization&#39;: &#39;Bearer &#39; + spotify_req.access_token}).json()
     name = basic_info[&#34;display_name&#34;]
@@ -123,7 +139,7 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
 
     # Uncomment following line, when ready to test actually adding this new user data to neo4j
     # result = neo_db.create_user(new_spotify_user)
-    
+
     return new_spotify_user
 
 @app.post(&#34;/createUser&#34;)
@@ -293,13 +309,42 @@ async def create_artist(artist: Artist):
 <span>async def <span class="ident">create_spotify_user</span></span>(<span>spotify_req: <a title="main.SpotifyUserRequest" href="#main.SpotifyUserRequest">SpotifyUserRequest</a>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>POST route for adding to the Neo4j database a user with spotify information
+like top artists and top tracks</p>
+<h2 id="parameters">Parameters</h2>
+<p><code>spotify_req</code> (SpotifyUserRequest): a request body consisting of the
+access token and the refresh token of the authenticated spotify user</p>
+<h2 id="returns">Returns</h2>
+<p>Tuple containing:</p>
+<dl>
+<dt><code>1. Neo4j entry object</code></dt>
+<dd>corresponding to the newly added user</dd>
+</dl>
+<p>containing the user's name, email, top artists, and top tracks.
+This object can be viewed as a Python dictionary or Javascript Object.
+2. request status code (e.g. <code>200</code> means request went fine)</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.post(&#34;/createUserFromAccessToken&#34;)
 async def create_spotify_user(spotify_req: SpotifyUserRequest):
+    &#34;&#34;&#34;
+    POST route for adding to the Neo4j database a user with spotify information
+    like top artists and top tracks
+
+    Parameters:
+        `spotify_req` (SpotifyUserRequest): a request body consisting of the
+        access token and the refresh token of the authenticated spotify user
+
+    Returns:
+        Tuple containing:
+
+        1. Neo4j entry object: corresponding to the newly added user
+        containing the user&#39;s name, email, top artists, and top tracks.
+        This object can be viewed as a Python dictionary or Javascript Object.
+        2. request status code (e.g. `200` means request went fine)
+    &#34;&#34;&#34;
     # GETS all basic information from user
     basic_info = requests.get(&#39;https://api.spotify.com/v1/me&#39;, headers={&#39;Authorization&#39;: &#39;Bearer &#39; + spotify_req.access_token}).json()
     name = basic_info[&#34;display_name&#34;]
@@ -323,7 +368,7 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
 
     # Uncomment following line, when ready to test actually adding this new user data to neo4j
     # result = neo_db.create_user(new_spotify_user)
-    
+
     return new_spotify_user</code></pre>
 </details>
 </dd>

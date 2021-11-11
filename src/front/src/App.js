@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import Meet from "./Meet";
 import Profile from "./Profile";
+import Matched from "./Matched";
 import Login from "./Login";
 import Navbar from "./Navbar";
 import "./App.css";
@@ -26,6 +27,14 @@ const App = () => {
           element={
             <PrivateRoute>
               <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/matched"
+          element={
+            <PrivateRoute>
+              <Matched />
             </PrivateRoute>
           }
         />

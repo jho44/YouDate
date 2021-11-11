@@ -5,6 +5,7 @@
       "src/App.js",
       "src/Profile.js",
       "src/Meet.js",
+      "src/Matched.js",
       "src/Login.js",
       "src/Navbar.js",
       "src/PrivateRoute.js"

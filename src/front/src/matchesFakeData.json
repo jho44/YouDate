@@ -1,0 +1,43 @@
+[
+  {
+    "name": "Weeknd",
+    "img": "https://media.glamour.com/photos/5f4cf28011ce28777d16cdba/3:2/w_3998,h_2665,c_limit/the-weeknd.jpg",
+    "contact": "123-456-7890"
+  },
+  {
+    "name": "Drake",
+    "img": "https://akns-images.eonline.com/eol_images/Entire_Site/2020912/rs_1200x1200-201012052848-1200-Drake-Euphoria-Aubrey-Drake-Graham-ch-101220.jpg?fit=around%7C1200:1200&output-quality=90&crop=1200:1200;center,top",
+    "contact": "@drake"
+  },
+  {
+    "name": "Kanye",
+    "img": "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTU0OTkwNDUxOTQ5MDUzNDQ3/kanye-west-attends-the-christian-dior-show-as-part-of-the-paris-fashion-week-womenswear-fall-winter-2015-2016-on-march-6-2015-in-paris-france-photo-by-dominique-charriau-wireimage-square.jpg",
+    "contact": "@kanyewest"
+  },
+  {
+    "name": "Doja",
+    "img": "https://stylecaster.com/wp-content/uploads/2021/09/doja-cat-net-worth.jpg",
+    "contact": "123-456-7890"
+  },
+  {
+    "name": "Ariana",
+    "img": "https://www.biography.com/.image/t_share/MTQ3MzM3MTcxNjA5NTkzNjQ3/ariana_grande_photo_jon_kopaloff_getty_images_465687098.jpg",
+    "contact": "@arianagrande"
+  },
+  {
+    "name": "Rihanna",
+    "img": "https://yt3.ggpht.com/ytc/AKedOLRkpn9XqlqjnHeh8h1gFKF26Tix8H2eNm583jinMg=s900-c-k-c0x00ffffff-no-rj",
+    "contact": "@rihanna"
+  },
+  {
+    "name": "Harry",
+    "img": "https://m.media-amazon.com/images/M/MV5BMTUxMzU2MTk1OF5BMl5BanBnXkFtZTgwNzg4NjAwMzI@._V1_.jpg",
+    "contact": "123-456-7890"
+  },
+  {
+    "name": "Billie",
+    "img": "https://media.glamour.com/photos/61682fdcbd3b64b6626bcc1f/master/w_2560%2Cc_limit/1343723358",
+    "contact": "123-456-7890"
+  }
+]
+

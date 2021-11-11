@@ -72,6 +72,22 @@ async def create_artist(artist: Artist):
 
 @app.post("/createUserFromAccessToken")
 async def create_spotify_user(spotify_req: SpotifyUserRequest):
+    """
+    POST route for adding to the Neo4j database a user with spotify information
+    like top artists and top tracks
+
+    Parameters:
+        `spotify_req` (SpotifyUserRequest): a request body consisting of the
+        access token and the refresh token of the authenticated spotify user
+
+    Returns:
+        Tuple containing:
+
+        1. Neo4j entry object: corresponding to the newly added user
+        containing the user's name, email, top artists, and top tracks.
+        This object can be viewed as a Python dictionary or Javascript Object.
+        2. request status code (e.g. `200` means request went fine)
+    """
     # GETS all basic information from user
     basic_info = requests.get('https://api.spotify.com/v1/me', headers={'Authorization': 'Bearer ' + spotify_req.access_token}).json()
     name = basic_info["display_name"]
@@ -95,7 +111,7 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
 
     # Uncomment following line, when ready to test actually adding this new user data to neo4j
     # result = neo_db.create_user(new_spotify_user)
-    
+
     return new_spotify_user
 
 @app.post("/createUser")

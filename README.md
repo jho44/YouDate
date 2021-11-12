@@ -87,6 +87,8 @@ You can find our documentation at our [GitHub Pages](https://jho44.github.io/You
 
 #### Backend (via Postman)
 
+Postman tests must be imported as a collection into Postman in order to run them. They are saved as a JSON file in our repository.
+
 **Create Artist**
 - Create a valid test artist
     1. assert that response code is 200

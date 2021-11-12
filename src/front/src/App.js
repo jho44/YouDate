@@ -1,11 +1,11 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
-import Meet from "./Meet";
-import Profile from "./Profile";
-import Matched from "./Matched";
+import Meet from "./components/Meet";
+import Profile from "./components/Profile";
+import Matched from "./components/Matched";
 import Login from "./Login";
-import Navbar from "./Navbar";
+import Navbar from "./components/Navbar";
 import "./App.css";
 
 /**
@@ -21,7 +21,15 @@ const App = () => {
     <>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route exact path="/" element={<Meet />} />
+        <Route
+          exact
+          path="/"
+          element={
+            <PrivateRoute>
+              <Meet />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/profile"
           element={

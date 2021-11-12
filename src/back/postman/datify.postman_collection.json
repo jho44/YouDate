@@ -68,7 +68,11 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"pm.test(\"Expected name\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.name).to.eql(\"Test Artist\");",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -119,7 +123,11 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"pm.test(\"Expected name\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson[0].name).to.eql(\"Athya\");",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -130,7 +138,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Athya\",\n    \"email\": \"athyauk@gmail.com\",\n    \"top_artists\": [\"hi\"],\n    \"top_songs\": [\"hey\"]\n}",
+					"raw": "{\n    \"name\": \"Athya\",\n    \"email\": \"athyauk@gmail.com\",\n    \"top_artists\": [\"Adele\"],\n    \"top_songs\": [\"Hello\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"

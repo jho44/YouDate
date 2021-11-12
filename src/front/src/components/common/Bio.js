@@ -1,66 +1,8 @@
 import React, { useState } from "react";
-import { Descriptions, Input, Modal } from "antd";
+import { Input, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import "../../App.css";
 import EditButton from "./EditButton";
-
-/**
- * EditBioParagraph sub-component used exclusively by BioParagraph sub-component.
- * Used to display the form needed to edit the bio paragraph.
- * This component is rendered when the user needs to edit their bio.
- *
- * @property {string} bioParagraph - The content for the bio paragraph
- * @property {Function} finishEditFunction - The desired onClick
- * function for the finish editing button. In this case, this is the
- * function that brings up the finished editing model.
- * @returns {HTML} Styled div wrapped around input form and buton
- *
- * @package
- * @class
- */
-const EditBioParagraph = ({ bioParagraph, finishEditFunction }) => {
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
-      <Input defaultValue={bioParagraph} />
-      <EditButton isEdit={true} editFunction={finishEditFunction} />
-    </div>
-  );
-};
-
-/**
- * NoEditBioParagraph sub-component used exclusively by BioParagraph sub-component.
- * Used to display the bio paragraph and a button to render the form used
- * to edit the bio paragraph.
- *
- * @property {string} bioParagraph - The content for the bio paragraph
- * @property {Function} editFunction - The desired onClick
- * function for the  edit button. In this case, this is the
- * function that changes the state to bring up the editing form.
- * @returns {HTML} Styled div wrapped around bio paragraph and button
- *
- * @package
- * @class
- */
-const NoEditBioParagraph = ({ bioParagraph, editFunction }) => {
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
-      {bioParagraph}
-      <EditButton isEdit={false} editFunction={editFunction} />
-    </div>
-  );
-};
 
 /**
  * BioParagraph sub-component used exclusively by Bio sub-component.
@@ -89,7 +31,7 @@ const BioParagraph = ({
   finishEditFunction,
 }) => {
   return (
-    <div style={{ width: "100%"}}>
+    <span style={{ width: "100%"}}>
       {meet ? (
         bioParagraph
       ) : (
@@ -113,7 +55,7 @@ const BioParagraph = ({
         )}
         </div>
       )}
-    </div>
+    </span>
   );
 };
 
@@ -205,23 +147,34 @@ const Bio = ({ meet, content }) => {
   }
 
   return (
-    <Descriptions style={{ marginBottom: "0px" }}
-      size="small"
-      title={`${content.name} (${content.pronouns})`}
-      labelStyle={{ color: "white" }}
-      contentStyle={{ color: "white" }}
-      extra={<span>{content.age}</span>}
-    >
-      <Descriptions.Item label="">
-        <BioParagraph
+    <>
+      <div 
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "0.5rem",
+        }}
+      >
+        <div 
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <h1 style={{ margin: "0px" }}>{content.name}</h1>
+          <h3 style={{ margin: "0px", marginLeft: "0.5rem" }}> ({content.pronouns})</h3>
+        </div>
+        <span>{content.age}</span>
+      </div>
+      <BioParagraph
           meet={meet}
           bioParagraph={content.description}
           editBioPressed={editBioPressed}
           editFunction={editBio}
           finishEditFunction={finishedEditBio}
         />
-      </Descriptions.Item>
-    </Descriptions>
+    </>
   );
 };
 

@@ -117,4 +117,4 @@ Virtual env with required dependencies must be active
 - Ensures the logic to parse the json object returned by spotify is accurate and robust
 
 **Other unit tests test the same routes as integration tests**
-- Ensures ONLY that the APi contract is valid (aka unchanged from a previous valid execution). This is useful when refactoring to ensure there are no service disruptions.
+- Ensures ONLY that the API contract is valid (aka unchanged from a previous valid execution). This is useful when refactoring to ensure there are no service disruptions.

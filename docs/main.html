@@ -36,6 +36,7 @@ import atexit
 import urllib
 import requests
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.testclient import TestClient
 
 class SpotifyUserRequest(BaseModel):
     access_token: str
@@ -62,6 +63,7 @@ def _exit_application():
 atexit.register(_exit_application)
 
 app = FastAPI()
+test_client = TestClient(app)
 
 origins = [
     &#34;http://localhost:3000&#34;
@@ -74,6 +76,10 @@ app.add_middleware(
     allow_methods=[&#34;*&#34;],
     allow_headers=[&#34;*&#34;],
 )
+
+@app.get(&#34;/ping&#34;)
+def pong():
+    return {&#34;ping&#34;: &#34;pong!&#34;}
 
 @app.post(&#34;/createArtist&#34;)
 async def create_artist(artist: Artist):
@@ -237,6 +243,7 @@ async def get_unmet(email):
     &#34;&#34;&#34;
     result = neo_db.get_unmet(email)
     return result
+
 
 @app.post(&#34;/like&#34;)
 async def like(email_a: str = Body(...), email_b: str = Body(...)):
@@ -598,6 +605,20 @@ async def like(email_a: str = Body(...), email_b: str = Body(...)):
     return result</code></pre>
 </details>
 </dd>
+<dt id="main.pong"><code class="name flex">
+<span>def <span class="ident">pong</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@app.get(&#34;/ping&#34;)
+def pong():
+    return {&#34;ping&#34;: &#34;pong!&#34;}</code></pre>
+</details>
+</dd>
 </dl>
 </section>
 <section>
@@ -723,6 +744,7 @@ async def like(email_a: str = Body(...), email_b: str = Body(...)):
 <li><code><a title="main.get_matched" href="#main.get_matched">get_matched</a></code></li>
 <li><code><a title="main.get_unmet" href="#main.get_unmet">get_unmet</a></code></li>
 <li><code><a title="main.like" href="#main.like">like</a></code></li>
+<li><code><a title="main.pong" href="#main.pong">pong</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>

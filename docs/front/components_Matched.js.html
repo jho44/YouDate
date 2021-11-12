@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/Matched.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/Matched.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import { Modal, Button, Avatar } from "antd";
+import { ExclamationCircleOutlined, CloseOutlined } from "@ant-design/icons";
+import "../App.css";
+import data from "./matchesFakeData.json";
+
+/**
+ * Match sub-component used exclusively by Matched component.
+ * Displays a match's profile picture, name, and contact info.
+ *
+ * @property {string} imgPath - path to match's image file
+ * @property {string} name - name of match
+ * @property {string} contact - contact of match
+ * @returns {HTML} Styled div wrapped around said match component.
+ *
+ * @package
+ * @class
+ */
+const Match = ({ index, imgPath, name, contact }) => {
+  /**
+   * @typedef {Boolean} deleteMatchPressed
+   * @description (Private) state variable controlling whether the
+   * Delete Match Confirmation modal should be open.
+   * @memberof Match
+   */
+  /**
+   * @typedef {Function} setDeleteMatchPressed
+   * @param {Boolean} newState - If `false`, Delete Match
+   * Confirmation modal should be closed.
+   * If `true`, modal should be open.
+   * @description Sets `deleteMatchPressed` to `newState`
+   * @returns {void}
+   * @memberof Match
+   * @private
+   */
+
+  const [deleteMatchPressed, setDeleteMatchPressed] = useState(false);
+
+  /**
+   * Function to open Delete Match Confirmation modal. Includes
+   * `OnOK()` and `onCancel()`.
+   *
+   * @returns {void}
+   */
+  function showConfirm() {
+    Modal.confirm({
+      centered: true,
+      title: "Delete Match",
+      icon: &lt;ExclamationCircleOutlined />,
+      content: "Are you sure you want to delete this match?",
+      /**
+       * @description Function to actually delete match if user hits "OK"
+       * @memberof Match
+       * @returns {void}
+       * @private
+       */
+      onOk() {
+        // TODO: delete acc
+      },
+      /**
+       * @description Function to set `deleteMatchPressed` to `false` to close modal.
+       * @memberof Match
+       * @returns {void}
+       * @private
+       */
+      onCancel() {
+        setDeleteMatchPressed(false);
+      },
+    });
+  }
+
+  /**
+   * Function to open Delete Match Confirmation modal.
+   *
+   * @memberof Match
+   * @returns {void}
+   */
+  function deleteMatch() {
+    setDeleteMatchPressed(true);
+
+    showConfirm();
+  }
+
+  return (
+    &lt;div
+      data-testid="match"
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "1rem",
+        marginLeft: "1rem",
+      }}
+    >
+      &lt;div
+        style={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
+        &lt;Avatar src={imgPath} size={85} />
+        &lt;div style={{ marginLeft: "1rem", marginRight: "1rem" }}>
+          &lt;h4>{name}&lt;/h4>
+          &lt;span>{contact}&lt;/span>
+        &lt;/div>
+      &lt;/div>
+      &lt;div>
+        &lt;Button
+          ghost
+          style={{ border: 0 }}
+          size="medium"
+          icon={&lt;CloseOutlined style={{ color: "white" }} />}
+          onClick={deleteMatch}
+          button-testid={`delete-match-${index}`}
+        />
+      &lt;/div>
+    &lt;/div>
+  );
+};
+
+/**
+ * Component for the Matched page
+ *
+ * @returns {React.Fragment} Matched page, including all a user's matches,
+ * each with a profile pic, name, and contact info.
+ *
+ * @class
+ */
+const Matched = () => {
+  /**
+   * Function to generate all the Match sub-components for a user.
+   *
+   * @returns {Match}
+   */
+  let generateList = data.map((item, index) => {
+    return (
+      &lt;Match
+        key={index}
+        index={index}
+        imgPath={item.img}
+        name={item.name}
+        contact={item.contact}
+      />
+    );
+  });
+
+  return (
+    &lt;div className="container" style={{ margin: "1rem" }}>
+      &lt;h1 style={{ color: "white" }}>Matches&lt;/h1>
+      {generateList}
+    &lt;/div>
+  );
+};
+
+export default Matched;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="fakeAuth.html">fakeAuth</a></li><li><a href="Login.html">Login</a></li><li><a href="Match.html">Match</a></li><li><a href="Matched.html">Matched</a></li><li><a href="Meet.html">Meet</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="NavbarBtn.html">NavbarBtn</a></li><li><a href="PrivateRoute.html">PrivateRoute</a></li><li><a href="Profile.html">Profile</a></li><li><a href="QA.html">QA</a></li><li><a href="Tidbit.html">Tidbit</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Nov 12 2021 06:12:44 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

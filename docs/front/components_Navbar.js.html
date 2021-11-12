@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: App.js</title>
+    <title>JSDoc: Source: components/Navbar.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: App.js</h1>
+    <h1 class="page-title">Source: components/Navbar.js</h1>
 
     
 
@@ -27,61 +27,59 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import React from "react";
-import { Route, Routes } from "react-router-dom";
-import PrivateRoute from "./PrivateRoute";
-import Meet from "./components/Meet";
-import Profile from "./components/Profile";
-import Matched from "./components/Matched";
-import Login from "./Login";
-import Navbar from "./components/Navbar";
-import "./App.css";
+import { Link } from "react-router-dom";
+import { Button } from "antd";
+import { UserOutlined, HomeOutlined, MessageOutlined } from "@ant-design/icons";
+import "../App.css";
 
 /**
- * Wrapper component for proper page (rendered conditionally based on
- * history path) and navigation bar. Takes no props.
+ * Button used exclusively by the Navbar.
  *
- * @returns {React.Fragment} Wrapper around Routes and Navigation Bar
+ * @returns {HTML} `&lt;Link />` with `link`'s `href` wrapped around icon
+ * button with `icon` as the icon.
  *
+ * @package
  * @class
  */
-const App = () => {
+const NavbarBtn = ({ icon, link }) => {
   return (
-    &lt;>
-      &lt;Routes>
-        &lt;Route path="/login" element={&lt;Login />} />
-        &lt;Route
-          exact
-          path="/"
-          element={
-            &lt;PrivateRoute>
-              &lt;Meet />
-            &lt;/PrivateRoute>
-          }
-        />
-        &lt;Route
-          path="/profile"
-          element={
-            &lt;PrivateRoute>
-              &lt;Profile />
-            &lt;/PrivateRoute>
-          }
-        />
-        &lt;Route
-          path="/matched"
-          element={
-            &lt;PrivateRoute>
-              &lt;Matched />
-            &lt;/PrivateRoute>
-          }
-        />
-      &lt;/Routes>
-
-      &lt;Navbar />
-    &lt;/>
+    &lt;Link to={link}>
+      &lt;Button size="large" ghost style={{ border: 0 }} icon={icon} />
+    &lt;/Link>
   );
 };
 
-export default App;
+/**
+ * Navbar Component that clings to the bottom of the screen on every
+ * page. Takes no props.
+ *
+ * @returns {HTML} Styled div containing 3 buttons, each of which
+ * lead to a different page of our app.
+ *
+ * @class
+ */
+const Navbar = () => {
+  return (
+    &lt;div
+      style={{
+        backgroundColor: "#E8BFFB",
+        position: "fixed",
+        bottom: 0,
+        width: "100vw",
+        display: "flex",
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        height: "4rem",
+      }}
+    >
+      &lt;NavbarBtn icon={&lt;HomeOutlined />} link="/" />
+      &lt;NavbarBtn icon={&lt;MessageOutlined />} link="/matched" />
+      &lt;NavbarBtn icon={&lt;UserOutlined />} link="/profile" />
+    &lt;/div>
+  );
+};
+
+export default Navbar;
 </code></pre>
         </article>
     </section>

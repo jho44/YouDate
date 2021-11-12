@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/Meet.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/Meet.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import { Descriptions, Button, Affix } from "antd";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import "../App.css";
+import data from "./fakeData.json";
+import Tidbit from "./common/Tidbit";
+import QA from "./common/QA";
+
+/**
+ * Component for the Meet page
+ *
+ * @property {boolean} meet - Whether this component is being used for
+ * the PROFILE or MEET page
+ * @returns {React.Fragment} Profile page, including a user's photo,
+ * basic information, favorite artists and songs
+ *
+ * @class
+ */
+const Meet = ({ meet }) => {
+  /**
+   * @typedef {Boolean} likePressed
+   * @description (Private) state variable controlling whether the
+   * Like Confirmation modal should be open.
+   * @memberof Meet
+   */
+  /**
+   * @typedef {Function} setLikePressed
+   * @param {Boolean} newState - If `false`, Like
+   * Confirmation modal should be closed.
+   * If `true`, modal should be open.
+   * @description Sets `likePressed` to `newState`
+   * @returns {void}
+   * @memberof Meet
+   * @private
+   */
+  /**
+   * @typedef {Boolean} dislikePressed
+   * @description (Private) state variable controlling whether the
+   * Dislike Confirmation modal should be open.
+   * @memberof Meet
+   */
+  /**
+   * @typedef {Function} setDislikePressed
+   * @param {Boolean} newState - If `false`, Dislike
+   * Confirmation modal should be closed.
+   * If `true`, modal should be open.
+   * @description Sets `dislikePressed` to `newState`
+   * @returns {void}
+   * @memberof Meet
+   * @private
+   */
+
+  const [likePressed, setLikePressed] = useState(false);
+  const [dislikePressed, setDislikePressed] = useState(false);
+
+  /**
+   * Function to open Like Confirmation modal.
+   *
+   * @memberof Meet
+   * @returns {void}
+   */
+  function like() {
+    setLikePressed(true);
+    // todo: add person to matched page
+  }
+
+  /**
+   * Function to open Dislike Confirmation modal.
+   *
+   * @memberof Meet
+   * @returns {void}
+   */
+  function dislike() {
+    setDislikePressed(true);
+    // todo: display next person
+  }
+  return (
+    &lt;>
+      &lt;div
+        className="photo"
+        style={{ backgroundImage: `url('${data.user.img}')` }}
+      />
+
+      &lt;div className="container">
+        &lt;Descriptions
+          title={`${data.user.name} (${data.user.pronouns})`}
+          labelStyle={{ color: "white" }}
+          contentStyle={{ color: "white" }}
+          extra={&lt;span>{data.user.age}&lt;/span>}
+        >
+          &lt;Descriptions.Item label="">
+            {data.user.description}
+          &lt;/Descriptions.Item>
+        &lt;/Descriptions>
+
+        &lt;h3>Artists in Common&lt;/h3>
+        {data.user.artists.map((artist, ind) => (
+          &lt;div style={{ display: "flex", alignItems: "center" }} key={ind}>
+            &lt;div
+              className="photo"
+              style={{
+                backgroundImage: `url('${artist.img}')`,
+                backgroundColor: "grey",
+                width: 85,
+                height: 85,
+                marginBottom: "1rem",
+              }}
+            />
+
+            &lt;span style={{ paddingLeft: "1rem" }}>{artist.name}&lt;/span>
+          &lt;/div>
+        ))}
+        &lt;h3>Songs in Common&lt;/h3>
+        {data.user.songs.map((song, ind) => (
+          &lt;div style={{ display: "flex", alignItems: "center" }} key={ind}>
+            &lt;div
+              className="photo"
+              style={{
+                backgroundImage: `url('${song.img}')`,
+                backgroundColor: "grey",
+                width: 85,
+                height: 85,
+                marginBottom: "1rem",
+              }}
+            />
+
+            &lt;span style={{ paddingLeft: "1rem" }}>
+              {song.name} by {song.artist}
+            &lt;/span>
+          &lt;/div>
+        ))}
+
+        &lt;div className="basic-info column-flex">
+          &lt;Tidbit
+            imgPath="/LookingIcon.png"
+            alt="desired-relationship"
+            content={data.user.desiredRelationship}
+          />
+          &lt;Tidbit
+            imgPath="/EducationIcon.png"
+            alt="education"
+            content={data.user.education}
+          />
+        &lt;/div>
+
+        {data.user.QAs.map((qa, ind) => (
+          &lt;QA Q={qa.Q} A={qa.A} key={ind} />
+        ))}
+        &lt;Affix offsetBottom={75}>
+          &lt;div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            &lt;div style={{ marginRight: "5rem" }}>
+              &lt;Button
+                ghost
+                size="large"
+                icon={&lt;CloseOutlined style={{ color: "white" }} />}
+                onClick={dislike}
+                data-testid="left-swipe"
+              />
+            &lt;/div>
+            &lt;Button
+              ghost
+              size="large"
+              icon={&lt;CheckOutlined style={{ color: "white" }} />}
+              onClick={like}
+              data-testid="right-swipe"
+            />
+          &lt;/div>
+        &lt;/Affix>
+      &lt;/div>
+    &lt;/>
+  );
+};
+
+export default Meet;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="fakeAuth.html">fakeAuth</a></li><li><a href="Login.html">Login</a></li><li><a href="Match.html">Match</a></li><li><a href="Matched.html">Matched</a></li><li><a href="Meet.html">Meet</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="NavbarBtn.html">NavbarBtn</a></li><li><a href="PrivateRoute.html">PrivateRoute</a></li><li><a href="Profile.html">Profile</a></li><li><a href="QA.html">QA</a></li><li><a href="Tidbit.html">Tidbit</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Nov 12 2021 06:12:44 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

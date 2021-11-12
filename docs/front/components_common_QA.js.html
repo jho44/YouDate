@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: App.js</title>
+    <title>JSDoc: Source: components/common/QA.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: App.js</h1>
+    <h1 class="page-title">Source: components/common/QA.js</h1>
 
     
 
@@ -27,61 +27,29 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import React from "react";
-import { Route, Routes } from "react-router-dom";
-import PrivateRoute from "./PrivateRoute";
-import Meet from "./components/Meet";
-import Profile from "./components/Profile";
-import Matched from "./components/Matched";
-import Login from "./Login";
-import Navbar from "./components/Navbar";
-import "./App.css";
+import "../../App.css";
 
 /**
- * Wrapper component for proper page (rendered conditionally based on
- * history path) and navigation bar. Takes no props.
+ * QA sub-component used by Meet and Profile component.
+ * User specified question and answer pairs.
  *
- * @returns {React.Fragment} Wrapper around Routes and Navigation Bar
+ * @property {string} Q - question about the user
+ * @property {string} A - user's answer to that question
+ * @returns {HTML} Styled div wrapped around said `Q` and `A`.
  *
+ * @package
  * @class
  */
-const App = () => {
+const QA = ({ Q, A }) => {
   return (
-    &lt;>
-      &lt;Routes>
-        &lt;Route path="/login" element={&lt;Login />} />
-        &lt;Route
-          exact
-          path="/"
-          element={
-            &lt;PrivateRoute>
-              &lt;Meet />
-            &lt;/PrivateRoute>
-          }
-        />
-        &lt;Route
-          path="/profile"
-          element={
-            &lt;PrivateRoute>
-              &lt;Profile />
-            &lt;/PrivateRoute>
-          }
-        />
-        &lt;Route
-          path="/matched"
-          element={
-            &lt;PrivateRoute>
-              &lt;Matched />
-            &lt;/PrivateRoute>
-          }
-        />
-      &lt;/Routes>
-
-      &lt;Navbar />
-    &lt;/>
+    &lt;div style={{ marginBottom: "1rem" }}>
+      &lt;h4>{Q}&lt;/h4>
+      &lt;span>{A}&lt;/span>
+    &lt;/div>
   );
 };
 
-export default App;
+export default QA;
 </code></pre>
         </article>
     </section>

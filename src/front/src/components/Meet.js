@@ -5,6 +5,7 @@ import "../App.css";
 import data from "./fakeData.json";
 import Tidbit from "./common/Tidbit";
 import QA from "./common/QA";
+import Bio from "./common/Bio";
 
 /**
  * Component for the Meet page
@@ -82,16 +83,7 @@ const Meet = ({ meet }) => {
       />
 
       <div className="container">
-        <Descriptions
-          title={`${data.user.name} (${data.user.pronouns})`}
-          labelStyle={{ color: "white" }}
-          contentStyle={{ color: "white" }}
-          extra={<span>{data.user.age}</span>}
-        >
-          <Descriptions.Item label="">
-            {data.user.description}
-          </Descriptions.Item>
-        </Descriptions>
+        <Bio meet={true} content={data.user} />
 
         <h3>Artists in Common</h3>
         {data.user.artists.map((artist, ind) => (

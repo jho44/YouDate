@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Descriptions, Modal, Button, Affix} from "antd";
-import { ExclamationCircleOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import { Descriptions, Button, Affix } from "antd";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import "./App.css";
 import data from "./fakeData.json";
 
@@ -96,98 +96,30 @@ const Meet = ({ meet }) => {
    * @private
    */
 
-   const [rightSwipePressed, setRightSwipePressed] = useState(false);
-   const [leftSwipePressed, setLeftSwipePressed] = useState(false);
-
-   /**
-    * Function to open Match Confirmation modal. Includes
-    * `OnOK()` and `onCancel()`.
-    *
-    * @returns {void}
-    */
-   function showRightConfirm() {
-     Modal.confirm({
-       centered: true,
-       title: "Match",
-       icon: <ExclamationCircleOutlined />,
-       content: "Are you sure you want to swipe right?",
-       /**
-        * @description Function to add person to matched page if user hits "OK"
-        * @memberof Meet
-        * @returns {void}
-        * @private
-        */
-       onOk() {
-         // TODO: add person to matched page/database
-       },
-       /**
-        * @description Function to set `rightSwipePressed` to `false` to close modal.
-        * @memberof Meet
-        * @returns {void}
-        * @private
-        */
-       onCancel() {
-        setRightSwipePressed(false);
-       },
-     });
-   }
-
-   /**
-    * Function to open Not Match Confirmation modal. Includes
-    * `OnOK()` and `onCancel()`.
-    *
-    * @returns {void}
-    */
-    function showLeftConfirm() {
-      Modal.confirm({
-        centered: true,
-        title: "Not Match",
-        icon: <ExclamationCircleOutlined />,
-        content: "Are you sure you want to swipe left?",
-        /**
-         * @description Function to display the next person if user hits "OK"
-         * @memberof Meet
-         * @returns {void}
-         * @private
-         */
-        onOk() {
-          // TODO: Display the next person to be judged
-        },
-        /**
-         * @description Function to set `leftSwipePressed` to `false` to close modal.
-         * @memberof Meet
-         * @returns {void}
-         * @private
-         */
-        onCancel() {
-          setLeftSwipePressed(false);
-        },
-      });
-    }
+  const [rightSwipePressed, setRightSwipePressed] = useState(false);
+  const [leftSwipePressed, setLeftSwipePressed] = useState(false);
 
   /**
-    * Function to open Right Swipe Confirmation modal.
-    *
-    * @memberof Meet
-    * @returns {void}
-    */
-   function rightSwipe() {
+   * Function to open Right Swipe Confirmation modal.
+   *
+   * @memberof Meet
+   * @returns {void}
+   */
+  function rightSwipe() {
     setRightSwipePressed(true);
-
-    showRightConfirm();
+    // todo: add person to matched page
   }
- 
-   /**
-    * Function to open Right Swipe Confirmation modal.
-    *
-    * @memberof Meet
-    * @returns {void}
-    */
-   function leftSwipe() {
+
+  /**
+   * Function to open Right Swipe Confirmation modal.
+   *
+   * @memberof Meet
+   * @returns {void}
+   */
+  function leftSwipe() {
     setLeftSwipePressed(true);
- 
-     showLeftConfirm();
-   }
+    // todo: display next person
+  }
   return (
     <>
       <div
@@ -260,25 +192,33 @@ const Meet = ({ meet }) => {
         {data.user.QAs.map((qa, ind) => (
           <QA Q={qa.Q} A={qa.A} key={ind} />
         ))}
-        <Affix offsetBottom={75} >
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <Affix offsetBottom={75}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <div style={{ marginRight: "5rem" }}>
               <Button
                 ghost
                 size="large"
-                icon={<CloseOutlined style={{ color: "white" }}/>}
+                icon={<CloseOutlined style={{ color: "white" }} />}
                 onClick={leftSwipe}
+                data-testid="left-swipe"
               />
             </div>
             <Button
               ghost
               size="large"
-              icon={<CheckOutlined style={{ color: "white" }}/>}
+              icon={<CheckOutlined style={{ color: "white" }} />}
               onClick={rightSwipe}
+              data-testid="right-swipe"
             />
           </div>
         </Affix>
-        </div>
+      </div>
     </>
   );
 };

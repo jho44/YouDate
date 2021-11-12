@@ -33,15 +33,15 @@ const Match = ({ imgPath, name, contact }) => {
    * @memberof Match
    * @private
    */
-  
+
   const [deleteMatchPressed, setDeleteMatchPressed] = useState(false);
 
   /**
-  * Function to open Delete Match Confirmation modal. Includes
-  * `OnOK()` and `onCancel()`.
-  *
-  * @returns {void}
-  */
+   * Function to open Delete Match Confirmation modal. Includes
+   * `OnOK()` and `onCancel()`.
+   *
+   * @returns {void}
+   */
   function showConfirm() {
     Modal.confirm({
       centered: true,
@@ -49,20 +49,20 @@ const Match = ({ imgPath, name, contact }) => {
       icon: <ExclamationCircleOutlined />,
       content: "Are you sure you want to delete this match?",
       /**
-      * @description Function to actually delete match if user hits "OK"
-      * @memberof Match
-      * @returns {void}
-      * @private
-      */
+       * @description Function to actually delete match if user hits "OK"
+       * @memberof Match
+       * @returns {void}
+       * @private
+       */
       onOk() {
         // TODO: delete acc
       },
       /**
-      * @description Function to set `deleteMatchPressed` to `false` to close modal.
-      * @memberof Match
-      * @returns {void}
-      * @private
-      */
+       * @description Function to set `deleteMatchPressed` to `false` to close modal.
+       * @memberof Match
+       * @returns {void}
+       * @private
+       */
       onCancel() {
         setDeleteMatchPressed(false);
       },
@@ -70,20 +70,34 @@ const Match = ({ imgPath, name, contact }) => {
   }
 
   /**
-  * Function to open Delete Match Confirmation modal.
-  *
-  * @memberof Match
-  * @returns {void}
-  */
+   * Function to open Delete Match Confirmation modal.
+   *
+   * @memberof Match
+   * @returns {void}
+   */
   function deleteMatch() {
     setDeleteMatchPressed(true);
 
     showConfirm();
   }
-  
+
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", marginLeft: "1rem" }}>
-      <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "1rem",
+        marginLeft: "1rem",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
         <Avatar src={imgPath} size={85} />
         <div style={{ marginLeft: "1rem", marginRight: "1rem" }}>
           <h4>{name}</h4>
@@ -91,13 +105,14 @@ const Match = ({ imgPath, name, contact }) => {
         </div>
       </div>
       <div>
-      <Button
-        ghost
-        style={{ border: 0 }}
-        size="medium"
-        icon={<CloseOutlined style={{ color: "white" }} />}
-        onClick={deleteMatch}
-      />
+        <Button
+          ghost
+          style={{ border: 0 }}
+          size="medium"
+          icon={<CloseOutlined style={{ color: "white" }} />}
+          onClick={deleteMatch}
+          data-testid="delete-match"
+        />
       </div>
     </div>
   );
@@ -113,16 +128,26 @@ const Match = ({ imgPath, name, contact }) => {
  */
 const Matched = () => {
   /**
-  * Function to generate all the Match sub-components for a user.
-  *
-  * @returns {Match}
-  */
+   * Function to generate all the Match sub-components for a user.
+   *
+   * @returns {Match}
+   */
   let generateList = data.map((item, index) => {
-      return <Match key={index} imgPath={item.img} name={item.name} contact={item.contact}/>
-  })
+    return (
+      <Match
+        key={index}
+        imgPath={item.img}
+        name={item.name}
+        contact={item.contact}
+      />
+    );
+  });
 
   return (
-    <div className="container" style={{ margin: "1rem", marginBottom: "4rem", position: "relative" }}>
+    <div
+      className="container"
+      style={{ margin: "1rem", marginBottom: "4rem", position: "relative" }}
+    >
       <h1 style={{ color: "white" }}>Matches</h1>
       {generateList}
     </div>

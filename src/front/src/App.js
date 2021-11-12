@@ -21,7 +21,14 @@ const App = () => {
     <>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route exact path="/" element={<Meet />} />
+        <Route
+          exact path="/"
+          element={
+            <PrivateRoute>
+              <Meet />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/profile"
           element={

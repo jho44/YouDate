@@ -42,7 +42,7 @@ You can find our documentation at our [GitHub Pages](https://jho44.github.io/You
 - Profile page requires login (fake for now)
     1. click on button corresponding to Profile page on navbar
     2. click on the Login button on the resulting page after navigation
-    3. the resulting page after logging in should have a "Favorite Artists" section
+    3. assert that the resulting page after logging in has a "Favorite Artists" section
 
 - Toggle Delete Account Confirmation modal open
     1. click on button corresponding to Profile page on navbar
@@ -57,3 +57,30 @@ You can find our documentation at our [GitHub Pages](https://jho44.github.io/You
     4. click on the "Cancel" button
     5. assert that the modal is gone
     6. assert that the "Delete Account" switch is switched off
+
+**Matched**
+- Matched page requires login and renders dummy matches
+    1. click on button corresponding to Matches page on navbar
+    2. click on the Login button on the resulting page after navigation
+    3. assert the resulting page after logging in has 1 div with class `container`
+    4. assert the resulting page has the word "Matches"
+    5. assert that there are 8 dummy matches
+
+- Open Delete Match modal
+    1. click on button corresponding to Matches page on navbar
+    2. click on the Login button on the resulting page after navigation
+    3. click on Delete Match button on first match
+    4. assert that an Ant Design modal opened with the words "Delete Match" in it
+
+- Close Delete Match modal
+    1. click on button corresponding to Matches page on navbar
+    2. click on the Login button on the resulting page after navigation
+    3. click on Delete Match button on first match
+    4. click on the Cancel button
+    5. asseert that the Ant Design modal is gone
+
+**Meet**
+- Meet page requires login
+    1. click on button corresponding to Meet page on navbar
+    2. click on the Login button on the resulting page after navigation
+    3. assert the resulting page after logging in has the words "Artists in Common"

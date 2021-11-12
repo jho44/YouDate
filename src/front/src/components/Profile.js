@@ -6,6 +6,7 @@ import data from "./fakeData.json";
 import Tidbit from "./common/Tidbit";
 import QA from "./common/QA";
 import Bio from "./common/Bio";
+import NameAndPronouns from "./common/NameAndPronouns";
 
 /**
  * Component for the Profile page
@@ -90,7 +91,8 @@ const Profile = ({ meet }) => {
       />
 
       <div className="container">
-        <Bio meet={false} content={data.user} />
+        <NameAndPronouns meet={false} content={data.user} />
+        <Bio meet={false} bioParagraph={data.user.description} />
 
         <h3>Favorite Artists</h3>
         {data.user.artists.map((artist, ind) => (

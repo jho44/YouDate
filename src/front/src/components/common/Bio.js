@@ -4,60 +4,6 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import "../../App.css";
 import EditButton from "./EditButton";
 
-/**
- * BioParagraph sub-component used exclusively by Bio sub-component.
- * Creates the bio paragraph in Profile and Meet pages.
- *
- * @property {boolean} meet - Whether this component is being used for
- * the PROFILE or MEET page
- * @property {string} bioParagraph - The content for the bio paragraph
- * @property {boolean} editBioPressed - The state of the bio paragraph.
- * This determines if it is rendering the pre edit stage or the currently
- * editing stage.
- * @property {Function} editFunction - The function that changes the
- * state to bring up the editing form.
- * @property {Function} finishEditFunction - The function that brings up
- * the finished editing model.
- * @returns {HTML} Styled div wrapped around the bio paragraph
- *
- * @package
- * @class
- */
-const BioParagraph = ({
-  meet,
-  bioParagraph,
-  editBioPressed,
-  editFunction,
-  finishEditFunction,
-}) => {
-  return (
-    <span style={{ width: "100%"}}>
-      {meet ? (
-        bioParagraph
-      ) : (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-        {editBioPressed ? (
-          <>
-            <Input defaultValue={bioParagraph} />
-            <EditButton isEdit={true} editFunction={finishEditFunction} />
-          </>
-        ) : (
-          <>
-            {bioParagraph}
-            <EditButton isEdit={false} editFunction={editFunction} />
-          </>
-        )}
-        </div>
-      )}
-    </span>
-  );
-};
 
 /**
  * Bio sub-component used by the Meet and Profile component.
@@ -66,13 +12,13 @@ const BioParagraph = ({
  *
  * @property {boolean} meet - Whether this component is being used for
  * the PROFILE or MEET page
- * @property {string} content - The content for the bio
- * @returns {HTML} Styled div wrapped around name, age, and bio.
+ * @property {string} bioParagraph - The content for the bio paragraph
+ * @returns {HTML} Styled div wrapped around the bio paragraph.
  *
  * @package
  * @class
  */
-const Bio = ({ meet, content }) => {
+const Bio = ({ meet, bioParagraph }) => {
   /**
    * @typedef {Boolean} editBioPressed
    * @description (Private) state variable controlling whether the
@@ -145,36 +91,32 @@ const Bio = ({ meet, content }) => {
   function finishedEditBio() {
     showConfirm();
   }
-
   return (
-    <>
-      <div 
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "0.5rem",
-        }}
-      >
-        <div 
+    <span style={{ width: "100%"}}>
+      {meet ? (
+        bioParagraph
+      ) : (
+        <div
           style={{
             display: "flex",
+            justifyContent: "space-between",
             alignItems: "center",
           }}
         >
-          <h1 style={{ margin: "0px" }}>{content.name}</h1>
-          <h3 style={{ margin: "0px", marginLeft: "0.5rem" }}> ({content.pronouns})</h3>
+        {editBioPressed ? (
+          <>
+            <Input autoSize defaultValue={bioParagraph} />
+            <EditButton isEdit={true} editFunction={finishedEditBio} />
+          </>
+        ) : (
+          <>
+            {bioParagraph}
+            <EditButton isEdit={false} editFunction={editBio} />
+          </>
+        )}
         </div>
-        <span>{content.age}</span>
-      </div>
-      <BioParagraph
-          meet={meet}
-          bioParagraph={content.description}
-          editBioPressed={editBioPressed}
-          editFunction={editBio}
-          finishEditFunction={finishedEditBio}
-        />
-    </>
+      )}
+    </span>
   );
 };
 

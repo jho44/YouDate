@@ -6,6 +6,7 @@ import data from "./fakeData.json";
 import Tidbit from "./common/Tidbit";
 import QA from "./common/QA";
 import Bio from "./common/Bio";
+import NameAndPronouns from "./common/NameAndPronouns";
 
 /**
  * Component for the Meet page
@@ -83,7 +84,8 @@ const Meet = ({ meet }) => {
       />
 
       <div className="container">
-        <Bio meet={true} content={data.user} />
+        <NameAndPronouns meet={true} content={data.user} />
+        <Bio meet={true} bioParagraph={data.user.description} />
 
         <h3>Artists in Common</h3>
         {data.user.artists.map((artist, ind) => (

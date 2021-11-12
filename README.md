@@ -85,7 +85,7 @@ You can find our documentation at our [GitHub Pages](https://jho44.github.io/You
     2. click on the Login button on the resulting page after navigation
     3. assert the resulting page after logging in has the words "Artists in Common"
 
-#### Backend (via Postman)
+#### Backend (Integration tests via Postman)
 
 Postman tests must be imported as a collection into Postman in order to run them. They are saved as a JSON file in our repository.
 
@@ -108,3 +108,13 @@ Postman tests must be imported as a collection into Postman in order to run them
 - Delete a created user
     1. assert that response code is 200
     2. assert that the user is deleted
+
+#### Backend (Unit tests via Pytest and Monkeypatch)
+
+Virtual env with required dependencies must be active
+
+**Create User from Spotify Token**
+- Ensures the logic to parse the json object returned by spotify is accurate and robust
+
+**Other unit tests test the same routes as integration tests**
+- Ensures ONLY that the API contract is valid (aka unchanged from a previous valid execution). This is useful when refactoring to ensure there are no service disruptions.

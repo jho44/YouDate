@@ -1,56 +1,10 @@
 import React, { useState } from "react";
 import { Descriptions, Button, Affix } from "antd";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import "./App.css";
+import "../App.css";
 import data from "./fakeData.json";
-
-/**
- * Tidbit sub-component used by Meet and Profile component.
- * For things like a user's desired relationship type or education.
- *
- * @property {string} imgPath - path to icon's image file
- * corresponding to tidbit about user
- * @property {string} alt - `alt` attribute for said icon's image
- * element
- * @property {string} content - words for this Tidbit
- * @returns {HTML} Styled div wrapped around icon `img` and `span`
- * for `content`
- *
- * @package
- * @class
- */
-const Tidbit = ({ imgPath, alt, content }) => {
-  return (
-    <div style={{ marginBottom: "1rem" }}>
-      <img
-        src={imgPath}
-        alt={alt}
-        style={{ weight: "1.5rem", paddingRight: "1rem" }}
-      />
-      <span>{content}</span>
-    </div>
-  );
-};
-
-/**
- * QA sub-component used by Meet and Profile component.
- * User specified question and answer pairs.
- *
- * @property {string} Q - question about the user
- * @property {string} A - user's answer to that question
- * @returns {HTML} Styled div wrapped around said `Q` and `A`.
- *
- * @package
- * @class
- */
-const QA = ({ Q, A }) => {
-  return (
-    <div style={{ marginBottom: "1rem" }}>
-      <h4>{Q}</h4>
-      <span>{A}</span>
-    </div>
-  );
-};
+import Tidbit from "./common/Tidbit";
+import QA from "./common/QA";
 
 /**
  * Component for the Meet page

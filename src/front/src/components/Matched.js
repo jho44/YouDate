@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Avatar } from "antd";
 import { ExclamationCircleOutlined, CloseOutlined } from "@ant-design/icons";
-import "./App.css";
+import "../App.css";
 import data from "./matchesFakeData.json";
 
 /**

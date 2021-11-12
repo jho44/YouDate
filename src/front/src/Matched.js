@@ -95,8 +95,8 @@ const Match = ({ imgPath, name, contact }) => {
         ghost
         style={{ border: 0 }}
         size="medium"
-        icon={<CloseOutlined style={{ color: "white" }}
-        onClick={deleteMatch}/>}
+        icon={<CloseOutlined style={{ color: "white" }} />}
+        onClick={deleteMatch}
       />
       </div>
     </div>
@@ -122,7 +122,7 @@ const Matched = () => {
   })
 
   return (
-    <div style={{ margin: "1rem", marginBottom: "4rem", position: "relative" }}>
+    <div className="container" style={{ margin: "1rem", marginBottom: "4rem", position: "relative" }}>
       <h1 style={{ color: "white" }}>Matches</h1>
       {generateList}
     </div>

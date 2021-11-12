@@ -16,7 +16,7 @@ import data from "./matchesFakeData.json";
  * @package
  * @class
  */
-const Match = ({ imgPath, name, contact }) => {
+const Match = ({ index, imgPath, name, contact }) => {
   /**
    * @typedef {Boolean} deleteMatchPressed
    * @description (Private) state variable controlling whether the
@@ -82,7 +82,7 @@ const Match = ({ imgPath, name, contact }) => {
   }
 
   return (
-    <div
+    <div data-testid="match"
       style={{
         display: "flex",
         justifyContent: "space-between",
@@ -111,7 +111,7 @@ const Match = ({ imgPath, name, contact }) => {
           size="medium"
           icon={<CloseOutlined style={{ color: "white" }} />}
           onClick={deleteMatch}
-          data-testid="delete-match"
+          button-testid={`delete-match-${index}`}
         />
       </div>
     </div>
@@ -136,6 +136,7 @@ const Matched = () => {
     return (
       <Match
         key={index}
+        index={index}
         imgPath={item.img}
         name={item.name}
         contact={item.contact}

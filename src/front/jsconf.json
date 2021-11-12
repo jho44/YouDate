@@ -3,11 +3,11 @@
   "source": {
     "include": [
       "src/App.js",
-      "src/Profile.js",
-      "src/Meet.js",
-      "src/Matched.js",
+      "src/components/Profile.js",
+      "src/components/Meet.js",
+      "src/components/Matched.js",
       "src/Login.js",
-      "src/Navbar.js",
+      "src/components/Navbar.js",
       "src/PrivateRoute.js"
     ]
   }

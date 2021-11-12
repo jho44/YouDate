@@ -18,60 +18,60 @@ import QA from "./common/QA";
  */
 const Meet = ({ meet }) => {
   /**
-   * @typedef {Boolean} rightSwipePressed
+   * @typedef {Boolean} likePressed
    * @description (Private) state variable controlling whether the
-   * Match Confirmation modal should be open.
+   * Like Confirmation modal should be open.
    * @memberof Meet
    */
   /**
-   * @typedef {Function} setRightSwipePressed
-   * @param {Boolean} newState - If `false`, Match
+   * @typedef {Function} setLikePressed
+   * @param {Boolean} newState - If `false`, Like
    * Confirmation modal should be closed.
    * If `true`, modal should be open.
-   * @description Sets `rightSwipePressed` to `newState`
+   * @description Sets `likePressed` to `newState`
    * @returns {void}
    * @memberof Meet
    * @private
    */
   /**
-   * @typedef {Boolean} leftSwipePressed
+   * @typedef {Boolean} dislikePressed
    * @description (Private) state variable controlling whether the
-   * Not Match Confirmation modal should be open.
+   * Dislike Confirmation modal should be open.
    * @memberof Meet
    */
   /**
-   * @typedef {Function} setLeftSwipePressed
-   * @param {Boolean} newState - If `false`, Not Match
+   * @typedef {Function} setDislikePressed
+   * @param {Boolean} newState - If `false`, Dislike
    * Confirmation modal should be closed.
    * If `true`, modal should be open.
-   * @description Sets `leftSwipePressed` to `newState`
+   * @description Sets `dislikePressed` to `newState`
    * @returns {void}
    * @memberof Meet
    * @private
    */
 
-  const [rightSwipePressed, setRightSwipePressed] = useState(false);
-  const [leftSwipePressed, setLeftSwipePressed] = useState(false);
+  const [likePressed, setLikePressed] = useState(false);
+  const [dislikePressed, setDislikePressed] = useState(false);
 
   /**
-   * Function to open Right Swipe Confirmation modal.
+   * Function to open Like Confirmation modal.
    *
    * @memberof Meet
    * @returns {void}
    */
-  function rightSwipe() {
-    setRightSwipePressed(true);
+  function like() {
+    setLikePressed(true);
     // todo: add person to matched page
   }
 
   /**
-   * Function to open Right Swipe Confirmation modal.
+   * Function to open Dislike Confirmation modal.
    *
    * @memberof Meet
    * @returns {void}
    */
-  function leftSwipe() {
-    setLeftSwipePressed(true);
+  function dislike() {
+    setDislikePressed(true);
     // todo: display next person
   }
   return (
@@ -159,7 +159,7 @@ const Meet = ({ meet }) => {
                 ghost
                 size="large"
                 icon={<CloseOutlined style={{ color: "white" }} />}
-                onClick={leftSwipe}
+                onClick={dislike}
                 data-testid="left-swipe"
               />
             </div>
@@ -167,7 +167,7 @@ const Meet = ({ meet }) => {
               ghost
               size="large"
               icon={<CheckOutlined style={{ color: "white" }} />}
-              onClick={rightSwipe}
+              onClick={like}
               data-testid="right-swipe"
             />
           </div>

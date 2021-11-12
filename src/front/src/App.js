@@ -22,7 +22,8 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route
-          exact path="/"
+          exact
+          path="/"
           element={
             <PrivateRoute>
               <Meet />

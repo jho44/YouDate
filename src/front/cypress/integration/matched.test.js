@@ -10,7 +10,7 @@ describe("Meet Page", () => {
 
     cy.get("div.container").should("have.length", 1);
     cy.get("h1").contains("Matches");
-    cy.get('[data-testid="match"]').should('have.length', 8);
+    cy.get('[data-testid="match"]').should("have.length", 8);
   });
 
   it("Delete Match modal open", () => {
@@ -27,6 +27,6 @@ describe("Meet Page", () => {
     cy.get('[button-testid="delete-match-1"]').click();
     cy.contains("Cancel").click();
 
-    cy.get('div.ant-modal-body').should('not.exist')
+    cy.get("div.ant-modal-body").should("not.exist");
   });
 });

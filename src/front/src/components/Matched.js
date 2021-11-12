@@ -82,7 +82,8 @@ const Match = ({ index, imgPath, name, contact }) => {
   }
 
   return (
-    <div data-testid="match"
+    <div
+      data-testid="match"
       style={{
         display: "flex",
         justifyContent: "space-between",

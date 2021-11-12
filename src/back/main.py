@@ -8,6 +8,7 @@ import atexit
 import urllib
 import requests
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.testclient import TestClient
 
 class SpotifyUserRequest(BaseModel):
     access_token: str
@@ -34,6 +35,7 @@ def _exit_application():
 atexit.register(_exit_application)
 
 app = FastAPI()
+test_client = TestClient(app)
 
 origins = [
     "http://localhost:3000"
@@ -46,6 +48,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/ping")
+def pong():
+    return {"ping": "pong!"}
 
 @app.post("/createArtist")
 async def create_artist(artist: Artist):
@@ -209,6 +215,7 @@ async def get_unmet(email):
     """
     result = neo_db.get_unmet(email)
     return result
+
 
 @app.post("/like")
 async def like(email_a: str = Body(...), email_b: str = Body(...)):

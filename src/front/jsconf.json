@@ -8,7 +8,9 @@
       "src/components/Matched.js",
       "src/Login.js",
       "src/components/Navbar.js",
-      "src/PrivateRoute.js"
+      "src/PrivateRoute.js",
+      "src/components/common/QA.js",
+      "src/components/common/Tidbit.js"
     ]
   }
 }

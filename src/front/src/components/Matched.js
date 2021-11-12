@@ -146,10 +146,7 @@ const Matched = () => {
   });
 
   return (
-    <div
-      className="container"
-      style={{ margin: "1rem", marginBottom: "4rem", position: "relative" }}
-    >
+    <div className="container" style={{ margin: "1rem" }}>
       <h1 style={{ color: "white" }}>Matches</h1>
       {generateList}
     </div>

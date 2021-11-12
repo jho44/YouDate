@@ -77,10 +77,32 @@ You can find our documentation at our [GitHub Pages](https://jho44.github.io/You
     2. click on the Login button on the resulting page after navigation
     3. click on Delete Match button on first match
     4. click on the Cancel button
-    5. asseert that the Ant Design modal is gone
+    5. assert that the Ant Design modal is gone
 
 **Meet**
 - Meet page requires login
     1. click on button corresponding to Meet page on navbar
     2. click on the Login button on the resulting page after navigation
     3. assert the resulting page after logging in has the words "Artists in Common"
+
+#### Backend (via Postman)
+
+**Create Artist**
+- Create a valid test artist
+    1. assert that response code is 200
+    2. assert that the artist name is returned
+
+**Create User**
+- Create a valid, previously unseen user
+    1. assert that response code is 200
+    2. assert that the user data is correct
+
+**Create User from Spotify Profile**
+- Create a valid, previously unseen user from their Spotify credentials
+    1. assert that response code is 200
+    2. assert that user data matches the user data of the test Spotify user
+
+**Delete User**
+- Delete a created user
+    1. assert that response code is 200
+    2. assert that the user is deleted

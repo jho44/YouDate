@@ -158,7 +158,7 @@ class MatchPool:
     # get user
     def get_user(self, email):
         with self.driver.session() as session:
-            return session.read_transaction(self._get_user, user.email)
+            return session.read_transaction(self._get_user, email)
 
     @staticmethod
     def _get_user(tx, email):

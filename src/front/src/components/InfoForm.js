@@ -1,11 +1,20 @@
 import React, { useState } from "react";
-import { Form, Input, Button, DatePicker, Upload, Typography } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  DatePicker,
+  Upload,
+  Typography,
+  Select,
+} from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { getBase64, beforeUpload } from "../fileUpload";
 import "../App.css";
 
 const { Item } = Form;
 const { Title, Paragraph } = Typography;
+const { Option } = Select;
 
 const InfoFormItem = ({ child, ...props }) => {
   return <Item {...props}>{child}</Item>;
@@ -35,6 +44,21 @@ const InfoForm = () => {
   const [img, setImg] = useState();
 
   /**
+   * @typedef {Boolean} validImg
+   * @description (Private) Whether the uploaded image is valid (less than 2MB and a jpg/png).
+   * @memberof InfoForm
+   */
+  /**
+   * @typedef {Function} setValidImg
+   * @param {Boolean} newState - Whether the new image is valid.
+   * @description Sets `validImg` to `newState`.
+   * @returns {void}
+   * @memberof InfoForm
+   * @private
+   */
+  const [validImg, setValidImg] = useState(false);
+
+  /**
    * @typedef {Array} fileList
    * @description (Private) Array of File used internally by Ant
    * Design's `<Upload />`
@@ -58,11 +82,16 @@ const InfoForm = () => {
    * @private
    */
   const handleChange = (info) => {
-    getBase64(info.file, (imageUrl) => {
-      setImg(imageUrl);
-    });
+    if (validImg) {
+      getBase64(info.file, (imageUrl) => {
+        setImg(imageUrl);
+      });
 
-    setFileList([...info.fileList]);
+      setFileList([...info.fileList]);
+    } else {
+      setImg();
+      setFileList([]);
+    }
   };
 
   /**
@@ -73,6 +102,7 @@ const InfoForm = () => {
    */
   const onFinish = (values) => {
     console.log(values);
+    console.log(img);
   };
 
   /**
@@ -95,13 +125,19 @@ const InfoForm = () => {
     },
     {
       child: <Input />,
+      name: "email",
+      label: "Email",
+      rules: [{ required: true }],
+    },
+    {
+      child: <Input />,
       name: "pronouns",
       label: "Pronouns",
       rules: [{ required: true }],
     },
     {
       child: <DatePicker picker="month" />,
-      name: "birth-month",
+      name: "birth_month",
       label: "Birth Month",
       rules: [{ required: true }],
     },
@@ -118,7 +154,11 @@ const InfoForm = () => {
           listType="picture-card"
           className="avatar-uploader"
           showUploadList={false}
-          beforeUpload={beforeUpload}
+          beforeUpload={(file) =>
+            beforeUpload(file, (validPic) => {
+              setValidImg(validPic);
+            })
+          }
           onChange={handleChange}
           fileList={fileList}
         >
@@ -139,9 +179,91 @@ const InfoForm = () => {
           )}
         </Upload>
       ),
-      name: "profile-pic",
+      name: "profile_pic",
       label: "Profile Picture",
       valuePropName: "props",
+    },
+    {
+      child: (
+        <Select style={{ width: "50%" }}>
+          <Option value="casual">Go with the flow</Option>
+          <Option value="short-term">Short Term</Option>
+          <Option value="long-term">Long Term</Option>
+          <Option value="other">Other</Option>
+        </Select>
+      ),
+      name: "desired_relationship",
+      label: "Desired Relationship",
+      rules: [{ required: true }],
+    },
+    {
+      child: <Input />,
+      name: "education",
+      label: "Education",
+    },
+    {
+      child: <Input />,
+      name: "occupation",
+      label: "Occupation",
+    },
+    {
+      child: <Input />,
+      name: "sexual_orientation",
+      label: "Sexual Orientation",
+    },
+    {
+      child: <Input />,
+      name: "location",
+      label: "My Location",
+    },
+    {
+      child: (
+        <Select style={{ width: "50%" }} allowClear>
+          <Option value="anarchism">Anarchism</Option>
+          <Option value="communism">Communism</Option>
+          <Option value="conservatism">Conservatism</Option>
+          <Option value="environmentalism">Environmentalism</Option>
+          <Option value="fascism">Fascism</Option>
+          <Option value="feminism">Feminism</Option>
+          <Option value="liberalism">Liberalism</Option>
+          <Option value="nationalism">Nationalism</Option>
+          <Option value="populism">Populism</Option>
+          <Option value="socialism">Socialism</Option>
+          <Option value="other">Other</Option>
+        </Select>
+      ),
+      name: "political_view",
+      label: "Political View",
+    },
+    {
+      child: <Input />,
+      name: "height",
+      label: "Height",
+    },
+    {
+      child: <Input />,
+      name: "life_goal",
+      label: "Life goal of mine...",
+    },
+    {
+      child: <Input />,
+      name: "believe_or_not",
+      label: "Believe it or not, I...",
+    },
+    {
+      child: <Input />,
+      name: "life_peaked",
+      label: "My life peaked when...",
+    },
+    {
+      child: <Input />,
+      name: "feel_famous",
+      label: "I feel famous when...",
+    },
+    {
+      child: <Input />,
+      name: "biggest_risk",
+      label: "Biggest risk I've ever taken",
     },
   ];
 

@@ -64,7 +64,8 @@ h1.ant-typography,
   color: white;
 }
 
-.ant-message-custom-content.ant-message-error > span {
+.ant-message-custom-content.ant-message-error > span,
+.ant-select-selection-item {
   color: black;
 }
 
@@ -82,7 +83,7 @@ h3 {
 }
 
 .container {
-  margin: 1rem;
+  margin: 2rem;
   padding-bottom: 5rem;
 }
 

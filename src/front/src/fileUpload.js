@@ -16,11 +16,12 @@ export function getBase64(img, callback) {
 
 /**
  * Function to ensure uploaded image's type is jpeg/png and smaller than 2MB.
- * Taken from Ant Design's docs.
+ * Mostly taken from Ant Design's docs.
  * @param {File} file - The new image user's trying to upload.
- * @returns {void}
+ * @param {Function} callback - Function that sets state in caller with whether or not the newly uploaded image is valid.
+ * @returns {Boolean} - Always returns `false` because we want to handle uploads manually.
  */
-export function beforeUpload(file) {
+export function beforeUpload(file, callback) {
   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
   if (!isJpgOrPng) {
     message.error("You can only upload JPG/PNG file!");
@@ -29,5 +30,7 @@ export function beforeUpload(file) {
   if (!isLt2M) {
     message.error("Image must smaller than 2MB!");
   }
+
+  callback(isJpgOrPng && isLt2M);
   return false;
 }

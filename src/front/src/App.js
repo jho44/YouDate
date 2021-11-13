@@ -6,6 +6,7 @@ import Profile from "./components/Profile";
 import Matched from "./components/Matched";
 import Login from "./Login";
 import Navbar from "./components/Navbar";
+import InfoForm from "./components/InfoForm";
 import "./App.css";
 
 /**
@@ -21,6 +22,7 @@ const App = () => {
     <>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/info-form" element={<InfoForm />} />
         <Route
           exact
           path="/"

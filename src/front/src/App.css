@@ -55,16 +55,25 @@ h3,
 h4,
 p,
 span,
-.ant-descriptions-title {
+.ant-descriptions-title,
+.ant-btn.ant-btn-primary > span,
+.ant-form-item-label > label,
+.ant-typography,
+h1.ant-typography,
+.ant-typography h1 {
   color: white;
+}
+
+.ant-message-custom-content.ant-message-error > span {
+  color: black;
+}
+
+.anticon.anticon-close-circle:first-child {
+  color: red;
 }
 
 .ant-btn > span {
   color: black;
-}
-
-.ant-btn.ant-btn-primary > span {
-  color: white;
 }
 
 h3 {
@@ -80,4 +89,35 @@ h3 {
 .column-flex {
   display: flex;
   flex-direction: column;
+}
+
+#components-form-demo-control-hooks .ant-btn {
+  margin-right: 8px;
+}
+
+.ant-form-item-control-input-content
+  > .ant-upload-picture-card-wrapper.avatar-uploader,
+.form-btns > div > div > div {
+  display: flex;
+  justify-content: center;
+}
+
+.avatar-uploader > .ant-upload {
+  width: 128px;
+  height: 128px;
+}
+
+@media screen and (min-width: 701px) {
+  .avatar-uploader > .ant-upload {
+    width: 80%;
+    height: 500px;
+  }
+  .form-btns > div > div > div {
+    flex-direction: column;
+    align-items: center;
+  }
+  .form-btns > div > div > div > button {
+    width: 14%;
+    margin-top: 1rem;
+  }
 }

@@ -101,8 +101,45 @@ const InfoForm = () => {
    * @private
    */
   const onFinish = (values) => {
-    console.log(values);
-    console.log(img);
+    // for tidbits and qas, need to send `null` if have `undefined` field
+    // so that our server doesn't discard the `undefined` vals
+    const data = {
+      name: values.name,
+      email: values.email,
+      pronouns: values.pronouns,
+      birth_month: values.birth_month._d,
+      description: values.description,
+      pic: img,
+      qas: {
+        life_goal: values.life_goal || null,
+        believe_or_not: values.believe_or_not || null,
+        life_peaked: values.life_peaked || null,
+        feel_famous: values.feel_famous || null,
+        biggest_risk: values.biggest_risk || null,
+      },
+      tidbits: {
+        desired_relationship: values.desired_relationship || null,
+        education: values.education || null,
+        occupation: values.occupation || null,
+        sexual_orientation: values.sexual_orientation || null,
+        location: values.location || null,
+        political_view: values.political_view || null,
+        height: values.height || null,
+      },
+    };
+
+    fetch("http://localhost:8000/createUser", {
+      method: "POST",
+      mode: "cors",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((res_data) => console.log(res_data))
+      .catch((err) => console.error(err));
   };
 
   /**

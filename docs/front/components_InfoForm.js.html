@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/InfoForm.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/InfoForm.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import {
+  Form,
+  Input,
+  Button,
+  DatePicker,
+  Upload,
+  Typography,
+  Select,
+} from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { getBase64, beforeUpload } from "../fileUpload";
+import "../App.css";
+
+const { Item } = Form;
+const { Title, Paragraph } = Typography;
+const { Option } = Select;
+
+const InfoFormItem = ({ child, ...props }) => {
+  return &lt;Item {...props}>{child}&lt;/Item>;
+};
+
+/**
+ * Form for new Datify user to fill in their basic information.
+ *
+ * @returns {HTML} Page containing form asking for things like name, pronouns, birth month, etc.
+ *
+ * @class
+ */
+const InfoForm = () => {
+  /**
+   * @typedef {String} img
+   * @description (Private) base64 string of user's uploaded profile picture.
+   * @memberof InfoForm
+   */
+  /**
+   * @typedef {Function} setImg
+   * @param {String} newState - The new image we're uploading.
+   * @description Sets `img` to `newState`.
+   * @returns {void}
+   * @memberof InfoForm
+   * @private
+   */
+  const [img, setImg] = useState();
+
+  /**
+   * @typedef {Boolean} validImg
+   * @description (Private) Whether the uploaded image is valid (less than 2MB and a jpg/png).
+   * @memberof InfoForm
+   */
+  /**
+   * @typedef {Function} setValidImg
+   * @param {Boolean} newState - Whether the new image is valid.
+   * @description Sets `validImg` to `newState`.
+   * @returns {void}
+   * @memberof InfoForm
+   * @private
+   */
+  const [validImg, setValidImg] = useState(false);
+
+  /**
+   * @typedef {Array} fileList
+   * @description (Private) Array of File used internally by Ant
+   * Design's `&lt;Upload />`
+   * @memberof InfoForm
+   */
+  /**
+   * @typedef {Function} setFileList
+   * @param {File} newState - The new image we're uploading.
+   * @description Sets `fileList` to `newState`.
+   * @returns {void}
+   * @memberof InfoForm
+   * @private
+   */
+  const [fileList, setFileList] = useState([]);
+  const [form] = Form.useForm();
+
+  /**
+   * Function for getting base64 string from uploaded profile picture.
+   * @memberof InfoForm
+   * @returns {void}
+   * @private
+   */
+  const handleChange = (info) => {
+    if (validImg) {
+      getBase64(info.file, (imageUrl) => {
+        setImg(imageUrl);
+      });
+
+      setFileList([...info.fileList]);
+    } else {
+      setImg();
+      setFileList([]);
+    }
+  };
+
+  /**
+   * Function to send user's basic info to our Neo4j.
+   * @memberof InfoForm
+   * @returns {void}
+   * @private
+   */
+  const onFinish = (values) => {
+    console.log(values);
+    console.log(img);
+  };
+
+  /**
+   * Function to reset form fields to empty.
+   * @memberof InfoForm
+   * @returns {void}
+   * @private
+   */
+  const onReset = () => {
+    setImg();
+    form.resetFields();
+  };
+
+  const contents = [
+    {
+      child: &lt;Input />,
+      name: "name",
+      label: "Name",
+      rules: [{ required: true }],
+    },
+    {
+      child: &lt;Input />,
+      name: "email",
+      label: "Email",
+      rules: [{ required: true }],
+    },
+    {
+      child: &lt;Input />,
+      name: "pronouns",
+      label: "Pronouns",
+      rules: [{ required: true }],
+    },
+    {
+      child: &lt;DatePicker picker="month" />,
+      name: "birth_month",
+      label: "Birth Month",
+      rules: [{ required: true }],
+    },
+    {
+      child: &lt;Input />,
+      name: "description",
+      label: "Description",
+      rules: [{ required: true }],
+    },
+    {
+      child: (
+        &lt;Upload
+          name="avatar"
+          listType="picture-card"
+          className="avatar-uploader"
+          showUploadList={false}
+          beforeUpload={(file) =>
+            beforeUpload(file, (validPic) => {
+              setValidImg(validPic);
+            })
+          }
+          onChange={handleChange}
+          fileList={fileList}
+        >
+          {img ? (
+            &lt;div
+              className="photo"
+              style={{
+                backgroundImage: `url('${img}')`,
+                width: "100%",
+                height: "100%",
+              }}
+            />
+          ) : (
+            &lt;div className="column-flex">
+              &lt;PlusOutlined />
+              &lt;div style={{ marginTop: 8 }}>Upload&lt;/div>
+            &lt;/div>
+          )}
+        &lt;/Upload>
+      ),
+      name: "profile_pic",
+      label: "Profile Picture",
+      valuePropName: "props",
+    },
+    {
+      child: (
+        &lt;Select style={{ width: "50%" }}>
+          &lt;Option value="casual">Go with the flow&lt;/Option>
+          &lt;Option value="short-term">Short Term&lt;/Option>
+          &lt;Option value="long-term">Long Term&lt;/Option>
+          &lt;Option value="other">Other&lt;/Option>
+        &lt;/Select>
+      ),
+      name: "desired_relationship",
+      label: "Desired Relationship",
+      rules: [{ required: true }],
+    },
+    {
+      child: &lt;Input />,
+      name: "education",
+      label: "Education",
+    },
+    {
+      child: &lt;Input />,
+      name: "occupation",
+      label: "Occupation",
+    },
+    {
+      child: &lt;Input />,
+      name: "sexual_orientation",
+      label: "Sexual Orientation",
+    },
+    {
+      child: &lt;Input />,
+      name: "location",
+      label: "My Location",
+    },
+    {
+      child: (
+        &lt;Select style={{ width: "50%" }} allowClear>
+          &lt;Option value="anarchism">Anarchism&lt;/Option>
+          &lt;Option value="communism">Communism&lt;/Option>
+          &lt;Option value="conservatism">Conservatism&lt;/Option>
+          &lt;Option value="environmentalism">Environmentalism&lt;/Option>
+          &lt;Option value="fascism">Fascism&lt;/Option>
+          &lt;Option value="feminism">Feminism&lt;/Option>
+          &lt;Option value="liberalism">Liberalism&lt;/Option>
+          &lt;Option value="nationalism">Nationalism&lt;/Option>
+          &lt;Option value="populism">Populism&lt;/Option>
+          &lt;Option value="socialism">Socialism&lt;/Option>
+          &lt;Option value="other">Other&lt;/Option>
+        &lt;/Select>
+      ),
+      name: "political_view",
+      label: "Political View",
+    },
+    {
+      child: &lt;Input />,
+      name: "height",
+      label: "Height",
+    },
+    {
+      child: &lt;Input />,
+      name: "life_goal",
+      label: "Life goal of mine...",
+    },
+    {
+      child: &lt;Input />,
+      name: "believe_or_not",
+      label: "Believe it or not, I...",
+    },
+    {
+      child: &lt;Input />,
+      name: "life_peaked",
+      label: "My life peaked when...",
+    },
+    {
+      child: &lt;Input />,
+      name: "feel_famous",
+      label: "I feel famous when...",
+    },
+    {
+      child: &lt;Input />,
+      name: "biggest_risk",
+      label: "Biggest risk I've ever taken",
+    },
+  ];
+
+  return (
+    &lt;div className="container">
+      &lt;Title>Basic Info&lt;/Title>
+      &lt;Paragraph>Help us help you build your profile!&lt;/Paragraph>
+      &lt;Form layout="vertical" form={form} name="basic-info" onFinish={onFinish}>
+        {contents.map((content, ind) => (
+          &lt;InfoFormItem {...content} key={ind} />
+        ))}
+        &lt;Item className="form-btns">
+          &lt;Button type="primary" htmlType="submit">
+            Submit
+          &lt;/Button>
+          &lt;Button htmlType="button" onClick={onReset}>
+            Reset
+          &lt;/Button>
+        &lt;/Item>
+      &lt;/Form>
+    &lt;/div>
+  );
+};
+
+export default InfoForm;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="fakeAuth.html">fakeAuth</a></li><li><a href="InfoForm.html">InfoForm</a></li><li><a href="Login.html">Login</a></li><li><a href="Match.html">Match</a></li><li><a href="Matched.html">Matched</a></li><li><a href="Meet.html">Meet</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="NavbarBtn.html">NavbarBtn</a></li><li><a href="PrivateRoute.html">PrivateRoute</a></li><li><a href="Profile.html">Profile</a></li><li><a href="QA.html">QA</a></li><li><a href="Tidbit.html">Tidbit</a></li></ul><h3>Global</h3><ul><li><a href="global.html#beforeUpload">beforeUpload</a></li><li><a href="global.html#getBase64">getBase64</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Nov 16 2021 02:33:56 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -104,7 +104,7 @@
     
 
     
-    <h4 class="name" id="Login"><span class="type-signature"></span>Login<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h4>
+    <h4 class="name" id="beforeUpload"><span class="type-signature"></span>beforeUpload<span class="signature">(file, callback)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
 
     
@@ -112,13 +112,8 @@
 
 
 <div class="description">
-    <p>Class Component that renders our Login page and redirects us to either:</p>
-<ol>
-<li>the page we came from that required authentication</li>
-<li>the &quot;Home&quot; page for now</li>
-</ol>
-<p>(No special reason why this is a Class Component rather than a
-functional component.)</p>
+    <p>Function to ensure uploaded image's type is jpeg/png and smaller than 2MB.
+Mostly taken from Ant Design's docs.</p>
 </div>
 
 
@@ -129,15 +124,10 @@ functional component.)</p>
 
 
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
+    <h5>Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -159,13 +149,13 @@ functional component.)</p>
 
         <tr>
             
-                <td class="name"><code>location</code></td>
+                <td class="name"><code>file</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">File</span>
 
 
             
@@ -175,12 +165,37 @@ functional component.)</p>
 
             
 
-            <td class="description last"><p><code>{ from: { pathname: &quot;path/of/last/page/we/were/on&quot; } }</code></p></td>
+            <td class="description last"><p>The new image user's trying to upload.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Function that sets state in caller with whether or not the newly uploaded image is valid.</p></td>
         </tr>
 
     
     </tbody>
 </table>
+
+
 
 
 
@@ -214,7 +229,7 @@ functional component.)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Login.js.html">Login.js</a>, <a href="Login.js.html#line14">line 14</a>
+        <a href="fileUpload.js.html">fileUpload.js</a>, <a href="fileUpload.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -243,7 +258,9 @@ functional component.)</p>
 
         
 <div class="param-desc">
-    <p>Meet page, soon to include Profile page</p>
+    <ul>
+<li>Always returns <code>false</code> because we want to handle uploads manually.</li>
+</ul>
 </div>
 
 
@@ -254,7 +271,187 @@ functional component.)</p>
     </dt>
     <dd>
         
-<span class="param-type">HTML</span>
+<span class="param-type">Boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getBase64"><span class="type-signature"></span>getBase64<span class="signature">(img, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Function to turn File into base64 string then pass control to
+callback. Taken from Ant Design's docs.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>img</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">File</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The new image user's trying to upload.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Function to run after FileReader has
+loaded the <code>img</code> successfully.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="fileUpload.js.html">fileUpload.js</a>, <a href="fileUpload.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
 
 
     </dd>
@@ -282,13 +479,13 @@ functional component.)</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="fakeAuth.html">fakeAuth</a></li><li><a href="Meet.html">Meet</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="NavbarBtn.html">NavbarBtn</a></li><li><a href="PrivateRoute.html">PrivateRoute</a></li><li><a href="Profile.html">Profile</a></li><li><a href="QA.html">QA</a></li><li><a href="Tidbit.html">Tidbit</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Login">Login</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="fakeAuth.html">fakeAuth</a></li><li><a href="InfoForm.html">InfoForm</a></li><li><a href="Login.html">Login</a></li><li><a href="Match.html">Match</a></li><li><a href="Matched.html">Matched</a></li><li><a href="Meet.html">Meet</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="NavbarBtn.html">NavbarBtn</a></li><li><a href="PrivateRoute.html">PrivateRoute</a></li><li><a href="Profile.html">Profile</a></li><li><a href="QA.html">QA</a></li><li><a href="Tidbit.html">Tidbit</a></li></ul><h3>Global</h3><ul><li><a href="global.html#beforeUpload">beforeUpload</a></li><li><a href="global.html#getBase64">getBase64</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 10 2021 02:20:03 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Nov 16 2021 02:33:56 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

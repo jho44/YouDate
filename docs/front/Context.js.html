@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: components/common/Tidbit.js</title>
+    <title>JSDoc: Source: Context.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: components/common/Tidbit.js</h1>
+    <h1 class="page-title">Source: Context.js</h1>
 
     
 
@@ -26,38 +26,45 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React from "react";
-import "../../App.css";
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
 
 /**
- * Tidbit sub-component used by Meet and Profile component.
- * For things like a user's desired relationship type or education.
- *
- * @property {string} imgPath - path to icon's image file
- * corresponding to tidbit about user
- * @property {string} alt - `alt` attribute for said icon's image
- * element
- * @property {string} content - words for this Tidbit
- * @returns {HTML} Styled div wrapped around icon `img` and `span`
- * for `content`
- *
- * @package
+ * React Context object that contains a Provider and Consumer Component.
+ * @typedef AuthContext
+ */
+export const AuthContext = React.createContext(null);
+
+/**
+ * Provider from AuthContext for handling some near-global states.
+ * @property {Component} children - Consumers (everything within our Router).
  * @class
  */
-const Tidbit = ({ imgPath, alt, content }) => {
+export const ContextProvider = ({ children }) => {
+  /**
+   * @description Logged-in user's access and refresh tokens
+   * @typedef {Object} tokens
+   * @memberof ContextProvider
+   */
+  /**
+   * @typedef {Function} setTokens
+   * @param {Object} newState - The new Spotify tokens of the user who just logged in.
+   * @description Sets `tokens` to `newState`.
+   * @returns {void}
+   * @memberof ContextProvider
+   */
+  const [tokens, setTokens] = useState(null);
+
   return (
-    &lt;div style={{ marginBottom: "1rem" }}>
-      &lt;img
-        src={imgPath}
-        alt={alt}
-        style={{ weight: "1.5rem", paddingRight: "1rem" }}
-      />
-      &lt;span>{content}&lt;/span>
-    &lt;/div>
+    &lt;AuthContext.Provider
+      value={{
+        tokens,
+        setTokens,
+      }}
+    >
+      {children}
+    &lt;/AuthContext.Provider>
   );
 };
-
-export default Tidbit;
 </code></pre>
         </article>
     </section>

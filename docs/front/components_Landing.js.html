@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: components/common/Tidbit.js</title>
+    <title>JSDoc: Source: components/Landing.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: components/common/Tidbit.js</h1>
+    <h1 class="page-title">Source: components/Landing.js</h1>
 
     
 
@@ -26,38 +26,71 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React from "react";
-import "../../App.css";
+            <pre class="prettyprint source linenums"><code>import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Logo from "../datifyLogo.png";
+import { loginUrl } from "../spotify";
+
+const useStyles = makeStyles({
+  login: {
+    display: "grid",
+    placeItems: "center",
+    height: "100vh",
+    backgroundColor: "black",
+
+    "&amp; img": {
+      width: "50%",
+    },
+
+    "&amp; a": {
+      padding: "20px",
+      borderRadius: "99px",
+      backgroundColor: "#EE82EE",
+      fontWeight: 600,
+      color: "white",
+      textDecoration: "none",
+    },
+
+    "&amp; a:hover": {
+      backgroundColor: " white",
+      borderColor: "#1db954",
+      color: "#EE82EE",
+    },
+  },
+});
 
 /**
- * Tidbit sub-component used by Meet and Profile component.
- * For things like a user's desired relationship type or education.
+ * Class Component that renders our Login/Landing page and redirects us to either:
+ * 1. the page we came from that required authentication
+ * 2. the "Meet" page
  *
- * @property {string} imgPath - path to icon's image file
- * corresponding to tidbit about user
- * @property {string} alt - `alt` attribute for said icon's image
- * element
- * @property {string} content - words for this Tidbit
- * @returns {HTML} Styled div wrapped around icon `img` and `span`
- * for `content`
+ * @param {String} state - `"path/of/last/page/we/were/on"`
+ * @returns {HTML} Landing page, which includes Datify's logo and "LOGIN" button
  *
- * @package
  * @class
  */
-const Tidbit = ({ imgPath, alt, content }) => {
+function Landing({ state }) {
+  const classes = useStyles();
   return (
-    &lt;div style={{ marginBottom: "1rem" }}>
+    &lt;div className={classes.login}>
       &lt;img
-        src={imgPath}
-        alt={alt}
-        style={{ weight: "1.5rem", paddingRight: "1rem" }}
+        src={Logo}
+        alt="Youdate Logo"
+        style={{
+          maxHeight: "35vh",
+          display: "block",
+          width: "auto",
+          height: "auto",
+        }}
       />
-      &lt;span>{content}&lt;/span>
+      &lt;a href={`${loginUrl}${state &amp;&amp; state !== "/" ? state : "/meet/"}`}>
+        LOGIN WITH SPOTIFY
+      &lt;/a>
     &lt;/div>
   );
-};
+}
 
-export default Tidbit;
+export default Landing;
 </code></pre>
         </article>
     </section>

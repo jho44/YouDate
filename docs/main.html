@@ -30,7 +30,7 @@
 from starlette.responses import RedirectResponse
 from typing import Any, Optional, Dict, List
 from pydantic import BaseModel
-import neo_config
+import config
 import match_pool
 import atexit
 import urllib
@@ -60,7 +60,7 @@ class Artist(BaseModel):
 
 uri=&#34;neo4j+s://ce94f876.databases.neo4j.io&#34;
 user=&#34;neo4j&#34;
-password=neo_config.NEO_PASSWORD
+password=config.NEO_PASSWORD
 
 neo_db = match_pool.MatchPool(uri, user, password)
 
@@ -83,6 +83,45 @@ app.add_middleware(
     allow_methods=[&#34;*&#34;],
     allow_headers=[&#34;*&#34;],
 )
+
+CLIENT_ID = &#39;9cf53a8f93444cadac7b3e6d990a9e6d&#39;
+CLIENT_SECRET = config.SPOTIFY_CLIENT_SECRET
+
+SCOPES = &#39;user-top-read&#39;
+
+@app.get(&#39;/accessToken&#39;)
+async def accessToken(code: str, redirect: str):
+    &#34;&#34;&#34;
+    GET route for Spotify access token, necessary for getting users&#39; private Spotify info
+
+    Parameters:
+        `code` (str): the authorization code provided by pinging `https://accounts.spotify.com/authorize`
+        `redirect` (str): the URI we&#39;d like to redirect to after Spotify gives us our desired tokens
+
+    Returns:
+        Dictionary containing:
+        ```python
+        access_token = str # required for getting users&#39; private Spotify info
+        refresh_token = str, # for refreshing access_token after it expires
+        expires_in = int, # how many seconds until access_token expires
+        scope = str, # what permissions we need user to consent to before pulling their private info
+        token_type = str, # e.g. Bearer (Authentication)
+        ```
+    &#34;&#34;&#34;
+    url = &#34;https://accounts.spotify.com/api/token&#34;
+    headers = {}
+    data = {}
+
+    headers[&#39;Content-Type&#39;] = &#34;application/x-www-form-urlencoded&#34;
+    data = {
+        &#39;grant_type&#39;: &#34;authorization_code&#34;,
+        &#39;code&#39;: code,
+        &#39;client_id&#39;: CLIENT_ID,
+        &#39;client_secret&#39;: CLIENT_SECRET,
+        &#39;redirect_uri&#39;: redirect
+    }
+
+    return requests.post(url, headers=headers, data=data).json()
 
 @app.get(&#34;/ping&#34;)
 def pong():
@@ -308,6 +347,61 @@ async def like(email_a: str = Body(...), email_b: str = Body(...)):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="main.accessToken"><code class="name flex">
+<span>async def <span class="ident">accessToken</span></span>(<span>code: str, redirect: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>GET route for Spotify access token, necessary for getting users' private Spotify info</p>
+<h2 id="parameters">Parameters</h2>
+<p><code>code</code> (str): the authorization code provided by pinging <code>https://accounts.spotify.com/authorize</code>
+<code>redirect</code> (str): the URI we'd like to redirect to after Spotify gives us our desired tokens</p>
+<h2 id="returns">Returns</h2>
+<p>Dictionary containing:</p>
+<pre><code class="language-python">access_token = str # required for getting users' private Spotify info
+refresh_token = str, # for refreshing access_token after it expires
+expires_in = int, # how many seconds until access_token expires
+scope = str, # what permissions we need user to consent to before pulling their private info
+token_type = str, # e.g. Bearer (Authentication)
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@app.get(&#39;/accessToken&#39;)
+async def accessToken(code: str, redirect: str):
+    &#34;&#34;&#34;
+    GET route for Spotify access token, necessary for getting users&#39; private Spotify info
+
+    Parameters:
+        `code` (str): the authorization code provided by pinging `https://accounts.spotify.com/authorize`
+        `redirect` (str): the URI we&#39;d like to redirect to after Spotify gives us our desired tokens
+
+    Returns:
+        Dictionary containing:
+        ```python
+        access_token = str # required for getting users&#39; private Spotify info
+        refresh_token = str, # for refreshing access_token after it expires
+        expires_in = int, # how many seconds until access_token expires
+        scope = str, # what permissions we need user to consent to before pulling their private info
+        token_type = str, # e.g. Bearer (Authentication)
+        ```
+    &#34;&#34;&#34;
+    url = &#34;https://accounts.spotify.com/api/token&#34;
+    headers = {}
+    data = {}
+
+    headers[&#39;Content-Type&#39;] = &#34;application/x-www-form-urlencoded&#34;
+    data = {
+        &#39;grant_type&#39;: &#34;authorization_code&#34;,
+        &#39;code&#39;: code,
+        &#39;client_id&#39;: CLIENT_ID,
+        &#39;client_secret&#39;: CLIENT_SECRET,
+        &#39;redirect_uri&#39;: redirect
+    }
+
+    return requests.post(url, headers=headers, data=data).json()</code></pre>
+</details>
+</dd>
 <dt id="main.create_artist"><code class="name flex">
 <span>async def <span class="ident">create_artist</span></span>(<span>artist: <a title="main.Artist" href="#main.Artist">Artist</a>)</span>
 </code></dt>
@@ -880,6 +974,7 @@ def pong():
 <ul id="index">
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="two-column">
+<li><code><a title="main.accessToken" href="#main.accessToken">accessToken</a></code></li>
 <li><code><a title="main.create_artist" href="#main.create_artist">create_artist</a></code></li>
 <li><code><a title="main.create_spotify_user" href="#main.create_spotify_user">create_spotify_user</a></code></li>
 <li><code><a title="main.create_user" href="#main.create_user">create_user</a></code></li>

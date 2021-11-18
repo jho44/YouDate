@@ -21,11 +21,11 @@ const App = () => {
   return (
     <>
       <Routes>
+        {/* <Route exact path="/" element={<Login />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/info-form" element={<InfoForm />} />
         <Route
-          exact
-          path="/"
+          path="/meet"
           element={
             <PrivateRoute>
               <Meet />

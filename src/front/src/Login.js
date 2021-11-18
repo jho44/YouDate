@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { loginUrl } from "./spotify";
+import { Typography } from "antd";
+const { Title } = Typography;
 
 /**
  * Class Component that renders our Login page and redirects us to either:
@@ -14,33 +17,13 @@ import { Navigate, useLocation } from "react-router-dom";
  * @class
  */
 const Login = () => {
-  const [redirectToReferrer, setRedirectToReferrer] = useState(false);
-
-  /**
-   * Checks whether user has proper authentication. Takes no
-   * parameters. For now, uses fake authenticator to set a login
-   * state to true immediately upon button click. Upon state change,
-   * redirects to the page user came from.
-   *
-   * @private
-   */
-  function login() {
-    fakeAuth.authenticate(() => {
-      setRedirectToReferrer(true);
-    });
-  }
-
   const location = useLocation();
   const { from } = location.state || { from: { pathname: "/" } };
 
-  if (redirectToReferrer) {
-    return <Navigate to={from} />;
-  }
-
   return (
     <div>
-      <p>You must log in to view the page at {from.pathname}</p>
-      <button onClick={login}>Log in</button>
+      <Title>Datify</Title>
+      <a href={`${loginUrl}${from.pathname}`}>Login with your Spotify</a>
     </div>
   );
 };

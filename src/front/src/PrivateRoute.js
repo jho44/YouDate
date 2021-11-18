@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { fakeAuth } from "./Login";
 
@@ -15,6 +15,16 @@ import { fakeAuth } from "./Login";
  */
 const PrivateRoute = ({ children }) => {
   let location = useLocation();
+  useEffect(() => {
+    fetch(
+      `http://localhost:8000/accessToken?code=${new URLSearchParams(
+        location.search
+      ).get("code")}`
+    )
+      .then((res) => res.text())
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
+  });
 
   return fakeAuth.isAuthenticated ? (
     children

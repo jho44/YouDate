@@ -34,20 +34,14 @@ const useStyles = makeStyles({
 /**
  * Class Component that renders our Login/Landing page and redirects us to either:
  * 1. the page we came from that required authentication
- * 2. the "Home" page for now
+ * 2. the "Meet" page
  *
- * @property {Object} location - `{ from: { pathname: "path/of/last/page/we/were/on" } }`
- * @returns {HTML} Meet page, soon to include Profile page
+ * @param {String} state - `"path/of/last/page/we/were/on"`
+ * @returns {HTML} Landing page, which includes Datify's logo and "LOGIN" button
  *
  * @class
  */
 function Landing({ state }) {
-  const [local, setLocal] = useState("/meet/");
-
-  useEffect(() => {
-    if (state && state !== "/") setLocal(state);
-  }, [state]);
-
   const classes = useStyles();
   return (
     <div className={classes.login}>
@@ -61,7 +55,9 @@ function Landing({ state }) {
           height: "auto",
         }}
       />
-      <a href={`${loginUrl}${local}`}>LOGIN WITH SPOTIFY</a>
+      <a href={`${loginUrl}${state && state !== "/" ? state : "/meet/"}`}>
+        LOGIN WITH SPOTIFY
+      </a>
     </div>
   );
 }

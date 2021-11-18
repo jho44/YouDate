@@ -62,7 +62,24 @@ CLIENT_SECRET = config.SPOTIFY_CLIENT_SECRET
 SCOPES = 'user-top-read'
 
 @app.get('/accessToken')
-def accessToken(code: str, redirect: str):
+async def accessToken(code: str, redirect: str):
+    """
+    GET route for Spotify access token, necessary for getting users' private Spotify info
+
+    Parameters:
+        `code` (str): the authorization code provided by pinging `https://accounts.spotify.com/authorize`
+        `redirect` (str): the URI we'd like to redirect to after Spotify gives us our desired tokens
+
+    Returns:
+        Dictionary containing:
+        ```python
+        access_token = str # required for getting users' private Spotify info
+        refresh_token = str, # for refreshing access_token after it expires
+        expires_in = int, # how many seconds until access_token expires
+        scope = str, # what permissions we need user to consent to before pulling their private info
+        token_type = str, # e.g. Bearer (Authentication)
+        ```
+    """
     url = "https://accounts.spotify.com/api/token"
     headers = {}
     data = {}

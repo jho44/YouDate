@@ -10,12 +10,26 @@ import { AuthContext } from "./Context";
  * @property {Component} children - the page to send the user to if
  * they're already logged in
  * @returns {HTML} Conditionally returns `component` if logged in,
- * else returns `<Navigate />` to login page.
+ * else renders Login/Landing page.
  *
  * @class
  */
 const PrivateRoute = ({ children }) => {
-  const { setTokens, tokens } = useContext(AuthContext);
+  const {
+    /**
+     * AuthContext state of logged-in user's access and refresh tokens.
+     * @type {Object}
+     * @memberof PrivateRoute
+     */
+    setTokens,
+    /**
+     * Function from AuthContext for setting logged-in user's access and refresh tokens.
+     * @type {Function}
+     * @memberof PrivateRoute
+     */
+    tokens,
+  } = useContext(AuthContext);
+
   let location = useLocation();
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import PrivateRoute from "./PrivateRoute";
 import Meet from "./components/Meet";
 import Profile from "./components/Profile";
 import Matched from "./components/Matched";
-import Login from "./Login";
+import Landing from "./components/Landing";
 import Navbar from "./components/Navbar";
 import InfoForm from "./components/InfoForm";
 import "./App.css";
@@ -21,11 +21,11 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route exact path="/" element={<Landing />} />
+        <Route path="/login" element={<Landing />} />
         <Route path="/info-form" element={<InfoForm />} />
         <Route
-          exact
-          path="/"
+          path="/meet"
           element={
             <PrivateRoute>
               <Meet />

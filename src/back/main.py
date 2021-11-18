@@ -2,7 +2,7 @@ from fastapi import Body, FastAPI
 from starlette.responses import RedirectResponse
 from typing import Any, Optional, Dict, List
 from pydantic import BaseModel
-import neo_config
+import config
 import match_pool
 import atexit
 import urllib
@@ -32,7 +32,7 @@ class Artist(BaseModel):
 
 uri="neo4j+s://ce94f876.databases.neo4j.io"
 user="neo4j"
-password=neo_config.NEO_PASSWORD
+password=config.NEO_PASSWORD
 
 neo_db = match_pool.MatchPool(uri, user, password)
 
@@ -55,6 +55,45 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+CLIENT_ID = '9cf53a8f93444cadac7b3e6d990a9e6d'
+CLIENT_SECRET = config.SPOTIFY_CLIENT_SECRET
+
+SCOPES = 'user-top-read'
+
+@app.get('/accessToken')
+async def accessToken(code: str, redirect: str):
+    """
+    GET route for Spotify access token, necessary for getting users' private Spotify info
+
+    Parameters:
+        `code` (str): the authorization code provided by pinging `https://accounts.spotify.com/authorize`
+        `redirect` (str): the URI we'd like to redirect to after Spotify gives us our desired tokens
+
+    Returns:
+        Dictionary containing:
+        ```python
+        access_token = str # required for getting users' private Spotify info
+        refresh_token = str, # for refreshing access_token after it expires
+        expires_in = int, # how many seconds until access_token expires
+        scope = str, # what permissions we need user to consent to before pulling their private info
+        token_type = str, # e.g. Bearer (Authentication)
+        ```
+    """
+    url = "https://accounts.spotify.com/api/token"
+    headers = {}
+    data = {}
+
+    headers['Content-Type'] = "application/x-www-form-urlencoded"
+    data = {
+        'grant_type': "authorization_code",
+        'code': code,
+        'client_id': CLIENT_ID,
+        'client_secret': CLIENT_SECRET,
+        'redirect_uri': redirect
+    }
+
+    return requests.post(url, headers=headers, data=data).json()
 
 @app.get("/ping")
 def pong():

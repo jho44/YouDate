@@ -6,13 +6,14 @@
       "src/components/Profile.js",
       "src/components/Meet.js",
       "src/components/Matched.js",
-      "src/Login.js",
+      "src/components/Landing.js",
       "src/components/Navbar.js",
       "src/PrivateRoute.js",
       "src/components/common/QA.js",
       "src/components/common/Tidbit.js",
       "src/components/InfoForm.js",
-      "src/fileUpload.js"
+      "src/fileUpload.js",
+      "src/Context.js"
     ]
   }
 }

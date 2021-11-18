@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
-import { UserOutlined, HomeOutlined, MessageOutlined } from "@ant-design/icons";
+import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
+import { UserOutlined, MessageOutlined } from "@ant-design/icons";
 import "../App.css";
 
 /**
@@ -44,7 +45,10 @@ const Navbar = () => {
         height: "4rem",
       }}
     >
-      <NavbarBtn icon={<HomeOutlined />} link="/" />
+      <NavbarBtn
+        icon={<PeopleOutlineIcon style={{ color: "black", height: "100%" }} />}
+        link="/meet"
+      />
       <NavbarBtn icon={<MessageOutlined />} link="/matched" />
       <NavbarBtn icon={<UserOutlined />} link="/profile" />
     </div>

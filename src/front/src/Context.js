@@ -1,42 +1,39 @@
-import React from 'react';
-import { useSetState } from 'react-use';
+import React, { useState } from "react";
 
+/**
+ * React Context object that contains a Provider and Consumer Component.
+ * @typedef AuthContext
+ */
 export const AuthContext = React.createContext(null);
 
-const initialState = {
-  isLoggedIn: false,
-  isLoginPending: false,
-  loginError: null
-}
-
-export const ContextProvider = props => {
-  const [state, setState] = useSetState(initialState);
-
-  const setLoginPending = (isLoginPending) => setState({isLoginPending});
-  const setLoginSuccess = (isLoggedIn) => setState({isLoggedIn});
-  const setLoginError = (loginError) => setState({loginError});
-
-  const login = () => {
-    setLoginPending(false);
-    setLoginSuccess(true);
-    setLoginError(null);
-  }
-
-  const logout = () => {
-    setLoginPending(false);
-    setLoginSuccess(false);
-    setLoginError(null);
-  }
+/**
+ * Provider from AuthContext for handling some near-global states.
+ * @property {Component} children - Consumers (everything within our Router).
+ * @class
+ */
+export const ContextProvider = ({ children }) => {
+  /**
+   * @description Logged-in user's access and refresh tokens
+   * @typedef {Object} tokens
+   * @memberof ContextProvider
+   */
+  /**
+   * @typedef {Function} setTokens
+   * @param {Object} newState - The new Spotify tokens of the user who just logged in.
+   * @description Sets `tokens` to `newState`.
+   * @returns {void}
+   * @memberof ContextProvider
+   */
+  const [tokens, setTokens] = useState(null);
 
   return (
     <AuthContext.Provider
       value={{
-        state,
-        login,
-        logout,
+        tokens,
+        setTokens,
       }}
     >
-      {props.children}
+      {children}
     </AuthContext.Provider>
   );
 };

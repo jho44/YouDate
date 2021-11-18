@@ -1,6 +1,6 @@
 from fastapi import Body, FastAPI
 from starlette.responses import RedirectResponse
-from typing import Any, Optional, Dict
+from typing import Any, Optional, Dict, List
 from pydantic import BaseModel
 import neo_config
 import match_pool
@@ -24,6 +24,8 @@ class User(BaseModel):
     pic: Optional[str] = None
     tidbits: Dict[str, Optional[str]]
     qas: Dict[str, Optional[str]]
+    top_artists: Optional[List[str]] = []
+    top_songs: Optional[List[str]] = []
 
 class Artist(BaseModel):
     name: str
@@ -169,6 +171,8 @@ async def create_user(user: User):
             * `str life_peaked`
             * `str feel_famous`
             * `str biggest_risk`
+        * `List[str] top_artists` - to be provided when merged with `createUserFromAccessToken`
+        * `List[str] top_songs` - to be provided when merged with `createUserFromAccessToken`
 
     Returns:
         Tuple containing:

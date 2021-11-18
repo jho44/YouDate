@@ -58,12 +58,11 @@ app.add_middleware(
 
 CLIENT_ID = '9cf53a8f93444cadac7b3e6d990a9e6d'
 CLIENT_SECRET = config.SPOTIFY_CLIENT_SECRET
-REDIRECT_URI = 'http://localhost:3000/meet/'
 
 SCOPES = 'user-top-read'
 
 @app.get('/accessToken')
-def accessToken(code: str):
+def accessToken(code: str, redirect: str):
     url = "https://accounts.spotify.com/api/token"
     headers = {}
     data = {}
@@ -74,7 +73,7 @@ def accessToken(code: str):
         'code': code,
         'client_id': CLIENT_ID,
         'client_secret': CLIENT_SECRET,
-        'redirect_uri': REDIRECT_URI
+        'redirect_uri': redirect
     }
 
     return requests.post(url, headers=headers, data=data).json()

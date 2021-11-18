@@ -1,6 +1,6 @@
 from fastapi import Body, FastAPI
 from starlette.responses import RedirectResponse
-from typing import Any, List, Optional
+from typing import Any, Optional, Dict, List
 from pydantic import BaseModel
 import neo_config
 import match_pool
@@ -9,6 +9,7 @@ import urllib
 import requests
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.testclient import TestClient
+from datetime import datetime
 
 class SpotifyUserRequest(BaseModel):
     access_token: str
@@ -17,8 +18,14 @@ class SpotifyUserRequest(BaseModel):
 class User(BaseModel):
     name: str
     email: str
-    top_artists: List[str]
-    top_songs: List[str]
+    pronouns: str
+    birth_month: datetime
+    description: str
+    pic: Optional[str] = None
+    tidbits: Dict[str, Optional[str]]
+    qas: Dict[str, Optional[str]]
+    top_artists: Optional[List[str]] = []
+    top_songs: Optional[List[str]] = []
 
 class Artist(BaseModel):
     name: str
@@ -131,8 +138,41 @@ async def create_user(user: User):
 
         * `str name`
         * `str email`
-        * `List[str] top_artists`
-        * `List[str] top_songs`
+        * `str pronouns`
+        * `datetime birth_month`
+        * `str description`
+        * `str pic` - Optional
+        * `Dict[str, str] tidbits`:
+            * `str desired_relationship` - one of:
+                * `casual`
+                * `short-term`
+                * `long-term`
+                * `other`
+            * `str education` - Optional
+            * `str occupation` - Optional
+            * `str sexual_orientation` - Optional
+            * `str location` - Optional
+            * `str political_view` - Optional and one of:
+                * `anarchism`
+                * `communism`
+                * `conservatism`
+                * `environmentalism`
+                * `fascism`
+                * `feminism`
+                * `liberalism`
+                * `nationalism`
+                * `populism`
+                * `socialism`
+                * `other`
+            * `str height` - Optional
+        * QAs:
+            * `str life_goal`
+            * `str believe_or_not`
+            * `str life_peaked`
+            * `str feel_famous`
+            * `str biggest_risk`
+        * `List[str] top_artists` - to be provided when merged with `createUserFromAccessToken`
+        * `List[str] top_songs` - to be provided when merged with `createUserFromAccessToken`
 
     Returns:
         Tuple containing:

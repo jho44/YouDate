@@ -42,6 +42,12 @@ from datetime import datetime
 class SpotifyUserRequest(BaseModel):
     access_token: str
     refresh_token: str
+    pronouns: str
+    birth_month: datetime
+    description: str
+    pic: Optional[str] = None
+    tidbits: Dict[str, Optional[str]]
+    qas: Dict[str, Optional[str]]
 
 class User(BaseModel):
     name: str
@@ -183,6 +189,12 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
     new_spotify_user = User(
         name=name,
         email=email,
+        pronouns=spotify_req.pronouns,
+        birth_month=spotify_req.birth_month,
+        description=spotify_req.description,
+        pic=spotify_req.pic,
+        tidbits=spotify_req.tidbits,
+        qas=spotify_req.qas,
         top_artists = top_artists,
         top_songs = top_songs,
     )
@@ -190,8 +202,7 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
 
     # Uncomment following line, when ready to test actually adding this new user data to neo4j
-    # result = neo_db.create_user(new_spotify_user)
-
+    result = neo_db.create_user(new_spotify_user)
     return new_spotify_user
 
 @app.post(&#34;/createUser&#34;)
@@ -499,6 +510,12 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
     new_spotify_user = User(
         name=name,
         email=email,
+        pronouns=spotify_req.pronouns,
+        birth_month=spotify_req.birth_month,
+        description=spotify_req.description,
+        pic=spotify_req.pic,
+        tidbits=spotify_req.tidbits,
+        qas=spotify_req.qas,
         top_artists = top_artists,
         top_songs = top_songs,
     )
@@ -506,8 +523,7 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
 
     # Uncomment following line, when ready to test actually adding this new user data to neo4j
-    # result = neo_db.create_user(new_spotify_user)
-
+    result = neo_db.create_user(new_spotify_user)
     return new_spotify_user</code></pre>
 </details>
 </dd>
@@ -872,7 +888,13 @@ def pong():
 </summary>
 <pre><code class="python">class SpotifyUserRequest(BaseModel):
     access_token: str
-    refresh_token: str</code></pre>
+    refresh_token: str
+    pronouns: str
+    birth_month: datetime
+    description: str
+    pic: Optional[str] = None
+    tidbits: Dict[str, Optional[str]]
+    qas: Dict[str, Optional[str]]</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -885,7 +907,31 @@ def pong():
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="main.SpotifyUserRequest.birth_month"><code class="name">var <span class="ident">birth_month</span> : datetime.datetime</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="main.SpotifyUserRequest.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="main.SpotifyUserRequest.pic"><code class="name">var <span class="ident">pic</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="main.SpotifyUserRequest.pronouns"><code class="name">var <span class="ident">pronouns</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="main.SpotifyUserRequest.qas"><code class="name">var <span class="ident">qas</span> : Dict[str, Optional[str]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="main.SpotifyUserRequest.refresh_token"><code class="name">var <span class="ident">refresh_token</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="main.SpotifyUserRequest.tidbits"><code class="name">var <span class="ident">tidbits</span> : Dict[str, Optional[str]]</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -996,9 +1042,15 @@ def pong():
 </li>
 <li>
 <h4><code><a title="main.SpotifyUserRequest" href="#main.SpotifyUserRequest">SpotifyUserRequest</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="main.SpotifyUserRequest.access_token" href="#main.SpotifyUserRequest.access_token">access_token</a></code></li>
+<li><code><a title="main.SpotifyUserRequest.birth_month" href="#main.SpotifyUserRequest.birth_month">birth_month</a></code></li>
+<li><code><a title="main.SpotifyUserRequest.description" href="#main.SpotifyUserRequest.description">description</a></code></li>
+<li><code><a title="main.SpotifyUserRequest.pic" href="#main.SpotifyUserRequest.pic">pic</a></code></li>
+<li><code><a title="main.SpotifyUserRequest.pronouns" href="#main.SpotifyUserRequest.pronouns">pronouns</a></code></li>
+<li><code><a title="main.SpotifyUserRequest.qas" href="#main.SpotifyUserRequest.qas">qas</a></code></li>
 <li><code><a title="main.SpotifyUserRequest.refresh_token" href="#main.SpotifyUserRequest.refresh_token">refresh_token</a></code></li>
+<li><code><a title="main.SpotifyUserRequest.tidbits" href="#main.SpotifyUserRequest.tidbits">tidbits</a></code></li>
 </ul>
 </li>
 <li>

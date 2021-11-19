@@ -170,6 +170,7 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         top_artists = top_artists,
         top_songs = top_songs,
     )
+    print(new_spotify_user)
     # STATUS 403: Access token does not contain necessary scope
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
 

@@ -143,6 +143,40 @@ async def create_artist(artist: Artist):
         `artist` (Artist): a request body consisting of the name of
         the artist you&#39;d like to add.
 
+        * `str pronouns`
+        * `datetime birth_month`
+        * `str description`
+        * `str pic` - Optional
+        * `Dict[str, str] tidbits`:
+            * `str desired_relationship` - one of:
+                * `casual`
+                * `short-term`
+                * `long-term`
+                * `other`
+            * `str education` - Optional
+            * `str occupation` - Optional
+            * `str sexual_orientation` - Optional
+            * `str location` - Optional
+            * `str political_view` - Optional and one of:
+                * `anarchism`
+                * `communism`
+                * `conservatism`
+                * `environmentalism`
+                * `fascism`
+                * `feminism`
+                * `liberalism`
+                * `nationalism`
+                * `populism`
+                * `socialism`
+                * `other`
+            * `str height` - Optional
+        * QAs:
+            * `str life_goal`
+            * `str believe_or_not`
+            * `str life_peaked`
+            * `str feel_famous`
+            * `str biggest_risk`
+
     Returns:
         Tuple containing:
 
@@ -198,69 +232,12 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         top_artists = top_artists,
         top_songs = top_songs,
     )
+    print(new_spotify_user)
     # STATUS 403: Access token does not contain necessary scope
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
 
     # Uncomment following line, when ready to test actually adding this new user data to neo4j
     result = neo_db.create_user(new_spotify_user)
-    return new_spotify_user
-
-@app.post(&#34;/createUser&#34;)
-async def create_user(user: User):
-    &#34;&#34;&#34;
-    POST route for adding to the Neo4j database a new Datify user.
-
-    Parameters:
-        `user` (User) - a request body corresponding to the newly added
-        user containing:
-
-        * `str name`
-        * `str email`
-        * `str pronouns`
-        * `datetime birth_month`
-        * `str description`
-        * `str pic` - Optional
-        * `Dict[str, str] tidbits`:
-            * `str desired_relationship` - one of:
-                * `casual`
-                * `short-term`
-                * `long-term`
-                * `other`
-            * `str education` - Optional
-            * `str occupation` - Optional
-            * `str sexual_orientation` - Optional
-            * `str location` - Optional
-            * `str political_view` - Optional and one of:
-                * `anarchism`
-                * `communism`
-                * `conservatism`
-                * `environmentalism`
-                * `fascism`
-                * `feminism`
-                * `liberalism`
-                * `nationalism`
-                * `populism`
-                * `socialism`
-                * `other`
-            * `str height` - Optional
-        * QAs:
-            * `str life_goal`
-            * `str believe_or_not`
-            * `str life_peaked`
-            * `str feel_famous`
-            * `str biggest_risk`
-        * `List[str] top_artists` - to be provided when merged with `createUserFromAccessToken`
-        * `List[str] top_songs` - to be provided when merged with `createUserFromAccessToken`
-
-    Returns:
-        Tuple containing:
-
-        * Neo4j entry object: corresponding to the newly added user
-        containing the request body&#39;s contents. This object can be
-        viewed as a Python dictionary or Javascript Object.
-        * `int`: request status code (e.g. `200` means request went fine)
-    &#34;&#34;&#34;
-    result = neo_db.create_user(user)
     return result
 
 @app.post(&#34;/deleteUser&#34;)
@@ -422,6 +399,49 @@ user enjoys.</p>
 <h2 id="parameters">Parameters</h2>
 <p><code>artist</code> (Artist): a request body consisting of the name of
 the artist you'd like to add.</p>
+<ul>
+<li><code>str pronouns</code></li>
+<li><code>datetime birth_month</code></li>
+<li><code>str description</code></li>
+<li><code>str pic</code> - Optional</li>
+<li><code>Dict[str, str] tidbits</code>:<ul>
+<li><code>str desired_relationship</code> - one of:<ul>
+<li><code>casual</code></li>
+<li><code>short-term</code></li>
+<li><code>long-term</code></li>
+<li><code>other</code></li>
+</ul>
+</li>
+<li><code>str education</code> - Optional</li>
+<li><code>str occupation</code> - Optional</li>
+<li><code>str sexual_orientation</code> - Optional</li>
+<li><code>str location</code> - Optional</li>
+<li><code>str political_view</code> - Optional and one of:<ul>
+<li><code>anarchism</code></li>
+<li><code>communism</code></li>
+<li><code>conservatism</code></li>
+<li><code>environmentalism</code></li>
+<li><code>fascism</code></li>
+<li><code>feminism</code></li>
+<li><code>liberalism</code></li>
+<li><code>nationalism</code></li>
+<li><code>populism</code></li>
+<li><code>socialism</code></li>
+<li><code>other</code></li>
+</ul>
+</li>
+<li><code>str height</code> - Optional</li>
+</ul>
+</li>
+<li>QAs:<ul>
+<li><code>str life_goal</code></li>
+<li><code>str believe_or_not</code></li>
+<li><code>str life_peaked</code></li>
+<li><code>str feel_famous</code></li>
+<li><code>str biggest_risk</code></li>
+</ul>
+</li>
+</ul>
 <h2 id="returns">Returns</h2>
 <p>Tuple containing:</p>
 <ul>
@@ -443,6 +463,40 @@ async def create_artist(artist: Artist):
     Parameters:
         `artist` (Artist): a request body consisting of the name of
         the artist you&#39;d like to add.
+
+        * `str pronouns`
+        * `datetime birth_month`
+        * `str description`
+        * `str pic` - Optional
+        * `Dict[str, str] tidbits`:
+            * `str desired_relationship` - one of:
+                * `casual`
+                * `short-term`
+                * `long-term`
+                * `other`
+            * `str education` - Optional
+            * `str occupation` - Optional
+            * `str sexual_orientation` - Optional
+            * `str location` - Optional
+            * `str political_view` - Optional and one of:
+                * `anarchism`
+                * `communism`
+                * `conservatism`
+                * `environmentalism`
+                * `fascism`
+                * `feminism`
+                * `liberalism`
+                * `nationalism`
+                * `populism`
+                * `socialism`
+                * `other`
+            * `str height` - Optional
+        * QAs:
+            * `str life_goal`
+            * `str believe_or_not`
+            * `str life_peaked`
+            * `str feel_famous`
+            * `str biggest_risk`
 
     Returns:
         Tuple containing:
@@ -519,137 +573,12 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         top_artists = top_artists,
         top_songs = top_songs,
     )
+    print(new_spotify_user)
     # STATUS 403: Access token does not contain necessary scope
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
 
     # Uncomment following line, when ready to test actually adding this new user data to neo4j
     result = neo_db.create_user(new_spotify_user)
-    return new_spotify_user</code></pre>
-</details>
-</dd>
-<dt id="main.create_user"><code class="name flex">
-<span>async def <span class="ident">create_user</span></span>(<span>user: <a title="main.User" href="#main.User">User</a>)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>POST route for adding to the Neo4j database a new Datify user.</p>
-<h2 id="parameters">Parameters</h2>
-<p><code>user</code> (User) - a request body corresponding to the newly added
-user containing:</p>
-<ul>
-<li><code>str name</code></li>
-<li><code>str email</code></li>
-<li><code>str pronouns</code></li>
-<li><code>datetime birth_month</code></li>
-<li><code>str description</code></li>
-<li><code>str pic</code> - Optional</li>
-<li><code>Dict[str, str] tidbits</code>:<ul>
-<li><code>str desired_relationship</code> - one of:<ul>
-<li><code>casual</code></li>
-<li><code>short-term</code></li>
-<li><code>long-term</code></li>
-<li><code>other</code></li>
-</ul>
-</li>
-<li><code>str education</code> - Optional</li>
-<li><code>str occupation</code> - Optional</li>
-<li><code>str sexual_orientation</code> - Optional</li>
-<li><code>str location</code> - Optional</li>
-<li><code>str political_view</code> - Optional and one of:<ul>
-<li><code>anarchism</code></li>
-<li><code>communism</code></li>
-<li><code>conservatism</code></li>
-<li><code>environmentalism</code></li>
-<li><code>fascism</code></li>
-<li><code>feminism</code></li>
-<li><code>liberalism</code></li>
-<li><code>nationalism</code></li>
-<li><code>populism</code></li>
-<li><code>socialism</code></li>
-<li><code>other</code></li>
-</ul>
-</li>
-<li><code>str height</code> - Optional</li>
-</ul>
-</li>
-<li>QAs:<ul>
-<li><code>str life_goal</code></li>
-<li><code>str believe_or_not</code></li>
-<li><code>str life_peaked</code></li>
-<li><code>str feel_famous</code></li>
-<li><code>str biggest_risk</code></li>
-</ul>
-</li>
-<li><code>List[str] top_artists</code> - to be provided when merged with <code>createUserFromAccessToken</code></li>
-<li><code>List[str] top_songs</code> - to be provided when merged with <code>createUserFromAccessToken</code></li>
-</ul>
-<h2 id="returns">Returns</h2>
-<p>Tuple containing:</p>
-<ul>
-<li>Neo4j entry object: corresponding to the newly added user
-containing the request body's contents. This object can be
-viewed as a Python dictionary or Javascript Object.</li>
-<li><code>int</code>: request status code (e.g. <code>200</code> means request went fine)</li>
-</ul></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@app.post(&#34;/createUser&#34;)
-async def create_user(user: User):
-    &#34;&#34;&#34;
-    POST route for adding to the Neo4j database a new Datify user.
-
-    Parameters:
-        `user` (User) - a request body corresponding to the newly added
-        user containing:
-
-        * `str name`
-        * `str email`
-        * `str pronouns`
-        * `datetime birth_month`
-        * `str description`
-        * `str pic` - Optional
-        * `Dict[str, str] tidbits`:
-            * `str desired_relationship` - one of:
-                * `casual`
-                * `short-term`
-                * `long-term`
-                * `other`
-            * `str education` - Optional
-            * `str occupation` - Optional
-            * `str sexual_orientation` - Optional
-            * `str location` - Optional
-            * `str political_view` - Optional and one of:
-                * `anarchism`
-                * `communism`
-                * `conservatism`
-                * `environmentalism`
-                * `fascism`
-                * `feminism`
-                * `liberalism`
-                * `nationalism`
-                * `populism`
-                * `socialism`
-                * `other`
-            * `str height` - Optional
-        * QAs:
-            * `str life_goal`
-            * `str believe_or_not`
-            * `str life_peaked`
-            * `str feel_famous`
-            * `str biggest_risk`
-        * `List[str] top_artists` - to be provided when merged with `createUserFromAccessToken`
-        * `List[str] top_songs` - to be provided when merged with `createUserFromAccessToken`
-
-    Returns:
-        Tuple containing:
-
-        * Neo4j entry object: corresponding to the newly added user
-        containing the request body&#39;s contents. This object can be
-        viewed as a Python dictionary or Javascript Object.
-        * `int`: request status code (e.g. `200` means request went fine)
-    &#34;&#34;&#34;
-    result = neo_db.create_user(user)
     return result</code></pre>
 </details>
 </dd>
@@ -1023,7 +952,6 @@ def pong():
 <li><code><a title="main.accessToken" href="#main.accessToken">accessToken</a></code></li>
 <li><code><a title="main.create_artist" href="#main.create_artist">create_artist</a></code></li>
 <li><code><a title="main.create_spotify_user" href="#main.create_spotify_user">create_spotify_user</a></code></li>
-<li><code><a title="main.create_user" href="#main.create_user">create_user</a></code></li>
 <li><code><a title="main.delete_user" href="#main.delete_user">delete_user</a></code></li>
 <li><code><a title="main.dislike" href="#main.dislike">dislike</a></code></li>
 <li><code><a title="main.get_matched" href="#main.get_matched">get_matched</a></code></li>

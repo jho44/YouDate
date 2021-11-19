@@ -48,9 +48,12 @@ class MatchPool:
                 user.pronouns,
                 user.birth_month,
                 user.description,
-                # user.top_artists,
-                # user.top_songs
+                user.top_artists,
+                user.top_songs
             )
+
+            for artist in user.top_artists:
+                self.top_artist(user.email, artist)
 
             if status_code != 200:
                 return new_user, status_code
@@ -63,7 +66,7 @@ class MatchPool:
             )
 
     @staticmethod
-    def _create_user(tx, name, email, pronouns, birth_month, description): # TODO params: top_artists, top_songs
+    def _create_user(tx, name, email, pronouns, birth_month, description, top_artists, top_songs): # TODO params: top_artists, top_songs
         query = (
             '''
             CREATE (new:User {
@@ -71,7 +74,8 @@ class MatchPool:
                 email: $email,
                 pronouns: $pronouns,
                 birth_month: $birth_month,
-                description: $description
+                description: $description,
+                top_songs: $top_songs
             }) RETURN new
             '''
         )
@@ -83,7 +87,8 @@ class MatchPool:
             email=re.sub(r"\'",r"\\'", email),
             pronouns=re.sub(r"\'",r"\\'", pronouns),
             birth_month=birth_month,
-            description=re.sub(r"\'",r"\\'", description)
+            description=re.sub(r"\'",r"\\'", description),
+            top_songs=top_songs
         )
         #, top_artists=top_artists, top_songs=top_songs)
 
@@ -197,6 +202,22 @@ class MatchPool:
         except ServiceUnavailable as exception:
             logging.error('{query} raised an error: \n {exception}'.format(query=query, exception=exception))
             raise
+
+    def top_artist(self, email, artist_name):
+        with self.driver.session() as session:
+            return session.write_transaction(self._top_artist, email, artist_name)
+    
+    @staticmethod
+    def _top_artist(tx, email, artist_name):
+        query = (
+            '''
+            MATCH (a:User {email: $email}), (b:Artist {name: $artist_name})
+            CREATE (a)-[r:FOLLOWS]->(b)
+            '''
+        )
+        tx.run(query, email=email, artist_name=artist_name)
+
+        return 200
 
     # set 'LIKES' relationship on node A -> node B
     def like(self, email_a, email_b):

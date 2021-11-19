@@ -115,6 +115,40 @@ async def create_artist(artist: Artist):
         `artist` (Artist): a request body consisting of the name of
         the artist you'd like to add.
 
+        * `str pronouns`
+        * `datetime birth_month`
+        * `str description`
+        * `str pic` - Optional
+        * `Dict[str, str] tidbits`:
+            * `str desired_relationship` - one of:
+                * `casual`
+                * `short-term`
+                * `long-term`
+                * `other`
+            * `str education` - Optional
+            * `str occupation` - Optional
+            * `str sexual_orientation` - Optional
+            * `str location` - Optional
+            * `str political_view` - Optional and one of:
+                * `anarchism`
+                * `communism`
+                * `conservatism`
+                * `environmentalism`
+                * `fascism`
+                * `feminism`
+                * `liberalism`
+                * `nationalism`
+                * `populism`
+                * `socialism`
+                * `other`
+            * `str height` - Optional
+        * QAs:
+            * `str life_goal`
+            * `str believe_or_not`
+            * `str life_peaked`
+            * `str feel_famous`
+            * `str biggest_risk`
+
     Returns:
         Tuple containing:
 
@@ -170,69 +204,12 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         top_artists = top_artists,
         top_songs = top_songs,
     )
+    print(new_spotify_user)
     # STATUS 403: Access token does not contain necessary scope
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
 
     # Uncomment following line, when ready to test actually adding this new user data to neo4j
     result = neo_db.create_user(new_spotify_user)
-    return new_spotify_user
-
-@app.post("/createUser")
-async def create_user(user: User):
-    """
-    POST route for adding to the Neo4j database a new Datify user.
-
-    Parameters:
-        `user` (User) - a request body corresponding to the newly added
-        user containing:
-
-        * `str name`
-        * `str email`
-        * `str pronouns`
-        * `datetime birth_month`
-        * `str description`
-        * `str pic` - Optional
-        * `Dict[str, str] tidbits`:
-            * `str desired_relationship` - one of:
-                * `casual`
-                * `short-term`
-                * `long-term`
-                * `other`
-            * `str education` - Optional
-            * `str occupation` - Optional
-            * `str sexual_orientation` - Optional
-            * `str location` - Optional
-            * `str political_view` - Optional and one of:
-                * `anarchism`
-                * `communism`
-                * `conservatism`
-                * `environmentalism`
-                * `fascism`
-                * `feminism`
-                * `liberalism`
-                * `nationalism`
-                * `populism`
-                * `socialism`
-                * `other`
-            * `str height` - Optional
-        * QAs:
-            * `str life_goal`
-            * `str believe_or_not`
-            * `str life_peaked`
-            * `str feel_famous`
-            * `str biggest_risk`
-        * `List[str] top_artists` - to be provided when merged with `createUserFromAccessToken`
-        * `List[str] top_songs` - to be provided when merged with `createUserFromAccessToken`
-
-    Returns:
-        Tuple containing:
-
-        * Neo4j entry object: corresponding to the newly added user
-        containing the request body's contents. This object can be
-        viewed as a Python dictionary or Javascript Object.
-        * `int`: request status code (e.g. `200` means request went fine)
-    """
-    result = neo_db.create_user(user)
     return result
 
 @app.post("/deleteUser")

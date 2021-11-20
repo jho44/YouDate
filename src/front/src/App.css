@@ -2,13 +2,19 @@
 
 body {
   background-color: black;
+  background-image: url("gradient.png");
+  background-size: cover;	
+  background-repeat: no-repeat;
 }
+
 .App {
   text-align: center;
 }
 
 .App-logo {
   height: 40vmin;
+  width: 40vmin;
+  border-radius: 50%;
   pointer-events: none;
 }
 
@@ -47,7 +53,49 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 35vh;
+  height: 45vh;
+  width: 45vh;
+  border-radius: 50%;
+  float: left;
+  padding: 50px;
+}
+
+.profilePhoto {
+    background-color: "gray";
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 45vh;
+    width: 45vh;
+    border-radius: 50%;
+    float: left;
+    padding: 50px;
+    margin-left: 20%;
+  }
+
+.ant-descriptions-title {
+  color: white;
+  font-size: 30px;
+  position: absolute;
+  top: 15%; left: 45%; right: 0; bottom: 0;
+  z-index: 0;
+}
+
+.extra {
+    position: absolute;
+    top: 30%; left: 44.5%; right: 0; bottom: 0%;
+    padding: 3px 8px;
+    color: white;
+    z-index: 1;
+    font-size: 30px;
+}
+
+.container h2 {
+    position: absolute;
+    top: 33%; left: 45.5%; right: 0; bottom: 0%;
+    color: white;
+    font-size: 20px;
+    font-family: "gothambold";
 }
 
 h2,
@@ -55,13 +103,13 @@ h3,
 h4,
 p,
 span,
-.ant-descriptions-title,
 .ant-btn.ant-btn-primary > span,
 .ant-form-item-label > label,
 .ant-typography,
 h1.ant-typography,
 .ant-typography h1 {
   color: white;
+  font-size: 18px;
 }
 
 .ant-message-custom-content.ant-message-error > span,
@@ -85,6 +133,26 @@ h3 {
 .container {
   margin: 2rem;
   padding-bottom: 5rem;
+  font-family: "gothambold";
+}
+
+.userName {
+  margin: 2rem;
+  padding-bottom: 5rem;
+  font-family: "gothambold";
+}
+
+.Descriptions {
+    font-size: 30px;
+}
+.container h3 {
+    color: #E8BFFB;
+    font-family: "gothambold";
+    font-size: 20
+}
+
+.container .descriptions {
+    margin-left: 50px;
 }
 
 .column-flex {

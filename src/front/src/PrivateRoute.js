@@ -18,18 +18,28 @@ import { useNavigate } from "react-router-dom";
 const PrivateRoute = ({ children }) => {
   const {
     /**
-     * AuthContext state of logged-in user's access and refresh tokens.
-     * @type {Object}
+     * Function from `ContextProvider` for setting logged-in user's access and refresh tokens.
+     * @type {Function}
      * @memberof PrivateRoute
      */
     setTokens,
     /**
-     * Function from AuthContext for setting logged-in user's access and refresh tokens.
-     * @type {Function}
+     * `ContextProvider` state of logged-in user's access and refresh tokens.
+     * @type {Object}
      * @memberof PrivateRoute
      */
     tokens,
+    /**
+     * `ContextProvider` state of logged-in user's info.
+     * @type {Object}
+     * @memberof PrivateRoute
+     */
     user,
+    /**
+     * Function from `ContextProvider` for setting logged-in user's info.
+     * @type {Function}
+     * @memberof PrivateRoute
+     */
     setUser,
   } = useContext(AuthContext);
 

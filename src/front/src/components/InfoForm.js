@@ -30,7 +30,20 @@ const InfoFormItem = ({ child, ...props }) => {
  * @class
  */
 const InfoForm = () => {
-  const { tokens, setUser } = useContext(AuthContext);
+  const {
+    /**
+     * `ContextProvider` state of logged-in user's access and refresh tokens.
+     * @type {Object}
+     * @memberof InfoForm
+     */
+    tokens,
+    /**
+     * Function from `ContextProvider` for setting logged-in user's info.
+     * @type {Function}
+     * @memberof InfoForm
+     */
+    setUser,
+  } = useContext(AuthContext);
   const navigate = useNavigate();
 
   /**

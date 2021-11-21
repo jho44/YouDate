@@ -26,6 +26,18 @@ export const ContextProvider = ({ children }) => {
    */
   const [tokens, setTokens] = useState(null);
 
+  /**
+   * @description Logged-in user's info
+   * @typedef {Object} user
+   * @memberof ContextProvider
+   */
+  /**
+   * @typedef {Function} setUser
+   * @param {Object} newState - The user who's just logged in.
+   * @description Sets `user` to `newState`.
+   * @returns {void}
+   * @memberof ContextProvider
+   */
   const [user, setUser] = useState(null);
 
   return (

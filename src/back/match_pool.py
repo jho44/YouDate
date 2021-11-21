@@ -49,7 +49,9 @@ class MatchPool:
                 user.birth_month,
                 user.description,
                 user.top_artists,
-                user.top_songs
+                user.top_songs,
+                user.refresh_token,
+                user.user_id
             )
 
             for artist in user.top_artists:
@@ -66,7 +68,7 @@ class MatchPool:
             )
 
     @staticmethod
-    def _create_user(tx, name, email, pronouns, birth_month, description, top_artists, top_songs): # TODO params: top_artists, top_songs
+    def _create_user(tx, name, email, pronouns, birth_month, description, top_artists, top_songs, refresh_token, user_id):
         query = (
             '''
             CREATE (new:User {
@@ -75,12 +77,14 @@ class MatchPool:
                 pronouns: $pronouns,
                 birth_month: $birth_month,
                 description: $description,
-                top_songs: $top_songs
+                top_artists: $top_artists,
+                top_songs: $top_songs,
+                refresh_token: $refresh_token,
+                user_id: $user_id
             }) RETURN new
             '''
         )
-        # top_artists: $top_artists,
-        # top_songs: $top_songs
+
         results = tx.run(
             query,
             name=re.sub(r"\'",r"\\'", name),
@@ -88,9 +92,11 @@ class MatchPool:
             pronouns=re.sub(r"\'",r"\\'", pronouns),
             birth_month=birth_month,
             description=re.sub(r"\'",r"\\'", description),
-            top_songs=top_songs
+            top_artists=top_artists,
+            top_songs=top_songs,
+            refresh_token=refresh_token,
+            user_id=user_id
         )
-        #, top_artists=top_artists, top_songs=top_songs)
 
         try:
             for record in results:
@@ -187,26 +193,27 @@ class MatchPool:
             raise
 
     # get user
-    def get_user(self, email):
+    def get_user(self, user_id):
         with self.driver.session() as session:
-            return session.read_transaction(self._get_user, email)
+            return session.read_transaction(self._get_user, user_id)
 
     @staticmethod
-    def _get_user(tx, email):
-        query = 'MATCH (user:User {email: $email}) RETURN user'
-        results = tx.run(query, email=email)
+    def _get_user(tx, user_id):
+        query = 'MATCH (user:User {user_id: $user_id}) RETURN user'
+        results = tx.run(query, user_id=user_id)
 
         try:
             for record in results:
                 return record['user'], 200
+            return {}, 404
         except ServiceUnavailable as exception:
             logging.error('{query} raised an error: \n {exception}'.format(query=query, exception=exception))
-            raise
+            return None, 500
 
     def top_artist(self, email, artist_name):
         with self.driver.session() as session:
             return session.write_transaction(self._top_artist, email, artist_name)
-    
+
     @staticmethod
     def _top_artist(tx, email, artist_name):
         query = (

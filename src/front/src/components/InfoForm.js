@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Form,
   Input,
@@ -11,6 +11,8 @@ import {
 import { PlusOutlined } from "@ant-design/icons";
 import { getBase64, beforeUpload } from "../fileUpload";
 import "../App.css";
+import { AuthContext } from "../Context";
+import { useNavigate } from "react-router-dom";
 
 const { Item } = Form;
 const { Title, Paragraph } = Typography;
@@ -28,6 +30,9 @@ const InfoFormItem = ({ child, ...props }) => {
  * @class
  */
 const InfoForm = () => {
+  const { tokens, setUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   /**
    * @typedef {String} img
    * @description (Private) base64 string of user's uploaded profile picture.
@@ -126,9 +131,11 @@ const InfoForm = () => {
         political_view: values.political_view || null,
         height: values.height || null,
       },
+      access_token: tokens.accessToken,
+      refresh_token: tokens.refreshToken,
     };
 
-    fetch("http://localhost:8000/createUser", {
+    fetch("http://localhost:8000/createUserFromAccessToken", {
       method: "POST",
       mode: "cors",
       credentials: "same-origin",
@@ -138,7 +145,12 @@ const InfoForm = () => {
       body: JSON.stringify(data),
     })
       .then((res) => res.json())
-      .then((res_data) => console.log(res_data))
+      .then((res_data) => {
+        if (res_data[1] === 200) {
+          setUser(res_data[0]);
+          navigate("/profile");
+        } // TODO: error handling
+      })
       .catch((err) => console.error(err));
   };
 

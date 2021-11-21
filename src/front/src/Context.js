@@ -26,11 +26,15 @@ export const ContextProvider = ({ children }) => {
    */
   const [tokens, setTokens] = useState(null);
 
+  const [user, setUser] = useState(null);
+
   return (
     <AuthContext.Provider
       value={{
         tokens,
         setTokens,
+        user,
+        setUser,
       }}
     >
       {children}

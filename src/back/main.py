@@ -4,6 +4,7 @@ from typing import Any, Optional, Dict, List
 from pydantic import BaseModel
 import config
 import match_pool
+import spotify
 import atexit
 import urllib
 import requests
@@ -14,6 +15,7 @@ from datetime import datetime
 class SpotifyUserRequest(BaseModel):
     access_token: str
     refresh_token: str
+    name: str
     pronouns: str
     birth_month: datetime
     description: str
@@ -32,6 +34,8 @@ class User(BaseModel):
     qas: Dict[str, Optional[str]]
     top_artists: Optional[List[str]] = []
     top_songs: Optional[List[str]] = []
+    refresh_token: str
+    user_id: str
 
 class Artist(BaseModel):
     name: str
@@ -40,6 +44,7 @@ uri="neo4j+s://ce94f876.databases.neo4j.io"
 user="neo4j"
 password=config.NEO_PASSWORD
 
+spotify_requester = spotify.Spotify()
 neo_db = match_pool.MatchPool(uri, user, password)
 
 def _exit_application():
@@ -66,6 +71,12 @@ CLIENT_ID = '9cf53a8f93444cadac7b3e6d990a9e6d'
 CLIENT_SECRET = config.SPOTIFY_CLIENT_SECRET
 
 SCOPES = 'user-top-read'
+
+@app.get('/getUser')
+async def get_user(token: str):
+    basic_info = spotify_requester.get_basic_user_info(token)
+    user = neo_db.get_user(basic_info["id"])
+    return user
 
 @app.get('/accessToken')
 async def accessToken(code: str, redirect: str):
@@ -180,10 +191,7 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         This object can be viewed as a Python dictionary or Javascript Object.
         * `int`: request status code (e.g. `200` means request went fine)
     """
-    # GETS all basic information from user
-    basic_info = requests.get('https://api.spotify.com/v1/me', headers={'Authorization': 'Bearer ' + spotify_req.access_token}).json()
-    name = basic_info["display_name"]
-    email = basic_info["email"]
+    basic_info = spotify_requester.get_basic_user_info(spotify_req.access_token)
     top_artists = []
     top_songs = []
     top_artists_req = requests.get('https://api.spotify.com/v1/me/top/artists', headers={'Authorization': 'Bearer ' + spotify_req.access_token}).json()
@@ -192,9 +200,10 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
     top_tracks_req = requests.get('https://api.spotify.com/v1/me/top/tracks', headers={'Authorization': 'Bearer ' + spotify_req.access_token}).json()
     for track in top_tracks_req["items"]:
         top_songs.append(track["name"])
+
     new_spotify_user = User(
-        name=name,
-        email=email,
+        name=spotify_req.name,
+        email=basic_info["email"],
         pronouns=spotify_req.pronouns,
         birth_month=spotify_req.birth_month,
         description=spotify_req.description,
@@ -203,8 +212,9 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         qas=spotify_req.qas,
         top_artists = top_artists,
         top_songs = top_songs,
+        refresh_token = spotify_req.refresh_token,
+        user_id=basic_info["id"]
     )
-    print(new_spotify_user)
     # STATUS 403: Access token does not contain necessary scope
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
 

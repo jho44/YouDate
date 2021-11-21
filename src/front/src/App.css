@@ -1,10 +1,9 @@
 @import "antd/dist/antd.css";
 
 body {
-  background-color: black;
-  background-image: url("gradient.png");
-  background-size: cover;	
+  background: linear-gradient(#8A65BE, black);
   background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .App {
@@ -189,6 +188,5 @@ h3 {
     top: 33%; left: 45.5%; right: 0; bottom: 0%;
     color: white;
     font-size: 20px; 
-    font-family: "gothambold";
   }
 }

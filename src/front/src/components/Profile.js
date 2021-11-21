@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Descriptions, Switch, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 import "../App.css";
 import data from "./fakeData.json";
 import Tidbit from "./common/Tidbit";
@@ -35,6 +36,15 @@ const Profile = ({ meet }) => {
    */
 
   const [deleteAccChecked, setDeleteAccChecked] = useState(false);
+
+  /* Parallax effect for scrolling */
+  const [offsetY, setOffsetY] = useState(0);
+  const handleScroll = () => setOffsetY(window.pageYOffset);
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   /**
    * Function to open Delete Account Confirmation modal. Includes
@@ -77,28 +87,40 @@ const Profile = ({ meet }) => {
    */
   function deleteAcc() {
     setDeleteAccChecked(true);
-
     showConfirm();
+  }
+
+  /**
+   * Function to logout the current user.
+   * 
+   * @memberof Profile
+   * @returns {void}
+   */
+  const navigate = useNavigate();
+  function logout() {
+      navigate("/");
+      // Need to remove auth token
   }
 
   return (
     <>
-      <div
-        className="photo"
-        style={{ backgroundImage: `url('${data.user.img}')` }}
-      />
+      <div className="profilePhoto"
+        style={{ backgroundImage: `url('${data.user.img}')`, transform: `translateY(${offsetY * 0.25}px)` }}>
+      </div>
 
-      <div className="container">
+      <div className="userName" style={{ transform: `translateY(${offsetY * 0.4}px)` }}>
         <Descriptions
           title={`${data.user.name} (${data.user.pronouns})`}
           labelStyle={{ color: "white" }}
           contentStyle={{ color: "white" }}
-          extra={<span>{data.user.age}</span>}
-        >
+          extra={<span className="extra">{data.user.age}</span>}
+        />  
+     </div>
+
+     <div className="container">
           <Descriptions.Item label="">
-            {data.user.description}
+            <h2 className="description" style={{ transform: `translateY(${offsetY * 0.4}px)` }}>{data.user.description}</h2>
           </Descriptions.Item>
-        </Descriptions>
 
         <h3>Favorite Artists</h3>
         {data.user.artists.map((artist, ind) => (
@@ -155,14 +177,19 @@ const Profile = ({ meet }) => {
         ))}
 
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <p>Delete Account</p>
+          <p style={{ color: "#E8BFFB" }}>Delete Account</p>
           <Switch
             checked={deleteAccChecked}
             onChange={deleteAcc}
             data-testid="delete-acc"
           />
         </div>
+
+        <div onClick={logout}>
+            <button>Logout</button>
+        </div>
       </div>
+    );
     </>
   );
 };

@@ -32,6 +32,7 @@ from typing import Any, Optional, Dict, List
 from pydantic import BaseModel
 import config
 import match_pool
+import spotify
 import atexit
 import urllib
 import requests
@@ -42,6 +43,7 @@ from datetime import datetime
 class SpotifyUserRequest(BaseModel):
     access_token: str
     refresh_token: str
+    name: str
     pronouns: str
     birth_month: datetime
     description: str
@@ -60,6 +62,8 @@ class User(BaseModel):
     qas: Dict[str, Optional[str]]
     top_artists: Optional[List[str]] = []
     top_songs: Optional[List[str]] = []
+    refresh_token: str
+    user_id: str
 
 class Artist(BaseModel):
     name: str
@@ -68,6 +72,7 @@ uri=&#34;neo4j+s://ce94f876.databases.neo4j.io&#34;
 user=&#34;neo4j&#34;
 password=config.NEO_PASSWORD
 
+spotify_requester = spotify.Spotify()
 neo_db = match_pool.MatchPool(uri, user, password)
 
 def _exit_application():
@@ -95,14 +100,30 @@ CLIENT_SECRET = config.SPOTIFY_CLIENT_SECRET
 
 SCOPES = &#39;user-top-read&#39;
 
+@app.get(&#39;/getUser&#39;)
+async def get_user(token: str):
+    &#34;&#34;&#34;
+    GET route to see if user trying to login has a Datify account.
+
+    Parameters:
+        `token` (`str`): Spotify access token
+
+    Returns:
+        Dictionary either containing `User` properties (if user exists)
+        or nothing (if user doesn&#39;t exist)
+    &#34;&#34;&#34;
+    basic_info = spotify_requester.get_basic_user_info(token)
+    user = neo_db.get_user(basic_info[&#34;id&#34;])
+    return user
+
 @app.get(&#39;/accessToken&#39;)
 async def accessToken(code: str, redirect: str):
     &#34;&#34;&#34;
     GET route for Spotify access token, necessary for getting users&#39; private Spotify info
 
     Parameters:
-        `code` (str): the authorization code provided by pinging `https://accounts.spotify.com/authorize`
-        `redirect` (str): the URI we&#39;d like to redirect to after Spotify gives us our desired tokens
+        `code` (`str`): the authorization code provided by pinging `https://accounts.spotify.com/authorize`
+        `redirect` (`str`): the URI we&#39;d like to redirect to after Spotify gives us our desired tokens
 
     Returns:
         Dictionary containing:
@@ -140,8 +161,30 @@ async def create_artist(artist: Artist):
     user enjoys.
 
     Parameters:
-        `artist` (Artist): a request body consisting of the name of
+        `artist` (`Artist`): a request body consisting of the name of
         the artist you&#39;d like to add.
+
+    Returns:
+        Tuple containing:
+
+        * Neo4j entry object: corresponding to the newly added artist
+            containing the artist&#39;s name. This object can be viewed as a
+            Python dictionary or Javascript Object.
+        * `int`: request status code (e.g. `200` means request went fine)
+    &#34;&#34;&#34;
+    result = neo_db.create_artist(artist)
+    return result
+
+# TODO: delete Artist
+
+@app.post(&#34;/createUserFromAccessToken&#34;)
+async def create_spotify_user(spotify_req: SpotifyUserRequest):
+    &#34;&#34;&#34;
+    POST route for adding to the Neo4j database a user with spotify information
+    like top artists and top tracks
+
+    Parameters:
+        `spotify_req` (SpotifyUserRequest): a request body consisting of the authenticated user&#39;s:
 
         * `str pronouns`
         * `datetime birth_month`
@@ -180,38 +223,12 @@ async def create_artist(artist: Artist):
     Returns:
         Tuple containing:
 
-        * Neo4j entry object: corresponding to the newly added artist
-            containing the artist&#39;s name. This object can be viewed as a
-            Python dictionary or Javascript Object.
-        * `int`: request status code (e.g. `200` means request went fine)
-    &#34;&#34;&#34;
-    result = neo_db.create_artist(artist)
-    return result
-
-# TODO: delete Artist
-
-@app.post(&#34;/createUserFromAccessToken&#34;)
-async def create_spotify_user(spotify_req: SpotifyUserRequest):
-    &#34;&#34;&#34;
-    POST route for adding to the Neo4j database a user with spotify information
-    like top artists and top tracks
-
-    Parameters:
-        `spotify_req` (SpotifyUserRequest): a request body consisting of the
-        access token and the refresh token of the authenticated spotify user
-
-    Returns:
-        Tuple containing:
-
         * Neo4j entry object: corresponding to the newly added user
         containing the user&#39;s name, email, top artists, and top tracks.
         This object can be viewed as a Python dictionary or Javascript Object.
         * `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
-    # GETS all basic information from user
-    basic_info = requests.get(&#39;https://api.spotify.com/v1/me&#39;, headers={&#39;Authorization&#39;: &#39;Bearer &#39; + spotify_req.access_token}).json()
-    name = basic_info[&#34;display_name&#34;]
-    email = basic_info[&#34;email&#34;]
+    basic_info = spotify_requester.get_basic_user_info(spotify_req.access_token)
     top_artists = []
     top_songs = []
     top_artists_req = requests.get(&#39;https://api.spotify.com/v1/me/top/artists&#39;, headers={&#39;Authorization&#39;: &#39;Bearer &#39; + spotify_req.access_token}).json()
@@ -220,9 +237,10 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
     top_tracks_req = requests.get(&#39;https://api.spotify.com/v1/me/top/tracks&#39;, headers={&#39;Authorization&#39;: &#39;Bearer &#39; + spotify_req.access_token}).json()
     for track in top_tracks_req[&#34;items&#34;]:
         top_songs.append(track[&#34;name&#34;])
+
     new_spotify_user = User(
-        name=name,
-        email=email,
+        name=spotify_req.name,
+        email=basic_info[&#34;email&#34;],
         pronouns=spotify_req.pronouns,
         birth_month=spotify_req.birth_month,
         description=spotify_req.description,
@@ -231,8 +249,9 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         qas=spotify_req.qas,
         top_artists = top_artists,
         top_songs = top_songs,
+        refresh_token = spotify_req.refresh_token,
+        user_id=basic_info[&#34;id&#34;]
     )
-    print(new_spotify_user)
     # STATUS 403: Access token does not contain necessary scope
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
 
@@ -246,7 +265,7 @@ async def delete_user(email: str = Body(..., embed=True)):
     POST route for deleting from the Neo4j database an existing Datify user.
 
     Parameters:
-        `email` (str) - the email of the user we&#39;d like to delete
+        `email` (`str`) - the email of the user we&#39;d like to delete
 
     Returns:
         Tuple containing:
@@ -266,8 +285,8 @@ async def dislike(email_a: str = Body(...), email_b: str = Body(...)):
     userA will never be able to see userB again on this app.
 
     Parameters:
-        `email_a` (str) - userA&#39;s email
-        `email_b` (str) - userB&#39;s email
+        `email_a` (`str`) - userA&#39;s email
+        `email_b` (`str`) - userB&#39;s email
 
     Returns:
         `int`: request status code (e.g. `200` means request went fine)
@@ -282,7 +301,7 @@ async def get_matched(email):
     right on.
 
     Parameters:
-        `email` (str) - userA&#39;s email
+        `email` (`str`) - userA&#39;s email
 
     Returns:
         Tuple containing:
@@ -300,7 +319,7 @@ async def get_unmet(email):
     before.
 
     Parameters:
-        `email` (str) - userA&#39;s email
+        `email` (`str`) - userA&#39;s email
 
     Returns:
         Tuple containing:
@@ -318,8 +337,8 @@ async def like(email_a: str = Body(...), email_b: str = Body(...)):
     POST route for creating a &#39;LIKES` relationship from userA to userB.
     If userB also likes userA, they&#39;ll show up on each other&#39;s MATCHED pages.
     Parameters:
-        `email_a` (str) - userA&#39;s email
-        `email_b` (str) - userB&#39;s email
+        `email_a` (`str`) - userA&#39;s email
+        `email_b` (`str`) - userB&#39;s email
 
     Returns:
         `int`: request status code (e.g. `200` means request went fine)
@@ -341,8 +360,8 @@ async def like(email_a: str = Body(...), email_b: str = Body(...)):
 <dd>
 <div class="desc"><p>GET route for Spotify access token, necessary for getting users' private Spotify info</p>
 <h2 id="parameters">Parameters</h2>
-<p><code>code</code> (str): the authorization code provided by pinging <code>https://accounts.spotify.com/authorize</code>
-<code>redirect</code> (str): the URI we'd like to redirect to after Spotify gives us our desired tokens</p>
+<p><code>code</code> (<code>str</code>): the authorization code provided by pinging <code>https://accounts.spotify.com/authorize</code>
+<code>redirect</code> (<code>str</code>): the URI we'd like to redirect to after Spotify gives us our desired tokens</p>
 <h2 id="returns">Returns</h2>
 <p>Dictionary containing:</p>
 <pre><code class="language-python">access_token = str # required for getting users' private Spotify info
@@ -361,8 +380,8 @@ async def accessToken(code: str, redirect: str):
     GET route for Spotify access token, necessary for getting users&#39; private Spotify info
 
     Parameters:
-        `code` (str): the authorization code provided by pinging `https://accounts.spotify.com/authorize`
-        `redirect` (str): the URI we&#39;d like to redirect to after Spotify gives us our desired tokens
+        `code` (`str`): the authorization code provided by pinging `https://accounts.spotify.com/authorize`
+        `redirect` (`str`): the URI we&#39;d like to redirect to after Spotify gives us our desired tokens
 
     Returns:
         Dictionary containing:
@@ -397,8 +416,50 @@ async def accessToken(code: str, redirect: str):
 <div class="desc"><p>POST route for adding to the Neo4j database an artist a new Datify
 user enjoys.</p>
 <h2 id="parameters">Parameters</h2>
-<p><code>artist</code> (Artist): a request body consisting of the name of
+<p><code>artist</code> (<code><a title="main.Artist" href="#main.Artist">Artist</a></code>): a request body consisting of the name of
 the artist you'd like to add.</p>
+<h2 id="returns">Returns</h2>
+<p>Tuple containing:</p>
+<ul>
+<li>Neo4j entry object: corresponding to the newly added artist
+containing the artist's name. This object can be viewed as a
+Python dictionary or Javascript Object.</li>
+<li><code>int</code>: request status code (e.g. <code>200</code> means request went fine)</li>
+</ul></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@app.post(&#34;/createArtist&#34;)
+async def create_artist(artist: Artist):
+    &#34;&#34;&#34;
+    POST route for adding to the Neo4j database an artist a new Datify
+    user enjoys.
+
+    Parameters:
+        `artist` (`Artist`): a request body consisting of the name of
+        the artist you&#39;d like to add.
+
+    Returns:
+        Tuple containing:
+
+        * Neo4j entry object: corresponding to the newly added artist
+            containing the artist&#39;s name. This object can be viewed as a
+            Python dictionary or Javascript Object.
+        * `int`: request status code (e.g. `200` means request went fine)
+    &#34;&#34;&#34;
+    result = neo_db.create_artist(artist)
+    return result</code></pre>
+</details>
+</dd>
+<dt id="main.create_spotify_user"><code class="name flex">
+<span>async def <span class="ident">create_spotify_user</span></span>(<span>spotify_req: <a title="main.SpotifyUserRequest" href="#main.SpotifyUserRequest">SpotifyUserRequest</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>POST route for adding to the Neo4j database a user with spotify information
+like top artists and top tracks</p>
+<h2 id="parameters">Parameters</h2>
+<p><code>spotify_req</code> (SpotifyUserRequest): a request body consisting of the authenticated user's:</p>
 <ul>
 <li><code>str pronouns</code></li>
 <li><code>datetime birth_month</code></li>
@@ -445,24 +506,23 @@ the artist you'd like to add.</p>
 <h2 id="returns">Returns</h2>
 <p>Tuple containing:</p>
 <ul>
-<li>Neo4j entry object: corresponding to the newly added artist
-containing the artist's name. This object can be viewed as a
-Python dictionary or Javascript Object.</li>
+<li>Neo4j entry object: corresponding to the newly added user
+containing the user's name, email, top artists, and top tracks.
+This object can be viewed as a Python dictionary or Javascript Object.</li>
 <li><code>int</code>: request status code (e.g. <code>200</code> means request went fine)</li>
 </ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@app.post(&#34;/createArtist&#34;)
-async def create_artist(artist: Artist):
+<pre><code class="python">@app.post(&#34;/createUserFromAccessToken&#34;)
+async def create_spotify_user(spotify_req: SpotifyUserRequest):
     &#34;&#34;&#34;
-    POST route for adding to the Neo4j database an artist a new Datify
-    user enjoys.
+    POST route for adding to the Neo4j database a user with spotify information
+    like top artists and top tracks
 
     Parameters:
-        `artist` (Artist): a request body consisting of the name of
-        the artist you&#39;d like to add.
+        `spotify_req` (SpotifyUserRequest): a request body consisting of the authenticated user&#39;s:
 
         * `str pronouns`
         * `datetime birth_month`
@@ -501,58 +561,12 @@ async def create_artist(artist: Artist):
     Returns:
         Tuple containing:
 
-        * Neo4j entry object: corresponding to the newly added artist
-            containing the artist&#39;s name. This object can be viewed as a
-            Python dictionary or Javascript Object.
-        * `int`: request status code (e.g. `200` means request went fine)
-    &#34;&#34;&#34;
-    result = neo_db.create_artist(artist)
-    return result</code></pre>
-</details>
-</dd>
-<dt id="main.create_spotify_user"><code class="name flex">
-<span>async def <span class="ident">create_spotify_user</span></span>(<span>spotify_req: <a title="main.SpotifyUserRequest" href="#main.SpotifyUserRequest">SpotifyUserRequest</a>)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>POST route for adding to the Neo4j database a user with spotify information
-like top artists and top tracks</p>
-<h2 id="parameters">Parameters</h2>
-<p><code>spotify_req</code> (SpotifyUserRequest): a request body consisting of the
-access token and the refresh token of the authenticated spotify user</p>
-<h2 id="returns">Returns</h2>
-<p>Tuple containing:</p>
-<ul>
-<li>Neo4j entry object: corresponding to the newly added user
-containing the user's name, email, top artists, and top tracks.
-This object can be viewed as a Python dictionary or Javascript Object.</li>
-<li><code>int</code>: request status code (e.g. <code>200</code> means request went fine)</li>
-</ul></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@app.post(&#34;/createUserFromAccessToken&#34;)
-async def create_spotify_user(spotify_req: SpotifyUserRequest):
-    &#34;&#34;&#34;
-    POST route for adding to the Neo4j database a user with spotify information
-    like top artists and top tracks
-
-    Parameters:
-        `spotify_req` (SpotifyUserRequest): a request body consisting of the
-        access token and the refresh token of the authenticated spotify user
-
-    Returns:
-        Tuple containing:
-
         * Neo4j entry object: corresponding to the newly added user
         containing the user&#39;s name, email, top artists, and top tracks.
         This object can be viewed as a Python dictionary or Javascript Object.
         * `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
-    # GETS all basic information from user
-    basic_info = requests.get(&#39;https://api.spotify.com/v1/me&#39;, headers={&#39;Authorization&#39;: &#39;Bearer &#39; + spotify_req.access_token}).json()
-    name = basic_info[&#34;display_name&#34;]
-    email = basic_info[&#34;email&#34;]
+    basic_info = spotify_requester.get_basic_user_info(spotify_req.access_token)
     top_artists = []
     top_songs = []
     top_artists_req = requests.get(&#39;https://api.spotify.com/v1/me/top/artists&#39;, headers={&#39;Authorization&#39;: &#39;Bearer &#39; + spotify_req.access_token}).json()
@@ -561,9 +575,10 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
     top_tracks_req = requests.get(&#39;https://api.spotify.com/v1/me/top/tracks&#39;, headers={&#39;Authorization&#39;: &#39;Bearer &#39; + spotify_req.access_token}).json()
     for track in top_tracks_req[&#34;items&#34;]:
         top_songs.append(track[&#34;name&#34;])
+
     new_spotify_user = User(
-        name=name,
-        email=email,
+        name=spotify_req.name,
+        email=basic_info[&#34;email&#34;],
         pronouns=spotify_req.pronouns,
         birth_month=spotify_req.birth_month,
         description=spotify_req.description,
@@ -572,8 +587,9 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         qas=spotify_req.qas,
         top_artists = top_artists,
         top_songs = top_songs,
+        refresh_token = spotify_req.refresh_token,
+        user_id=basic_info[&#34;id&#34;]
     )
-    print(new_spotify_user)
     # STATUS 403: Access token does not contain necessary scope
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
 
@@ -588,7 +604,7 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
 <dd>
 <div class="desc"><p>POST route for deleting from the Neo4j database an existing Datify user.</p>
 <h2 id="parameters">Parameters</h2>
-<p><code>email</code> (str) - the email of the user we'd like to delete</p>
+<p><code>email</code> (<code>str</code>) - the email of the user we'd like to delete</p>
 <h2 id="returns">Returns</h2>
 <p>Tuple containing:</p>
 <ul>
@@ -607,7 +623,7 @@ async def delete_user(email: str = Body(..., embed=True)):
     POST route for deleting from the Neo4j database an existing Datify user.
 
     Parameters:
-        `email` (str) - the email of the user we&#39;d like to delete
+        `email` (`str`) - the email of the user we&#39;d like to delete
 
     Returns:
         Tuple containing:
@@ -628,8 +644,8 @@ async def delete_user(email: str = Body(..., embed=True)):
 <div class="desc"><p>POST route for creating a 'DISLIKES` relationship from userA to userB.
 userA will never be able to see userB again on this app.</p>
 <h2 id="parameters">Parameters</h2>
-<p><code>email_a</code> (str) - userA's email
-<code>email_b</code> (str) - userB's email</p>
+<p><code>email_a</code> (<code>str</code>) - userA's email
+<code>email_b</code> (<code>str</code>) - userB's email</p>
 <h2 id="returns">Returns</h2>
 <p><code>int</code>: request status code (e.g. <code>200</code> means request went fine)</p></div>
 <details class="source">
@@ -643,8 +659,8 @@ async def dislike(email_a: str = Body(...), email_b: str = Body(...)):
     userA will never be able to see userB again on this app.
 
     Parameters:
-        `email_a` (str) - userA&#39;s email
-        `email_b` (str) - userB&#39;s email
+        `email_a` (`str`) - userA&#39;s email
+        `email_b` (`str`) - userB&#39;s email
 
     Returns:
         `int`: request status code (e.g. `200` means request went fine)
@@ -660,7 +676,7 @@ async def dislike(email_a: str = Body(...), email_b: str = Body(...)):
 <div class="desc"><p>GET route for retrieving users a userA mutually liked / swiped
 right on.</p>
 <h2 id="parameters">Parameters</h2>
-<p><code>email</code> (str) - userA's email</p>
+<p><code>email</code> (<code>str</code>) - userA's email</p>
 <h2 id="returns">Returns</h2>
 <p>Tuple containing:</p>
 <ul>
@@ -678,7 +694,7 @@ async def get_matched(email):
     right on.
 
     Parameters:
-        `email` (str) - userA&#39;s email
+        `email` (`str`) - userA&#39;s email
 
     Returns:
         Tuple containing:
@@ -697,7 +713,7 @@ async def get_matched(email):
 <div class="desc"><p>GET route for retrieving 10 users a userA has never liked/disliked
 before.</p>
 <h2 id="parameters">Parameters</h2>
-<p><code>email</code> (str) - userA's email</p>
+<p><code>email</code> (<code>str</code>) - userA's email</p>
 <h2 id="returns">Returns</h2>
 <p>Tuple containing:</p>
 <ul>
@@ -715,7 +731,7 @@ async def get_unmet(email):
     before.
 
     Parameters:
-        `email` (str) - userA&#39;s email
+        `email` (`str`) - userA&#39;s email
 
     Returns:
         Tuple containing:
@@ -727,6 +743,37 @@ async def get_unmet(email):
     return result</code></pre>
 </details>
 </dd>
+<dt id="main.get_user"><code class="name flex">
+<span>async def <span class="ident">get_user</span></span>(<span>token: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>GET route to see if user trying to login has a Datify account.</p>
+<h2 id="parameters">Parameters</h2>
+<p><code>token</code> (<code>str</code>): Spotify access token</p>
+<h2 id="returns">Returns</h2>
+<p>Dictionary either containing <code><a title="main.User" href="#main.User">User</a></code> properties (if user exists)
+or nothing (if user doesn't exist)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@app.get(&#39;/getUser&#39;)
+async def get_user(token: str):
+    &#34;&#34;&#34;
+    GET route to see if user trying to login has a Datify account.
+
+    Parameters:
+        `token` (`str`): Spotify access token
+
+    Returns:
+        Dictionary either containing `User` properties (if user exists)
+        or nothing (if user doesn&#39;t exist)
+    &#34;&#34;&#34;
+    basic_info = spotify_requester.get_basic_user_info(token)
+    user = neo_db.get_user(basic_info[&#34;id&#34;])
+    return user</code></pre>
+</details>
+</dd>
 <dt id="main.like"><code class="name flex">
 <span>async def <span class="ident">like</span></span>(<span>email_a: str = Body(Ellipsis), email_b: str = Body(Ellipsis))</span>
 </code></dt>
@@ -734,8 +781,8 @@ async def get_unmet(email):
 <div class="desc"><p>POST route for creating a 'LIKES` relationship from userA to userB.
 If userB also likes userA, they'll show up on each other's MATCHED pages.</p>
 <h2 id="parameters">Parameters</h2>
-<p><code>email_a</code> (str) - userA's email
-<code>email_b</code> (str) - userB's email</p>
+<p><code>email_a</code> (<code>str</code>) - userA's email
+<code>email_b</code> (<code>str</code>) - userB's email</p>
 <h2 id="returns">Returns</h2>
 <p><code>int</code>: request status code (e.g. <code>200</code> means request went fine)</p></div>
 <details class="source">
@@ -748,8 +795,8 @@ async def like(email_a: str = Body(...), email_b: str = Body(...)):
     POST route for creating a &#39;LIKES` relationship from userA to userB.
     If userB also likes userA, they&#39;ll show up on each other&#39;s MATCHED pages.
     Parameters:
-        `email_a` (str) - userA&#39;s email
-        `email_b` (str) - userB&#39;s email
+        `email_a` (`str`) - userA&#39;s email
+        `email_b` (`str`) - userB&#39;s email
 
     Returns:
         `int`: request status code (e.g. `200` means request went fine)
@@ -818,6 +865,7 @@ def pong():
 <pre><code class="python">class SpotifyUserRequest(BaseModel):
     access_token: str
     refresh_token: str
+    name: str
     pronouns: str
     birth_month: datetime
     description: str
@@ -841,6 +889,10 @@ def pong():
 <div class="desc"></div>
 </dd>
 <dt id="main.SpotifyUserRequest.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="main.SpotifyUserRequest.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -887,7 +939,9 @@ def pong():
     tidbits: Dict[str, Optional[str]]
     qas: Dict[str, Optional[str]]
     top_artists: Optional[List[str]] = []
-    top_songs: Optional[List[str]] = []</code></pre>
+    top_songs: Optional[List[str]] = []
+    refresh_token: str
+    user_id: str</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -924,6 +978,10 @@ def pong():
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="main.User.refresh_token"><code class="name">var <span class="ident">refresh_token</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="main.User.tidbits"><code class="name">var <span class="ident">tidbits</span> : Dict[str, Optional[str]]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -933,6 +991,10 @@ def pong():
 <div class="desc"></div>
 </dd>
 <dt id="main.User.top_songs"><code class="name">var <span class="ident">top_songs</span> : Optional[List[str]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="main.User.user_id"><code class="name">var <span class="ident">user_id</span> : str</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -956,6 +1018,7 @@ def pong():
 <li><code><a title="main.dislike" href="#main.dislike">dislike</a></code></li>
 <li><code><a title="main.get_matched" href="#main.get_matched">get_matched</a></code></li>
 <li><code><a title="main.get_unmet" href="#main.get_unmet">get_unmet</a></code></li>
+<li><code><a title="main.get_user" href="#main.get_user">get_user</a></code></li>
 <li><code><a title="main.like" href="#main.like">like</a></code></li>
 <li><code><a title="main.pong" href="#main.pong">pong</a></code></li>
 </ul>
@@ -974,6 +1037,7 @@ def pong():
 <li><code><a title="main.SpotifyUserRequest.access_token" href="#main.SpotifyUserRequest.access_token">access_token</a></code></li>
 <li><code><a title="main.SpotifyUserRequest.birth_month" href="#main.SpotifyUserRequest.birth_month">birth_month</a></code></li>
 <li><code><a title="main.SpotifyUserRequest.description" href="#main.SpotifyUserRequest.description">description</a></code></li>
+<li><code><a title="main.SpotifyUserRequest.name" href="#main.SpotifyUserRequest.name">name</a></code></li>
 <li><code><a title="main.SpotifyUserRequest.pic" href="#main.SpotifyUserRequest.pic">pic</a></code></li>
 <li><code><a title="main.SpotifyUserRequest.pronouns" href="#main.SpotifyUserRequest.pronouns">pronouns</a></code></li>
 <li><code><a title="main.SpotifyUserRequest.qas" href="#main.SpotifyUserRequest.qas">qas</a></code></li>
@@ -991,9 +1055,11 @@ def pong():
 <li><code><a title="main.User.pic" href="#main.User.pic">pic</a></code></li>
 <li><code><a title="main.User.pronouns" href="#main.User.pronouns">pronouns</a></code></li>
 <li><code><a title="main.User.qas" href="#main.User.qas">qas</a></code></li>
+<li><code><a title="main.User.refresh_token" href="#main.User.refresh_token">refresh_token</a></code></li>
 <li><code><a title="main.User.tidbits" href="#main.User.tidbits">tidbits</a></code></li>
 <li><code><a title="main.User.top_artists" href="#main.User.top_artists">top_artists</a></code></li>
 <li><code><a title="main.User.top_songs" href="#main.User.top_songs">top_songs</a></code></li>
+<li><code><a title="main.User.user_id" href="#main.User.user_id">user_id</a></code></li>
 </ul>
 </li>
 </ul>

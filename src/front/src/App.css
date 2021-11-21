@@ -73,31 +73,6 @@ body {
     margin-left: 20%;
   }
 
-.ant-descriptions-title {
-  color: white;
-  font-size: 30px;
-  position: absolute;
-  top: 15%; left: 45%; right: 0; bottom: 0;
-  z-index: 0;
-}
-
-.extra {
-    position: absolute;
-    top: 30%; left: 44.5%; right: 0; bottom: 0%;
-    padding: 3px 8px;
-    color: white;
-    z-index: 1;
-    font-size: 30px;
-}
-
-.container h2 {
-    position: absolute;
-    top: 33%; left: 45.5%; right: 0; bottom: 0%;
-    color: white;
-    font-size: 20px;
-    font-family: "gothambold";
-}
-
 h2,
 h3,
 h4,
@@ -145,7 +120,7 @@ h3 {
 .Descriptions {
     font-size: 30px;
 }
-.container h3 {
+.container h3, h2 {
     color: #E8BFFB;
     font-family: "gothambold";
     font-size: 20
@@ -188,5 +163,32 @@ h3 {
   .form-btns > div > div > div > button {
     width: 14%;
     margin-top: 1rem;
+  }
+}
+
+@media screen and (min-width: 1390px) {
+  .ant-descriptions-title {
+    color: white;
+    font-size: 30px;
+    position: absolute;
+    top: 15%; left: 45%; right: 0; bottom: 0;
+    z-index: 0;
+  }
+      
+  .extra {
+    position: absolute;
+    top: 30%; left: 44.5%; right: 0; bottom: 0%;
+    padding: 3px 8px;
+    color: white;
+    z-index: 1;
+    font-size: 30px;
+  }
+      
+  .container h2 {
+    position: absolute;
+    top: 33%; left: 45.5%; right: 0; bottom: 0%;
+    color: white;
+    font-size: 20px; 
+    font-family: "gothambold";
   }
 }

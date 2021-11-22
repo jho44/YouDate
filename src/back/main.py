@@ -181,6 +181,9 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         * `int`: request status code (e.g. `200` means request went fine)
     """
     # GETS all basic information from user
+
+    # TODO: add error handling for incorrect datetime (some formats cause internal server error?)
+    # OR could be invalid spotify creds
     basic_info = requests.get('https://api.spotify.com/v1/me', headers={'Authorization': 'Bearer ' + spotify_req.access_token}).json()
     name = basic_info["display_name"]
     email = basic_info["email"]
@@ -196,7 +199,7 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         name=name,
         email=email,
         pronouns=spotify_req.pronouns,
-        birth_month=spotify_req.birth_month,
+        #birth_month=spotify_req.birth_month,
         description=spotify_req.description,
         pic=spotify_req.pic,
         tidbits=spotify_req.tidbits,
@@ -297,4 +300,19 @@ async def like(email_a: str = Body(...), email_b: str = Body(...)):
         `int`: request status code (e.g. `200` means request went fine)
     """
     result = neo_db.like(email_a, email_b)
+    return result
+
+@app.put("/updateUser")
+async def updateUser(facts, email):
+    """
+    PUT route for updating a user's information.
+
+    Parameters:
+        `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values
+        `email` (str) - user's email
+
+    Returns:
+        `int`: request status code (e.g. `200` means request went fine)
+    """
+    result = neo_db.save_facts(facts, email)
     return result

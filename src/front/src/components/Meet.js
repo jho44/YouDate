@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Descriptions, Button, Affix } from "antd";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import "../App.css";
@@ -52,6 +52,13 @@ const Meet = ({ meet }) => {
 
   const [likePressed, setLikePressed] = useState(false);
   const [dislikePressed, setDislikePressed] = useState(false);
+  const [offsetY, setOffsetY] = useState(0);
+  const handleScroll = () => setOffsetY(window.pageYOffset);
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   /**
    * Function to open Like Confirmation modal.
@@ -77,21 +84,23 @@ const Meet = ({ meet }) => {
   return (
     <>
       <div
-        className="photo"
-        style={{ backgroundImage: `url('${data.user.img}')` }}
+        className="profilePhoto"
+        style={{ backgroundImage: `url('${data.user.img}')`, transform: `translateY(${offsetY * 0.25}px)` }}
       />
 
-      <div className="container">
+    <div className="userName" style={{ transform: `translateY(${offsetY * 0.4}px)` }}>
         <Descriptions
           title={`${data.user.name} (${data.user.pronouns})`}
           labelStyle={{ color: "white" }}
           contentStyle={{ color: "white" }}
-          extra={<span>{data.user.age}</span>}
-        >
+          extra={<span className="extra">{data.user.age}</span>}
+        />  
+     </div>
+
+      <div className="container">
           <Descriptions.Item label="">
-            {data.user.description}
+            <h2 className="description" style={{ transform: `translateY(${offsetY * 0.4}px)` }}>{data.user.description}</h2>
           </Descriptions.Item>
-        </Descriptions>
 
         <h3>Artists in Common</h3>
         {data.user.artists.map((artist, ind) => (

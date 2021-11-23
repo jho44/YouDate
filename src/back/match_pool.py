@@ -123,19 +123,19 @@ class MatchPool:
             raise
 
     # set 'DISLIKES' relationship on node A -> node B
-    def dislike(self, email_a, email_b):
+    def dislike(self, userid_a, userid_b):
         with self.driver.session() as session:
-            return session.write_transaction(self._dislike, email_a, email_b)
+            return session.write_transaction(self._dislike, userid_a, userid_b)
 
     @staticmethod
-    def _dislike(tx, email_a, email_b):
+    def _dislike(tx, userid_a, userid_b):
         query = (
             '''
-            MATCH (a:User {email: $email_a}), (b:User {email: $email_b})
+            MATCH (a:User {user_id: $userid_a}), (b:User {user_id: $userid_b})
             CREATE (a)-[r:DISLIKES]->(b)
             '''
         )
-        tx.run(query, email_a=email_a, email_b=email_b)
+        tx.run(query, userid_a=userid_a, userid_b=userid_b)
 
         return 200
 
@@ -227,19 +227,19 @@ class MatchPool:
         return 200
 
     # set 'LIKES' relationship on node A -> node B
-    def like(self, email_a, email_b):
+    def like(self, userid_a, userid_b):
         with self.driver.session() as session:
-            return session.write_transaction(self._like, email_a, email_b)
+            return session.write_transaction(self._like, userid_a, userid_b)
 
     @staticmethod
-    def _like(tx, email_a, email_b):
+    def _like(tx, userid_a, userid_b):
         query = (
             '''
-            MATCH (a:User {email: $email_a}), (b:User {email: $email_b})
+            MATCH (a:User {user_id: $userid_a}), (b:User {user_id: $userid_b})
             CREATE (a)-[r:LIKES]->(b)
             '''
         )
-        tx.run(query, email_a=email_a, email_b=email_b)
+        tx.run(query, userid_a=userid_a, userid_b=userid_b)
 
         return 200
 

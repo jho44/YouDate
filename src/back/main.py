@@ -251,19 +251,20 @@ async def delete_user(email: str = Body(..., embed=True)):
     return result
 
 @app.post("/dislike")
-async def dislike(email_a: str = Body(...), email_b: str = Body(...)):
+async def dislike(userid_a: str = Body(...), userid_b: str = Body(...)):
     """
     POST route for creating a 'DISLIKES` relationship from userA to userB.
     userA will never be able to see userB again on this app.
 
     Parameters:
-        `email_a` (`str`) - userA's email
-        `email_b` (`str`) - userB's email
+        `userid_a` (`str`) - userA's Spotify ID
+
+        `userid_b` (`str`) - userB's Spotify ID
 
     Returns:
         `int`: request status code (e.g. `200` means request went fine)
     """
-    result = neo_db.dislike(email_a, email_b)
+    result = neo_db.dislike(userid_a, userid_b)
     return result
 
 @app.get("/getMatched")
@@ -304,16 +305,17 @@ async def get_unmet(email):
 
 
 @app.post("/like")
-async def like(email_a: str = Body(...), email_b: str = Body(...)):
+async def like(userid_a: str = Body(...), userid_b: str = Body(...)):
     """
     POST route for creating a 'LIKES` relationship from userA to userB.
     If userB also likes userA, they'll show up on each other's MATCHED pages.
     Parameters:
-        `email_a` (`str`) - userA's email
-        `email_b` (`str`) - userB's email
+        `userid_a` (`str`) - userA's Spotify ID
+
+        `userid_b` (`str`) - userB's Spotify ID
 
     Returns:
         `int`: request status code (e.g. `200` means request went fine)
     """
-    result = neo_db.like(email_a, email_b)
+    result = neo_db.like(userid_a, userid_b)
     return result

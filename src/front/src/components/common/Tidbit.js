@@ -1,14 +1,13 @@
 import React from "react";
 import "../../App.css";
+import { Person as PersonIcon } from "@mui/icons-material"; // placeholder for now
 
 /**
  * Tidbit sub-component used by Meet and Profile component.
  * For things like a user's desired relationship type or education.
  *
- * @property {string} imgPath - path to icon's image file
- * corresponding to tidbit about user
- * @property {string} alt - `alt` attribute for said icon's image
- * element
+ * @property {Component} Component - Icon Component corresponding to
+ * some user's tidbit.
  * @property {string} content - words for this Tidbit
  * @returns {HTML} Styled div wrapped around icon `img` and `span`
  * for `content`
@@ -16,7 +15,7 @@ import "../../App.css";
  * @package
  * @class
  */
-const Tidbit = ({ Component, content }) => {
+const Tidbit = ({ Component = PersonIcon, content }) => {
   return (
     <div
       style={{ marginBottom: "1rem", display: "flex", alignItems: "center" }}

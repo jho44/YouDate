@@ -49,7 +49,14 @@ const Profile = ({ meet }) => {
    */
   const [deleteAccChecked, setDeleteAccChecked] = useState(false);
 
-  const { user } = useContext(AuthContext);
+  const {
+    /**
+     * `ContextProvider` state of logged-in user's info.
+     * @type {Object}
+     * @memberof Profile
+     */
+    user,
+  } = useContext(AuthContext);
 
   /* Parallax effect for scrolling */
   const [offsetY, setOffsetY] = useState(0);

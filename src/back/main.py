@@ -89,6 +89,8 @@ async def get_user(token: str):
         or nothing (if user doesn't exist)
     """
     basic_info = spotify_requester.get_basic_user_info(token)
+    if basic_info is None:
+        raise HTTPException(status_code=404, detail="User not found")
     user = neo_db.get_user(basic_info["id"])
     return user
 
@@ -205,6 +207,8 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         * `int`: request status code (e.g. `200` means request went fine)
     """
     basic_info = spotify_requester.get_basic_user_info(spotify_req.access_token)
+    if basic_info is None:
+        raise HTTPException(status_code=404, detail="Spotify information not found")
     top_artists = []
     top_songs = []
     top_artists_req = requests.get('https://api.spotify.com/v1/me/top/artists', headers={'Authorization': 'Bearer ' + spotify_req.access_token}).json()
@@ -252,6 +256,8 @@ async def delete_user(email: str = Body(..., embed=True)):
         * `int`: request status code (e.g. `200` means request went fine)
     """
     result = neo_db.delete_user(email)
+    if result is None:
+        raise HTTPException(status_code=404, detail="User not found")
     return result
 
 @app.post("/dislike")

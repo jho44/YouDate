@@ -1,4 +1,4 @@
-from fastapi import Body, FastAPI
+from fastapi import Body, FastAPI, HTTPException
 from starlette.responses import RedirectResponse
 from typing import Any, Optional, Dict, List
 from pydantic import BaseModel
@@ -44,6 +44,12 @@ uri="neo4j+s://ce94f876.databases.neo4j.io"
 user="neo4j"
 password=config.NEO_PASSWORD
 
+
+QA_LIST = ["life_goal", "believe_or_not", "life_peaked", "feel_famous", "biggest_risk"]
+QA_MAX = 4
+TIDBIT_LIST = ["desired_relationship", "education", "occupation", "sexual_orientation", "location", "political_view", "height"]
+FACT_LIST = {"life_goal", "believe_or_not", "life_peaked", "feel_famous", "biggest_risk", "desired_relationship", "education", "occupation", "sexual_orientation", "location", "political_view", "height"}
+
 spotify_requester = spotify.Spotify()
 neo_db = match_pool.MatchPool(uri, user, password)
 
@@ -81,10 +87,13 @@ async def get_user(token: str):
         `token` (`str`): Spotify access token
 
     Returns:
-        Dictionary either containing `User` properties (if user exists)
+        * Dictionary either containing `User` properties (if user exists)
         or nothing (if user doesn't exist)
+        * `int`: request status code (e.g. `200` means request went fine)
     """
     basic_info = spotify_requester.get_basic_user_info(token)
+    if basic_info is None:
+        raise HTTPException(status_code=404, detail="User not found")
     user = neo_db.get_user(basic_info["id"])
     return user
 
@@ -201,6 +210,8 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         * `int`: request status code (e.g. `200` means request went fine)
     """
     basic_info = spotify_requester.get_basic_user_info(spotify_req.access_token)
+    if basic_info is None:
+        raise HTTPException(status_code=404, detail="Spotify information not found")
     top_artists = []
     top_songs = []
     top_artists_req = requests.get('https://api.spotify.com/v1/me/top/artists', headers={'Authorization': 'Bearer ' + spotify_req.access_token}).json()
@@ -248,6 +259,8 @@ async def delete_user(email: str = Body(..., embed=True)):
         * `int`: request status code (e.g. `200` means request went fine)
     """
     result = neo_db.delete_user(email)
+    if result is None:
+        raise HTTPException(status_code=404, detail="User not found")
     return result
 
 @app.post("/dislike")
@@ -316,4 +329,37 @@ async def like(email_a: str = Body(...), email_b: str = Body(...)):
         `int`: request status code (e.g. `200` means request went fine)
     """
     result = neo_db.like(email_a, email_b)
+    return result
+
+@app.put("/updateUserFacts")
+async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: str = Body(...)):
+    """
+    PUT route for updating a user's information.
+
+    Parameters:
+        `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values. 
+        Every single tidbit and QA should be included with a string or null. If a string is null, this fact is deleted from the user's profile.
+        The require fields are: "life_goal", "believe_or_not", "life_peaked", "feel_famous", "biggest_risk", "desired_relationship", "education", "occupation", "sexual_orientation", "location", "political_view", "height"
+        `email` (str) - user's email
+
+    Returns:
+        * Dictionary either containing `User` properties (if user exists)
+        or nothing (if user doesn't exist)
+        * `int`: request status code (e.g. `200` means request went fine)
+    """
+
+    if FACT_LIST != set(facts.keys()):
+        raise HTTPException(status_code=400, detail="Bad Request: Invalid Field Name")
+
+    qa_count = 0
+    for key in facts:
+        if key in QA_LIST and facts[key] is not None:
+            qa_count += 1
+
+    if qa_count > QA_MAX:
+        raise HTTPException(status_code=400, detail="Bad Request: Too Many QAs")
+
+    result = neo_db.save_facts(facts, email)
+    if result is None:
+       raise HTTPException(status_code=404, detail="User not found") 
     return result

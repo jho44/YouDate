@@ -13,6 +13,7 @@ import { getBase64, beforeUpload } from "../fileUpload";
 import "../App.css";
 import { AuthContext } from "../Context";
 import { useNavigate } from "react-router-dom";
+import { processUserInfo } from "../helpers";
 
 const { Item } = Form;
 const { Title, Paragraph } = Typography;
@@ -160,7 +161,9 @@ const InfoForm = () => {
       .then((res) => res.json())
       .then((res_data) => {
         if (res_data[1] === 200) {
-          setUser(res_data[0]);
+          let datifyUser = res_data[0];
+          const user = processUserInfo(datifyUser);
+          setUser(user);
           navigate("/profile");
         } // TODO: error handling
       })
@@ -231,6 +234,7 @@ const InfoForm = () => {
                 backgroundImage: `url('${img}')`,
                 width: "100%",
                 height: "100%",
+                borderRadius: 0,
               }}
             />
           ) : (

@@ -46,7 +46,9 @@ password=config.NEO_PASSWORD
 
 
 QA_LIST = ["life_goal", "believe_or_not", "life_peaked", "feel_famous", "biggest_risk"]
+QA_MAX = 4
 TIDBIT_LIST = ["desired_relationship", "education", "occupation", "sexual_orientation", "location", "political_view", "height"]
+FACT_LIST = {"life_goal", "believe_or_not", "life_peaked", "feel_famous", "biggest_risk", "desired_relationship", "education", "occupation", "sexual_orientation", "location", "political_view", "height"}
 
 spotify_requester = spotify.Spotify()
 neo_db = match_pool.MatchPool(uri, user, password)
@@ -334,20 +336,25 @@ async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: st
     PUT route for updating a user's information.
 
     Parameters:
-        `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values. If a string is null, this fact is deleted from the user's profile
+        `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values. 
+        Every single tidbit and QA should be included with a string or null. If a string is null, this fact is deleted from the user's profile.
+        The require fields are: "life_goal", "believe_or_not", "life_peaked", "feel_famous", "biggest_risk", "desired_relationship", "education", "occupation", "sexual_orientation", "location", "political_view", "height"
         `email` (str) - user's email
 
     Returns:
         `int`: request status code (e.g. `200` means request went fine)
     """
 
-    # Ensure that each field is valid
+    if FACT_LIST != set(facts.keys()):
+        raise HTTPException(status_code=400, detail="Bad Request: Invalid Field Name")
+
+    qa_count = 0
     for key in facts:
-        if key not in QA_LIST and key not in TIDBIT_LIST:
-            raise HTTPException(status_code=400, detail="Bad Request: Invalid field name")
+        if key in QA_LIST and facts[key] is not None:
+            qa_count += 1
 
     if qa_count > QA_MAX:
-        raise HTTPException(status_code=400, detail="Bad Request: Too many QAs")
+        raise HTTPException(status_code=400, detail="Bad Request: Too Many QAs")
 
     result = neo_db.save_facts(facts, email)
     if result is None:

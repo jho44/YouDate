@@ -26,7 +26,7 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from fastapi import Body, FastAPI
+<pre><code class="python">from fastapi import Body, FastAPI, HTTPException
 from starlette.responses import RedirectResponse
 from typing import Any, Optional, Dict, List
 from pydantic import BaseModel
@@ -72,6 +72,12 @@ uri=&#34;neo4j+s://ce94f876.databases.neo4j.io&#34;
 user=&#34;neo4j&#34;
 password=config.NEO_PASSWORD
 
+
+QA_LIST = [&#34;life_goal&#34;, &#34;believe_or_not&#34;, &#34;life_peaked&#34;, &#34;feel_famous&#34;, &#34;biggest_risk&#34;]
+QA_MAX = 4
+TIDBIT_LIST = [&#34;desired_relationship&#34;, &#34;education&#34;, &#34;occupation&#34;, &#34;sexual_orientation&#34;, &#34;location&#34;, &#34;political_view&#34;, &#34;height&#34;]
+FACT_LIST = {&#34;life_goal&#34;, &#34;believe_or_not&#34;, &#34;life_peaked&#34;, &#34;feel_famous&#34;, &#34;biggest_risk&#34;, &#34;desired_relationship&#34;, &#34;education&#34;, &#34;occupation&#34;, &#34;sexual_orientation&#34;, &#34;location&#34;, &#34;political_view&#34;, &#34;height&#34;}
+
 spotify_requester = spotify.Spotify()
 neo_db = match_pool.MatchPool(uri, user, password)
 
@@ -109,10 +115,13 @@ async def get_user(token: str):
         `token` (`str`): Spotify access token
 
     Returns:
-        Dictionary either containing `User` properties (if user exists)
+        * Dictionary either containing `User` properties (if user exists)
         or nothing (if user doesn&#39;t exist)
+        * `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
     basic_info = spotify_requester.get_basic_user_info(token)
+    if basic_info is None:
+        raise HTTPException(status_code=404, detail=&#34;User not found&#34;)
     user = neo_db.get_user(basic_info[&#34;id&#34;])
     return user
 
@@ -229,6 +238,8 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         * `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
     basic_info = spotify_requester.get_basic_user_info(spotify_req.access_token)
+    if basic_info is None:
+        raise HTTPException(status_code=404, detail=&#34;Spotify information not found&#34;)
     top_artists = []
     top_songs = []
     top_artists_req = requests.get(&#39;https://api.spotify.com/v1/me/top/artists&#39;, headers={&#39;Authorization&#39;: &#39;Bearer &#39; + spotify_req.access_token}).json()
@@ -276,6 +287,8 @@ async def delete_user(email: str = Body(..., embed=True)):
         * `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
     result = neo_db.delete_user(email)
+    if result is None:
+        raise HTTPException(status_code=404, detail=&#34;User not found&#34;)
     return result
 
 @app.post(&#34;/dislike&#34;)
@@ -344,6 +357,39 @@ async def like(email_a: str = Body(...), email_b: str = Body(...)):
         `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
     result = neo_db.like(email_a, email_b)
+    return result
+
+@app.put(&#34;/updateUserFacts&#34;)
+async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: str = Body(...)):
+    &#34;&#34;&#34;
+    PUT route for updating a user&#39;s information.
+
+    Parameters:
+        `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values. 
+        Every single tidbit and QA should be included with a string or null. If a string is null, this fact is deleted from the user&#39;s profile.
+        The require fields are: &#34;life_goal&#34;, &#34;believe_or_not&#34;, &#34;life_peaked&#34;, &#34;feel_famous&#34;, &#34;biggest_risk&#34;, &#34;desired_relationship&#34;, &#34;education&#34;, &#34;occupation&#34;, &#34;sexual_orientation&#34;, &#34;location&#34;, &#34;political_view&#34;, &#34;height&#34;
+        `email` (str) - user&#39;s email
+
+    Returns:
+        * Dictionary either containing `User` properties (if user exists)
+        or nothing (if user doesn&#39;t exist)
+        * `int`: request status code (e.g. `200` means request went fine)
+    &#34;&#34;&#34;
+
+    if FACT_LIST != set(facts.keys()):
+        raise HTTPException(status_code=400, detail=&#34;Bad Request: Invalid Field Name&#34;)
+
+    qa_count = 0
+    for key in facts:
+        if key in QA_LIST and facts[key] is not None:
+            qa_count += 1
+
+    if qa_count &gt; QA_MAX:
+        raise HTTPException(status_code=400, detail=&#34;Bad Request: Too Many QAs&#34;)
+
+    result = neo_db.save_facts(facts, email)
+    if result is None:
+       raise HTTPException(status_code=404, detail=&#34;User not found&#34;) 
     return result</code></pre>
 </details>
 </section>
@@ -567,6 +613,8 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         * `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
     basic_info = spotify_requester.get_basic_user_info(spotify_req.access_token)
+    if basic_info is None:
+        raise HTTPException(status_code=404, detail=&#34;Spotify information not found&#34;)
     top_artists = []
     top_songs = []
     top_artists_req = requests.get(&#39;https://api.spotify.com/v1/me/top/artists&#39;, headers={&#39;Authorization&#39;: &#39;Bearer &#39; + spotify_req.access_token}).json()
@@ -634,6 +682,8 @@ async def delete_user(email: str = Body(..., embed=True)):
         * `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
     result = neo_db.delete_user(email)
+    if result is None:
+        raise HTTPException(status_code=404, detail=&#34;User not found&#34;)
     return result</code></pre>
 </details>
 </dd>
@@ -751,8 +801,11 @@ async def get_unmet(email):
 <h2 id="parameters">Parameters</h2>
 <p><code>token</code> (<code>str</code>): Spotify access token</p>
 <h2 id="returns">Returns</h2>
-<p>Dictionary either containing <code><a title="main.User" href="#main.User">User</a></code> properties (if user exists)
-or nothing (if user doesn't exist)</p></div>
+<ul>
+<li>Dictionary either containing <code><a title="main.User" href="#main.User">User</a></code> properties (if user exists)
+or nothing (if user doesn't exist)</li>
+<li><code>int</code>: request status code (e.g. <code>200</code> means request went fine)</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -766,10 +819,13 @@ async def get_user(token: str):
         `token` (`str`): Spotify access token
 
     Returns:
-        Dictionary either containing `User` properties (if user exists)
+        * Dictionary either containing `User` properties (if user exists)
         or nothing (if user doesn&#39;t exist)
+        * `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
     basic_info = spotify_requester.get_basic_user_info(token)
+    if basic_info is None:
+        raise HTTPException(status_code=404, detail=&#34;User not found&#34;)
     user = neo_db.get_user(basic_info[&#34;id&#34;])
     return user</code></pre>
 </details>
@@ -817,6 +873,60 @@ async def like(email_a: str = Body(...), email_b: str = Body(...)):
 <pre><code class="python">@app.get(&#34;/ping&#34;)
 def pong():
     return {&#34;ping&#34;: &#34;pong!&#34;}</code></pre>
+</details>
+</dd>
+<dt id="main.updateUserFacts"><code class="name flex">
+<span>async def <span class="ident">updateUserFacts</span></span>(<span>facts: Dict[str, Optional[str]] = Body(Ellipsis), email: str = Body(Ellipsis))</span>
+</code></dt>
+<dd>
+<div class="desc"><p>PUT route for updating a user's information.</p>
+<h2 id="parameters">Parameters</h2>
+<p><code>facts</code> (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values.
+Every single tidbit and QA should be included with a string or null. If a string is null, this fact is deleted from the user's profile.
+The require fields are: "life_goal", "believe_or_not", "life_peaked", "feel_famous", "biggest_risk", "desired_relationship", "education", "occupation", "sexual_orientation", "location", "political_view", "height"
+<code>email</code> (str) - user's email</p>
+<h2 id="returns">Returns</h2>
+<ul>
+<li>Dictionary either containing <code><a title="main.User" href="#main.User">User</a></code> properties (if user exists)
+or nothing (if user doesn't exist)</li>
+<li><code>int</code>: request status code (e.g. <code>200</code> means request went fine)</li>
+</ul></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@app.put(&#34;/updateUserFacts&#34;)
+async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: str = Body(...)):
+    &#34;&#34;&#34;
+    PUT route for updating a user&#39;s information.
+
+    Parameters:
+        `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values. 
+        Every single tidbit and QA should be included with a string or null. If a string is null, this fact is deleted from the user&#39;s profile.
+        The require fields are: &#34;life_goal&#34;, &#34;believe_or_not&#34;, &#34;life_peaked&#34;, &#34;feel_famous&#34;, &#34;biggest_risk&#34;, &#34;desired_relationship&#34;, &#34;education&#34;, &#34;occupation&#34;, &#34;sexual_orientation&#34;, &#34;location&#34;, &#34;political_view&#34;, &#34;height&#34;
+        `email` (str) - user&#39;s email
+
+    Returns:
+        * Dictionary either containing `User` properties (if user exists)
+        or nothing (if user doesn&#39;t exist)
+        * `int`: request status code (e.g. `200` means request went fine)
+    &#34;&#34;&#34;
+
+    if FACT_LIST != set(facts.keys()):
+        raise HTTPException(status_code=400, detail=&#34;Bad Request: Invalid Field Name&#34;)
+
+    qa_count = 0
+    for key in facts:
+        if key in QA_LIST and facts[key] is not None:
+            qa_count += 1
+
+    if qa_count &gt; QA_MAX:
+        raise HTTPException(status_code=400, detail=&#34;Bad Request: Too Many QAs&#34;)
+
+    result = neo_db.save_facts(facts, email)
+    if result is None:
+       raise HTTPException(status_code=404, detail=&#34;User not found&#34;) 
+    return result</code></pre>
 </details>
 </dd>
 </dl>
@@ -1021,6 +1131,7 @@ def pong():
 <li><code><a title="main.get_user" href="#main.get_user">get_user</a></code></li>
 <li><code><a title="main.like" href="#main.like">like</a></code></li>
 <li><code><a title="main.pong" href="#main.pong">pong</a></code></li>
+<li><code><a title="main.updateUserFacts" href="#main.updateUserFacts">updateUserFacts</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>

@@ -87,8 +87,9 @@ async def get_user(token: str):
         `token` (`str`): Spotify access token
 
     Returns:
-        Dictionary either containing `User` properties (if user exists)
+        * Dictionary either containing `User` properties (if user exists)
         or nothing (if user doesn't exist)
+        * `int`: request status code (e.g. `200` means request went fine)
     """
     basic_info = spotify_requester.get_basic_user_info(token)
     if basic_info is None:
@@ -342,7 +343,9 @@ async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: st
         `email` (str) - user's email
 
     Returns:
-        `int`: request status code (e.g. `200` means request went fine)
+        * Dictionary either containing `User` properties (if user exists)
+        or nothing (if user doesn't exist)
+        * `int`: request status code (e.g. `200` means request went fine)
     """
 
     if FACT_LIST != set(facts.keys()):

@@ -324,12 +324,12 @@ async def like(email_a: str = Body(...), email_b: str = Body(...)):
     return result
 
 @app.put("/updateUserFacts")
-async def updateUserFacts(facts: Dict[str, str] = Body(...), email: str = Body(...)):
+async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: str = Body(...)):
     """
     PUT route for updating a user's information.
 
     Parameters:
-        `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values
+        `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values. If a string is null, this fact is deleted from the user's profile
         `email` (str) - user's email
 
     Returns:
@@ -348,4 +348,6 @@ async def updateUserFacts(facts: Dict[str, str] = Body(...), email: str = Body(.
         raise HTTPException(status_code=400, detail="Bad Request: Too many QAs")
 
     result = neo_db.save_facts(facts, email)
+    if result is None:
+       raise HTTPException(status_code=404, detail="User not found") 
     return result

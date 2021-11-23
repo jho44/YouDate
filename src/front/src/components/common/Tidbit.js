@@ -16,13 +16,13 @@ import "../../App.css";
  * @package
  * @class
  */
-const Tidbit = ({ imgPath, alt, content }) => {
+const Tidbit = ({ Component, content }) => {
   return (
-    <div style={{ marginBottom: "1rem" }}>
-      <img
-        src={imgPath}
-        alt={alt}
-        style={{ weight: "1.5rem", paddingRight: "1rem" }}
+    <div
+      style={{ marginBottom: "1rem", display: "flex", alignItems: "center" }}
+    >
+      <Component
+        style={{ fontSize: "2.5vw", marginRight: "0.1rem", color: "white" }}
       />
       <span>{content}</span>
     </div>

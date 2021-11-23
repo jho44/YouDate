@@ -46,7 +46,6 @@ password=config.NEO_PASSWORD
 
 
 QA_LIST = ["life_goal", "believe_or_not", "life_peaked", "feel_famous", "biggest_risk"]
-QA_MAX = 4
 TIDBIT_LIST = ["desired_relationship", "education", "occupation", "sexual_orientation", "location", "political_view", "height"]
 
 spotify_requester = spotify.Spotify()
@@ -336,13 +335,10 @@ async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: st
         `int`: request status code (e.g. `200` means request went fine)
     """
 
-    # Ensure only 4 QAs are chosen at most, and that each field is valid
-    qa_count = 0
+    # Ensure that each field is valid
     for key in facts:
         if key not in QA_LIST and key not in TIDBIT_LIST:
             raise HTTPException(status_code=400, detail="Bad Request: Invalid field name")
-        if key in QA_LIST:
-            qa_count += 1
 
     if qa_count > QA_MAX:
         raise HTTPException(status_code=400, detail="Bad Request: Too many QAs")

@@ -292,19 +292,20 @@ async def delete_user(email: str = Body(..., embed=True)):
     return result
 
 @app.post(&#34;/dislike&#34;)
-async def dislike(email_a: str = Body(...), email_b: str = Body(...)):
+async def dislike(userid_a: str = Body(...), userid_b: str = Body(...)):
     &#34;&#34;&#34;
     POST route for creating a &#39;DISLIKES` relationship from userA to userB.
     userA will never be able to see userB again on this app.
 
     Parameters:
-        `email_a` (`str`) - userA&#39;s email
-        `email_b` (`str`) - userB&#39;s email
+        `userid_a` (`str`) - userA&#39;s Spotify ID
+
+        `userid_b` (`str`) - userB&#39;s Spotify ID
 
     Returns:
         `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
-    result = neo_db.dislike(email_a, email_b)
+    result = neo_db.dislike(userid_a, userid_b)
     return result
 
 @app.get(&#34;/getMatched&#34;)
@@ -345,18 +346,19 @@ async def get_unmet(email):
 
 
 @app.post(&#34;/like&#34;)
-async def like(email_a: str = Body(...), email_b: str = Body(...)):
+async def like(userid_a: str = Body(...), userid_b: str = Body(...)):
     &#34;&#34;&#34;
     POST route for creating a &#39;LIKES` relationship from userA to userB.
     If userB also likes userA, they&#39;ll show up on each other&#39;s MATCHED pages.
     Parameters:
-        `email_a` (`str`) - userA&#39;s email
-        `email_b` (`str`) - userB&#39;s email
+        `userid_a` (`str`) - userA&#39;s Spotify ID
+
+        `userid_b` (`str`) - userB&#39;s Spotify ID
 
     Returns:
         `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
-    result = neo_db.like(email_a, email_b)
+    result = neo_db.like(userid_a, userid_b)
     return result
 
 @app.put(&#34;/updateUserFacts&#34;)
@@ -688,14 +690,14 @@ async def delete_user(email: str = Body(..., embed=True)):
 </details>
 </dd>
 <dt id="main.dislike"><code class="name flex">
-<span>async def <span class="ident">dislike</span></span>(<span>email_a: str = Body(Ellipsis), email_b: str = Body(Ellipsis))</span>
+<span>async def <span class="ident">dislike</span></span>(<span>userid_a: str = Body(Ellipsis), userid_b: str = Body(Ellipsis))</span>
 </code></dt>
 <dd>
 <div class="desc"><p>POST route for creating a 'DISLIKES` relationship from userA to userB.
 userA will never be able to see userB again on this app.</p>
 <h2 id="parameters">Parameters</h2>
-<p><code>email_a</code> (<code>str</code>) - userA's email
-<code>email_b</code> (<code>str</code>) - userB's email</p>
+<p><code>userid_a</code> (<code>str</code>) - userA's Spotify ID</p>
+<p><code>userid_b</code> (<code>str</code>) - userB's Spotify ID</p>
 <h2 id="returns">Returns</h2>
 <p><code>int</code>: request status code (e.g. <code>200</code> means request went fine)</p></div>
 <details class="source">
@@ -703,19 +705,20 @@ userA will never be able to see userB again on this app.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.post(&#34;/dislike&#34;)
-async def dislike(email_a: str = Body(...), email_b: str = Body(...)):
+async def dislike(userid_a: str = Body(...), userid_b: str = Body(...)):
     &#34;&#34;&#34;
     POST route for creating a &#39;DISLIKES` relationship from userA to userB.
     userA will never be able to see userB again on this app.
 
     Parameters:
-        `email_a` (`str`) - userA&#39;s email
-        `email_b` (`str`) - userB&#39;s email
+        `userid_a` (`str`) - userA&#39;s Spotify ID
+
+        `userid_b` (`str`) - userB&#39;s Spotify ID
 
     Returns:
         `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
-    result = neo_db.dislike(email_a, email_b)
+    result = neo_db.dislike(userid_a, userid_b)
     return result</code></pre>
 </details>
 </dd>
@@ -831,14 +834,14 @@ async def get_user(token: str):
 </details>
 </dd>
 <dt id="main.like"><code class="name flex">
-<span>async def <span class="ident">like</span></span>(<span>email_a: str = Body(Ellipsis), email_b: str = Body(Ellipsis))</span>
+<span>async def <span class="ident">like</span></span>(<span>userid_a: str = Body(Ellipsis), userid_b: str = Body(Ellipsis))</span>
 </code></dt>
 <dd>
 <div class="desc"><p>POST route for creating a 'LIKES` relationship from userA to userB.
 If userB also likes userA, they'll show up on each other's MATCHED pages.</p>
 <h2 id="parameters">Parameters</h2>
-<p><code>email_a</code> (<code>str</code>) - userA's email
-<code>email_b</code> (<code>str</code>) - userB's email</p>
+<p><code>userid_a</code> (<code>str</code>) - userA's Spotify ID</p>
+<p><code>userid_b</code> (<code>str</code>) - userB's Spotify ID</p>
 <h2 id="returns">Returns</h2>
 <p><code>int</code>: request status code (e.g. <code>200</code> means request went fine)</p></div>
 <details class="source">
@@ -846,18 +849,19 @@ If userB also likes userA, they'll show up on each other's MATCHED pages.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.post(&#34;/like&#34;)
-async def like(email_a: str = Body(...), email_b: str = Body(...)):
+async def like(userid_a: str = Body(...), userid_b: str = Body(...)):
     &#34;&#34;&#34;
     POST route for creating a &#39;LIKES` relationship from userA to userB.
     If userB also likes userA, they&#39;ll show up on each other&#39;s MATCHED pages.
     Parameters:
-        `email_a` (`str`) - userA&#39;s email
-        `email_b` (`str`) - userB&#39;s email
+        `userid_a` (`str`) - userA&#39;s Spotify ID
+
+        `userid_b` (`str`) - userB&#39;s Spotify ID
 
     Returns:
         `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
-    result = neo_db.like(email_a, email_b)
+    result = neo_db.like(userid_a, userid_b)
     return result</code></pre>
 </details>
 </dd>

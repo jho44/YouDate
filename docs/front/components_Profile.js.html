@@ -29,11 +29,24 @@
             <pre class="prettyprint source linenums"><code>import React, { useState, useEffect, useContext } from "react";
 import { Descriptions, Switch, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "../App.css";
-import data from "./fakeData.json";
 import Tidbit from "./common/Tidbit";
 import QA from "./common/QA";
+import { AuthContext } from "../Context";
+import {
+  School as SchoolIcon,
+  Search as SearchIcon,
+  Work as WorkIcon,
+  Favorite as FavoriteIcon,
+  LocationOn as LocationOnIcon,
+  AccountBalance as AccountBalanceIcon,
+  Height as HeightIcon,
+  Person as PersonIcon,
+} from "@mui/icons-material";
+import { Typography } from "antd";
+
+const { Title } = Typography;
 
 /**
  * Component for the Profile page
@@ -62,8 +75,28 @@ const Profile = ({ meet }) => {
    * @memberof Profile
    * @private
    */
-
   const [deleteAccChecked, setDeleteAccChecked] = useState(false);
+
+  const {
+    /**
+     * `ContextProvider` state of logged-in user's info.
+     * @type {Object}
+     * @memberof Profile
+     */
+    user,
+    /**
+     * Function from `ContextProvider` for setting logged-in user's access and refresh tokens.
+     * @type {Function}
+     * @memberof Profile
+     */
+    setTokens,
+    /**
+     * Function from `ContextProvider` for setting logged-in user's info.
+     * @type {Function}
+     * @memberof Profile
+     */
+    setUser,
+  } = useContext(AuthContext);
 
   /* Parallax effect for scrolling */
   const [offsetY, setOffsetY] = useState(0);
@@ -93,7 +126,28 @@ const Profile = ({ meet }) => {
        * @private
        */
       onOk() {
-        // TODO: delete acc
+        // delete acc
+        fetch("http://localhost:8000/deleteUser", {
+          method: "POST",
+          mode: "cors",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: user.email }),
+        })
+          .then((data) => data.json())
+          .then((data) => {
+            // err handling
+            if (data[1] !== 200) console.error("Deletion failed");
+
+            return;
+          })
+          .then(() => {
+            // logout
+            logout();
+          })
+          .catch((err) => console.error(err));
       },
       /**
        * @description Function to set `deleteAccChecked` to `false` to close modal.
@@ -120,89 +174,159 @@ const Profile = ({ meet }) => {
 
   /**
    * Function to logout the current user.
-   * 
+   *
    * @memberof Profile
    * @returns {void}
    */
-  const navigate = useNavigate();
+  const location = useLocation();
   function logout() {
-      navigate("/");
-      // Need to remove auth token
+    // credit: https://stackoverflow.com/a/50738483/11294788
+    const url = "https://accounts.spotify.com/en/logout";
+    window.open(url, "Spotify Logout", "width=700,height=500,top=40,left=40");
+    new URLSearchParams(location.search).delete("code");
+    setTokens(null); // Need to remove auth token
+    setUser(null);
   }
 
   return (
     &lt;>
-      &lt;div className="profilePhoto"
-        style={{ backgroundImage: `url('${data.user.img}')`, transform: `translateY(${offsetY * 0.25}px)` }}>
-      &lt;/div>
-
-      &lt;div className="userName" style={{ transform: `translateY(${offsetY * 0.4}px)` }}>
-        &lt;Descriptions
-          title={`${data.user.name} (${data.user.pronouns})`}
-          labelStyle={{ color: "white" }}
-          contentStyle={{ color: "white" }}
-          extra={&lt;span className="extra">{data.user.age}&lt;/span>}
-        />  
-     &lt;/div>
-
-     &lt;div className="container">
-          &lt;Descriptions.Item label="">
-            &lt;h2 className="description" style={{ transform: `translateY(${offsetY * 0.4}px)` }}>{data.user.description}&lt;/h2>
-          &lt;/Descriptions.Item>
-
-        &lt;h3>Favorite Artists&lt;/h3>
-        {data.user.artists.map((artist, ind) => (
-          &lt;div style={{ display: "flex", alignItems: "center" }} key={ind}>
-            &lt;div
-              className="photo"
-              style={{
-                backgroundImage: `url('${artist.img}')`,
-                backgroundColor: "grey",
-                width: 85,
-                height: 85,
-                marginBottom: "1rem",
-              }}
-            />
-
-            &lt;span style={{ paddingLeft: "1rem" }}>{artist.name}&lt;/span>
-          &lt;/div>
-        ))}
-        &lt;h3>Favorite Songs&lt;/h3>
-        {data.user.songs.map((song, ind) => (
-          &lt;div style={{ display: "flex", alignItems: "center" }} key={ind}>
-            &lt;div
-              className="photo"
-              style={{
-                backgroundImage: `url('${song.img}')`,
-                backgroundColor: "grey",
-                width: 85,
-                height: 85,
-                marginBottom: "1rem",
-              }}
-            />
-
-            &lt;span style={{ paddingLeft: "1rem" }}>
-              {song.name} by {song.artist}
-            &lt;/span>
-          &lt;/div>
-        ))}
-
-        &lt;div className="basic-info column-flex">
-          &lt;Tidbit
-            imgPath="/LookingIcon.png"
-            alt="desired-relationship"
-            content={data.user.desiredRelationship}
-          />
-          &lt;Tidbit
-            imgPath="/EducationIcon.png"
-            alt="education"
-            content={data.user.education}
+      {user.pic ? (
+        &lt;div
+          className="profilePhoto"
+          style={{
+            backgroundImage: `url('${user.pic}')`,
+            transform: `translateY(${offsetY * 0.25}px)`,
+          }}
+        />
+      ) : (
+        &lt;div
+          className="profilePhoto"
+          style={{
+            transform: `translateY(${offsetY * 0.25}px)`,
+            padding: 0,
+            border: "solid white",
+          }}
+        >
+          &lt;PersonIcon
+            style={{ height: "100%", width: "100%", color: "white" }}
           />
         &lt;/div>
+      )}
+      &lt;div
+        className="userName"
+        style={{ transform: `translateY(${offsetY * 0.4}px)` }}
+      >
+        &lt;Descriptions
+          title={`${user.name} (${user.pronouns})`}
+          labelStyle={{ color: "white" }}
+          contentStyle={{ color: "white" }}
+          extra={&lt;span className="extra">{user.age}&lt;/span>}
+        />
+      &lt;/div>
+      &lt;div className="container">
+        &lt;Descriptions.Item label="">
+          &lt;h2
+            className="description"
+            style={{ transform: `translateY(${offsetY * 0.4}px)` }}
+          >
+            {user.description.replace(/\\'/g, "'")}
+          &lt;/h2>
+        &lt;/Descriptions.Item>
 
-        {data.user.QAs.map((qa, ind) => (
-          &lt;QA Q={qa.Q} A={qa.A} key={ind} />
-        ))}
+        &lt;h3>Favorite Artists&lt;/h3>
+        {(!user || !user.top_artists.length) &amp;&amp; (
+          &lt;Title level={5} style={{ color: "#dbdbdb" }}>
+            No favorite artists at this time
+          &lt;/Title>
+        )}
+        {user &amp;&amp;
+          user.top_artists.map((artist, ind) => (
+            &lt;div style={{ display: "flex", alignItems: "center" }} key={ind}>
+              &lt;div
+                className="photo"
+                style={{
+                  backgroundImage: `url('${artist.img}')`,
+                  backgroundColor: "grey",
+                  width: 85,
+                  height: 85,
+                  marginBottom: "1rem",
+                }}
+              />
+
+              &lt;span style={{ paddingLeft: "1rem" }}>{artist.name}&lt;/span>
+            &lt;/div>
+          ))}
+        &lt;h3>Favorite Songs&lt;/h3>
+        {(!user || !user.top_songs.length) &amp;&amp; (
+          &lt;Title level={5} style={{ color: "#dbdbdb" }}>
+            No favorite songs at this time
+          &lt;/Title>
+        )}
+        {user &amp;&amp;
+          user.top_songs.map((song, ind) => (
+            &lt;div style={{ display: "flex", alignItems: "center" }} key={ind}>
+              &lt;div
+                className="photo"
+                style={{
+                  backgroundImage: `url('${song.img}')`,
+                  backgroundColor: "grey",
+                  width: 85,
+                  height: 85,
+                  marginBottom: "1rem",
+                }}
+              />
+
+              &lt;span style={{ paddingLeft: "1rem" }}>
+                {song.name} by {song.artist}
+              &lt;/span>
+            &lt;/div>
+          ))}
+
+        &lt;div className="basic-info column-flex">
+          {(!user || !user.tidbits.length) &amp;&amp; (
+            &lt;Title level={5} style={{ color: "#dbdbdb" }}>
+              No tidbits at this time
+            &lt;/Title>
+          )}
+          {user &amp;&amp;
+            user.tidbits.map((tidbit, ind) => {
+              const { key, val } = tidbit;
+              if (val) {
+                let component;
+                switch (key) {
+                  case "desired_relationship":
+                    component = SearchIcon;
+                    break;
+                  case "education":
+                    component = SchoolIcon;
+                    break;
+                  case "occupation":
+                    component = WorkIcon;
+                    break;
+                  case "sexual_orientation":
+                    component = FavoriteIcon;
+                    break;
+                  case "location":
+                    component = LocationOnIcon;
+                    break;
+                  case "political_view":
+                    component = AccountBalanceIcon;
+                    break;
+                  case "height":
+                    component = HeightIcon;
+                    break;
+                  default:
+                }
+
+                return &lt;Tidbit key={ind} Component={component} content={val} />;
+              } else return &lt;>&lt;/>;
+            })}
+        &lt;/div>
+
+        {user.QAs.map((qa, ind) => {
+          if (qa.A) return &lt;QA Q={qa.Q} A={qa.A} key={ind} />;
+          else return &lt;>&lt;/>;
+        })}
 
         &lt;div style={{ display: "flex", justifyContent: "space-between" }}>
           &lt;p style={{ color: "#E8BFFB" }}>Delete Account&lt;/p>
@@ -214,10 +338,10 @@ const Profile = ({ meet }) => {
         &lt;/div>
 
         &lt;div onClick={logout}>
-            &lt;button>Logout&lt;/button>
+          &lt;button>Logout&lt;/button>
         &lt;/div>
       &lt;/div>
-    );
+      );
     &lt;/>
   );
 };
@@ -239,7 +363,7 @@ export default Profile;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Nov 23 2021 22:30:35 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 24 2021 00:21:43 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

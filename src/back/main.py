@@ -381,12 +381,8 @@ async def get_shared_tracks(userid_a: str = Body(...), userid_b: str = Body(...)
     Returns:
         * list: of Track names that userA and userB mutually like
     """
-    '''
     result = neo_db.get_shared_tracks(userid_a, userid_b)
     return result
-    '''
-    #TODO:
-    pass
 
 
 @app.put("/updateUserFacts")

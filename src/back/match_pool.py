@@ -249,27 +249,49 @@ class MatchPool:
 
     @staticmethod
     def _get_shared_artists(tx, userid_a, userid_b):
-        query_a = (
+        query = (
             '''
             MATCH (:User {email: $email})-[r:FOLLOWS]-(Artist)
             RETURN Artist
             '''
         )
-        results_a = tx.run(query_a, email=userid_a)
-
-        query_b = (
-            '''
-            MATCH (:User {email: $email})-[r:FOLLOWS]-(Artist)
-            RETURN Artist
-            '''
-        )
-        results_b = tx.run(query_b, email=userid_b)
+        results_a = tx.run(query, email=userid_a)
+        results_b = tx.run(query, email=userid_b)
 
         try:
             top_artists_a = set([record["Artist"]["name"] for record in results_a])
             top_artists_b = set([record["Artist"]["name"] for record in results_b])
             shared_artists = list(top_artists_a.intersection(top_artists_b))
             return shared_artists, 200
+        except ServiceUnavailable as exception:
+            logging.error('{query} raised an error: \n {exception}'.format(query=query, exception=exception))
+            raise
+
+    def get_shared_tracks(self, userid_a, userid_b):
+        with self.driver.session() as session:
+            return session.read_transaction(self._get_shared_tracks, userid_a, userid_b)
+
+    @staticmethod
+    def _get_shared_tracks(tx, userid_a, userid_b):
+        query = 'MATCH (user:User {email: $email}) RETURN user'
+        results_a = tx.run(query, email=userid_a)
+        results_b = tx.run(query, email=userid_b)
+
+        record_a = None
+        record_b = None
+        for record in results_a:
+            record_a = record
+            break
+
+        for record in results_b:
+            record_b = record
+            break
+            
+        try:
+            top_tracks_a = set(record_a["user"]["top_songs"])
+            top_tracks_b = set(record_b["user"]["top_songs"])
+            shared_tracks = list(top_tracks_a.intersection(top_tracks_b))
+            return shared_tracks, 200
         except ServiceUnavailable as exception:
             logging.error('{query} raised an error: \n {exception}'.format(query=query, exception=exception))
             raise

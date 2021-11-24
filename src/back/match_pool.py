@@ -243,6 +243,37 @@ class MatchPool:
 
         return 200
 
+    def get_shared_artists(self, userid_a, userid_b):
+        with self.driver.session() as session:
+            return session.read_transaction(self._get_shared_artists, userid_a, userid_b)
+
+    @staticmethod
+    def _get_shared_artists(tx, userid_a, userid_b):
+        query_a = (
+            '''
+            MATCH (:User {email: $email})-[r:FOLLOWS]-(Artist)
+            RETURN Artist
+            '''
+        )
+        results_a = tx.run(query_a, email=userid_a)
+
+        query_b = (
+            '''
+            MATCH (:User {email: $email})-[r:FOLLOWS]-(Artist)
+            RETURN Artist
+            '''
+        )
+        results_b = tx.run(query_b, email=userid_b)
+
+        try:
+            top_artists_a = set([record["Artist"]["name"] for record in results_a])
+            top_artists_b = set([record["Artist"]["name"] for record in results_b])
+            shared_artists = list(top_artists_a.intersection(top_artists_b))
+            return shared_artists, 200
+        except ServiceUnavailable as exception:
+            logging.error('{query} raised an error: \n {exception}'.format(query=query, exception=exception))
+            raise
+
     # saves all extra facts (i.e. tidbits and QAs) as properties of User node corresponding to provided email
     def save_facts(self, facts, email):
         with self.driver.session() as session:

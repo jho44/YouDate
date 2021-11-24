@@ -85,22 +85,33 @@ const Meet = ({ meet }) => {
     <>
       <div
         className="profilePhoto"
-        style={{ backgroundImage: `url('${data.user.img}')`, transform: `translateY(${offsetY * 0.25}px)` }}
+        style={{
+          backgroundImage: `url('${data.user.img}')`,
+          transform: `translateY(${offsetY * 0.25}px)`,
+        }}
       />
 
-    <div className="userName" style={{ transform: `translateY(${offsetY * 0.4}px)` }}>
+      <div
+        className="userName"
+        style={{ transform: `translateY(${offsetY * 0.4}px)` }}
+      >
         <Descriptions
           title={`${data.user.name} (${data.user.pronouns})`}
           labelStyle={{ color: "white" }}
           contentStyle={{ color: "white" }}
           extra={<span className="extra">{data.user.age}</span>}
-        />  
-     </div>
+        />
+      </div>
 
       <div className="container">
-          <Descriptions.Item label="">
-            <h2 className="description" style={{ transform: `translateY(${offsetY * 0.4}px)` }}>{data.user.description}</h2>
-          </Descriptions.Item>
+        <Descriptions.Item label="">
+          <h2
+            className="description"
+            style={{ transform: `translateY(${offsetY * 0.4}px)` }}
+          >
+            {data.user.description}
+          </h2>
+        </Descriptions.Item>
 
         <h3>Artists in Common</h3>
         {data.user.artists.map((artist, ind) => (

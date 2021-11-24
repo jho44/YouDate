@@ -3,9 +3,22 @@ import { Descriptions, Switch, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
-import data from "./fakeData.json";
 import Tidbit from "./common/Tidbit";
 import QA from "./common/QA";
+import { AuthContext } from "../Context";
+import {
+  School as SchoolIcon,
+  Search as SearchIcon,
+  Work as WorkIcon,
+  Favorite as FavoriteIcon,
+  LocationOn as LocationOnIcon,
+  AccountBalance as AccountBalanceIcon,
+  Height as HeightIcon,
+  Person as PersonIcon,
+} from "@mui/icons-material";
+import { Typography } from "antd";
+
+const { Title } = Typography;
 
 /**
  * Component for the Profile page
@@ -34,8 +47,16 @@ const Profile = ({ meet }) => {
    * @memberof Profile
    * @private
    */
-
   const [deleteAccChecked, setDeleteAccChecked] = useState(false);
+
+  const {
+    /**
+     * `ContextProvider` state of logged-in user's info.
+     * @type {Object}
+     * @memberof Profile
+     */
+    user,
+  } = useContext(AuthContext);
 
   /* Parallax effect for scrolling */
   const [offsetY, setOffsetY] = useState(0);
@@ -92,38 +113,68 @@ const Profile = ({ meet }) => {
 
   /**
    * Function to logout the current user.
-   * 
+   *
    * @memberof Profile
    * @returns {void}
    */
   const navigate = useNavigate();
   function logout() {
-      navigate("/");
-      // Need to remove auth token
+    navigate("/");
+    // Need to remove auth token
   }
 
   return (
     <>
-      <div className="profilePhoto"
-        style={{ backgroundImage: `url('${data.user.img}')`, transform: `translateY(${offsetY * 0.25}px)` }}>
-      </div>
-
-      <div className="userName" style={{ transform: `translateY(${offsetY * 0.4}px)` }}>
+      {user.pic ? (
+        <div
+          className="profilePhoto"
+          style={{
+            backgroundImage: `url('${user.pic}')`,
+            transform: `translateY(${offsetY * 0.25}px)`,
+          }}
+        />
+      ) : (
+        <div
+          className="profilePhoto"
+          style={{
+            transform: `translateY(${offsetY * 0.25}px)`,
+            padding: 0,
+            border: "solid white",
+          }}
+        >
+          <PersonIcon
+            style={{ height: "100%", width: "100%", color: "white" }}
+          />
+        </div>
+      )}
+      <div
+        className="userName"
+        style={{ transform: `translateY(${offsetY * 0.4}px)` }}
+      >
         <Descriptions
-          title={`${data.user.name} (${data.user.pronouns})`}
+          title={`${user.name} (${user.pronouns})`}
           labelStyle={{ color: "white" }}
           contentStyle={{ color: "white" }}
-          extra={<span className="extra">{data.user.age}</span>}
-        />  
-     </div>
-
-     <div className="container">
-          <Descriptions.Item label="">
-            <h2 className="description" style={{ transform: `translateY(${offsetY * 0.4}px)` }}>{data.user.description}</h2>
-          </Descriptions.Item>
+          extra={<span className="extra">{user.age}</span>}
+        />
+      </div>
+      <div className="container">
+        <Descriptions.Item label="">
+          <h2
+            className="description"
+            style={{ transform: `translateY(${offsetY * 0.4}px)` }}
+          >
+            {user.description}
+          </h2>
+        </Descriptions.Item>
 
         <h3>Favorite Artists</h3>
-        {data.user.artists.map((artist, ind) => (
+        {!user.top_artists.length && (
+          <Title level={5} style={{ color: "#dbdbdb" }}>
+            No favorite artists at this time
+          </Title>
+        )}
+        {user.top_artists.map((artist, ind) => (
           <div style={{ display: "flex", alignItems: "center" }} key={ind}>
             <div
               className="photo"
@@ -140,7 +191,12 @@ const Profile = ({ meet }) => {
           </div>
         ))}
         <h3>Favorite Songs</h3>
-        {data.user.songs.map((song, ind) => (
+        {!user.top_songs.length && (
+          <Title level={5} style={{ color: "#dbdbdb" }}>
+            No favorite songs at this time
+          </Title>
+        )}
+        {user.top_songs.map((song, ind) => (
           <div style={{ display: "flex", alignItems: "center" }} key={ind}>
             <div
               className="photo"
@@ -160,21 +216,43 @@ const Profile = ({ meet }) => {
         ))}
 
         <div className="basic-info column-flex">
-          <Tidbit
-            imgPath="/LookingIcon.png"
-            alt="desired-relationship"
-            content={data.user.desiredRelationship}
-          />
-          <Tidbit
-            imgPath="/EducationIcon.png"
-            alt="education"
-            content={data.user.education}
-          />
+          {Object.entries(user.tidbits).map(([tidbit, val], ind) => {
+            if (val) {
+              let component;
+              switch (tidbit) {
+                case "desired_relationship":
+                  component = SearchIcon;
+                  break;
+                case "education":
+                  component = SchoolIcon;
+                  break;
+                case "occupation":
+                  component = WorkIcon;
+                  break;
+                case "sexual_orientation":
+                  component = FavoriteIcon;
+                  break;
+                case "location":
+                  component = LocationOnIcon;
+                  break;
+                case "political_view":
+                  component = AccountBalanceIcon;
+                  break;
+                case "height":
+                  component = HeightIcon;
+                  break;
+                default:
+              }
+
+              return <Tidbit key={ind} Component={component} content={val} />;
+            } else return <></>;
+          })}
         </div>
 
-        {data.user.QAs.map((qa, ind) => (
-          <QA Q={qa.Q} A={qa.A} key={ind} />
-        ))}
+        {user.QAs.map((qa, ind) => {
+          if (qa.A) return <QA Q={qa.Q} A={qa.A} key={ind} />;
+          else return <></>;
+        })}
 
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <p style={{ color: "#E8BFFB" }}>Delete Account</p>
@@ -186,10 +264,10 @@ const Profile = ({ meet }) => {
         </div>
 
         <div onClick={logout}>
-            <button>Logout</button>
+          <button>Logout</button>
         </div>
       </div>
-    );
+      );
     </>
   );
 };

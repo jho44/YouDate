@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Modal, Button, Avatar } from "antd";
 import { ExclamationCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import "../App.css";
-import data from "./matchesFakeData.json";
+import { AuthContext } from "../Context";
+import { Typography } from "antd";
+
+const { Title } = Typography;
 
 /**
  * Match sub-component used exclusively by Matched component.
@@ -128,27 +131,41 @@ const Match = ({ index, imgPath, name, contact }) => {
  * @class
  */
 const Matched = () => {
-  /**
-   * Function to generate all the Match sub-components for a user.
-   *
-   * @returns {Match}
-   */
-  let generateList = data.map((item, index) => {
-    return (
-      <Match
-        key={index}
-        index={index}
-        imgPath={item.img}
-        name={item.name}
-        contact={item.contact}
-      />
-    );
-  });
+  const { user } = useContext(AuthContext);
+  const [matchList, setMatchList] = useState([]);
+
+  useEffect(() => {
+    fetch(`http://localhost:8000/getMatched?email=${user.email}`)
+      .then((data) => data.json())
+      .then((data) => {
+        if (data[1] === 200) {
+          setMatchList(
+            data[0].map((item, index) => {
+              return (
+                <Match
+                  key={index}
+                  index={index}
+                  imgPath={item.img}
+                  name={item.name}
+                  contact={item.contact}
+                />
+              );
+            })
+          );
+        }
+      })
+      .catch((err) => console.error(err));
+  }, [user.email]);
 
   return (
     <div className="container" style={{ margin: "1rem" }}>
       <h1 style={{ color: "white" }}>Matches</h1>
-      {generateList}
+      {matchList}
+      {!matchList.length && (
+        <Title level={5} style={{ color: "#dbdbdb", textAlign: "center" }}>
+          No matches yet. Let's try to meet more people~
+        </Title>
+      )}
     </div>
   );
 };

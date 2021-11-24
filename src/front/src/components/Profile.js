@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Descriptions, Switch, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "../App.css";
 import Tidbit from "./common/Tidbit";
 import QA from "./common/QA";
@@ -56,6 +56,18 @@ const Profile = ({ meet }) => {
      * @memberof Profile
      */
     user,
+    /**
+     * Function from `ContextProvider` for setting logged-in user's access and refresh tokens.
+     * @type {Function}
+     * @memberof Profile
+     */
+    setTokens,
+    /**
+     * Function from `ContextProvider` for setting logged-in user's info.
+     * @type {Function}
+     * @memberof Profile
+     */
+    setUser,
   } = useContext(AuthContext);
 
   /* Parallax effect for scrolling */
@@ -86,7 +98,28 @@ const Profile = ({ meet }) => {
        * @private
        */
       onOk() {
-        // TODO: delete acc
+        // delete acc
+        fetch("http://localhost:8000/deleteUser", {
+          method: "POST",
+          mode: "cors",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: user.email }),
+        })
+          .then((data) => data.json())
+          .then((data) => {
+            // err handling
+            if (data[1] !== 200) console.error("Deletion failed");
+
+            return;
+          })
+          .then(() => {
+            // logout
+            logout();
+          })
+          .catch((err) => console.error(err));
       },
       /**
        * @description Function to set `deleteAccChecked` to `false` to close modal.
@@ -117,10 +150,14 @@ const Profile = ({ meet }) => {
    * @memberof Profile
    * @returns {void}
    */
-  const navigate = useNavigate();
+  const location = useLocation();
   function logout() {
-    navigate("/");
-    // Need to remove auth token
+    // credit: https://stackoverflow.com/a/50738483/11294788
+    const url = "https://accounts.spotify.com/en/logout";
+    window.open(url, "Spotify Logout", "width=700,height=500,top=40,left=40");
+    new URLSearchParams(location.search).delete("code");
+    setTokens(null); // Need to remove auth token
+    setUser(null);
   }
 
   return (
@@ -164,89 +201,98 @@ const Profile = ({ meet }) => {
             className="description"
             style={{ transform: `translateY(${offsetY * 0.4}px)` }}
           >
-            {user.description}
+            {user.description.replace(/\\'/g, "'")}
           </h2>
         </Descriptions.Item>
 
         <h3>Favorite Artists</h3>
-        {!user.top_artists.length && (
+        {(!user || !user.top_artists.length) && (
           <Title level={5} style={{ color: "#dbdbdb" }}>
             No favorite artists at this time
           </Title>
         )}
-        {user.top_artists.map((artist, ind) => (
-          <div style={{ display: "flex", alignItems: "center" }} key={ind}>
-            <div
-              className="photo"
-              style={{
-                backgroundImage: `url('${artist.img}')`,
-                backgroundColor: "grey",
-                width: 85,
-                height: 85,
-                marginBottom: "1rem",
-              }}
-            />
+        {user &&
+          user.top_artists.map((artist, ind) => (
+            <div style={{ display: "flex", alignItems: "center" }} key={ind}>
+              <div
+                className="photo"
+                style={{
+                  backgroundImage: `url('${artist.img}')`,
+                  backgroundColor: "grey",
+                  width: 85,
+                  height: 85,
+                  marginBottom: "1rem",
+                }}
+              />
 
-            <span style={{ paddingLeft: "1rem" }}>{artist.name}</span>
-          </div>
-        ))}
+              <span style={{ paddingLeft: "1rem" }}>{artist.name}</span>
+            </div>
+          ))}
         <h3>Favorite Songs</h3>
-        {!user.top_songs.length && (
+        {(!user || !user.top_songs.length) && (
           <Title level={5} style={{ color: "#dbdbdb" }}>
             No favorite songs at this time
           </Title>
         )}
-        {user.top_songs.map((song, ind) => (
-          <div style={{ display: "flex", alignItems: "center" }} key={ind}>
-            <div
-              className="photo"
-              style={{
-                backgroundImage: `url('${song.img}')`,
-                backgroundColor: "grey",
-                width: 85,
-                height: 85,
-                marginBottom: "1rem",
-              }}
-            />
+        {user &&
+          user.top_songs.map((song, ind) => (
+            <div style={{ display: "flex", alignItems: "center" }} key={ind}>
+              <div
+                className="photo"
+                style={{
+                  backgroundImage: `url('${song.img}')`,
+                  backgroundColor: "grey",
+                  width: 85,
+                  height: 85,
+                  marginBottom: "1rem",
+                }}
+              />
 
-            <span style={{ paddingLeft: "1rem" }}>
-              {song.name} by {song.artist}
-            </span>
-          </div>
-        ))}
+              <span style={{ paddingLeft: "1rem" }}>
+                {song.name} by {song.artist}
+              </span>
+            </div>
+          ))}
 
         <div className="basic-info column-flex">
-          {Object.entries(user.tidbits).map(([tidbit, val], ind) => {
-            if (val) {
-              let component;
-              switch (tidbit) {
-                case "desired_relationship":
-                  component = SearchIcon;
-                  break;
-                case "education":
-                  component = SchoolIcon;
-                  break;
-                case "occupation":
-                  component = WorkIcon;
-                  break;
-                case "sexual_orientation":
-                  component = FavoriteIcon;
-                  break;
-                case "location":
-                  component = LocationOnIcon;
-                  break;
-                case "political_view":
-                  component = AccountBalanceIcon;
-                  break;
-                case "height":
-                  component = HeightIcon;
-                  break;
-                default:
-              }
+          {(!user || !user.tidbits.length) && (
+            <Title level={5} style={{ color: "#dbdbdb" }}>
+              No tidbits at this time
+            </Title>
+          )}
+          {user &&
+            user.tidbits.map((tidbit, ind) => {
+              const { key, val } = tidbit;
+              if (val) {
+                let component;
+                switch (key) {
+                  case "desired_relationship":
+                    component = SearchIcon;
+                    break;
+                  case "education":
+                    component = SchoolIcon;
+                    break;
+                  case "occupation":
+                    component = WorkIcon;
+                    break;
+                  case "sexual_orientation":
+                    component = FavoriteIcon;
+                    break;
+                  case "location":
+                    component = LocationOnIcon;
+                    break;
+                  case "political_view":
+                    component = AccountBalanceIcon;
+                    break;
+                  case "height":
+                    component = HeightIcon;
+                    break;
+                  default:
+                }
 
-              return <Tidbit key={ind} Component={component} content={val} />;
-            } else return <></>;
-          })}
+                return <Tidbit key={ind} Component={component} content={val} />;
+              } else return <></>;
+            })}
         </div>
 
         {user.QAs.map((qa, ind) => {

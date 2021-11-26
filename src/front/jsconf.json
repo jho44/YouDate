@@ -12,7 +12,8 @@
       "src/components/common/QA.js",
       "src/components/common/Tidbit.js",
       "src/components/common/Bio.js",
-      "src/components/common/EditButton.js"
+      "src/components/common/NameAndPronouns.js",
+      "src/components/common/EditIcon.js"
     ]
   }
 }

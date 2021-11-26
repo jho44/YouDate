@@ -11,6 +11,7 @@
       "src/PrivateRoute.js",
       "src/components/common/QA.js",
       "src/components/common/Tidbit.js",
+      "src/components/common/SpotifyDataBlock.js",
       "src/components/InfoForm.js",
       "src/fileUpload.js",
       "src/Context.js"

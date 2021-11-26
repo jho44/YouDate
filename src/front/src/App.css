@@ -82,3 +82,12 @@ h3 {
   display: flex;
   flex-direction: column;
 }
+
+.ant-typography-secondary {
+  color: white;
+}
+
+.edit-page {
+  margin: 0px;
+  color: white;
+}

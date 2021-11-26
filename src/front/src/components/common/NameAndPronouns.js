@@ -1,164 +1,60 @@
 import React, { useState } from "react";
-import { Input, Modal, Form } from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { Typography } from "antd";
 import "../../App.css";
-import EditButton from "./EditButton";
+import EditIcon from "./EditIcon";
+
+const { Title } = Typography;
 
 /**
- * BioParagraph sub-component used exclusively by Bio sub-component.
- * Creates the bio paragraph in Profile and Meet pages.
+ * NameAndPronouns sub-component used by the Meet and Profile component.
+ * Used to create the name and pronouns part of the profile. This includes
+ * the name, age, and pronouns of each user.
  *
  * @property {boolean} meet - Whether this component is being used for
  * the PROFILE or MEET page
- * @property {string} bioParagraph - The content for the bio paragraph
- * @property {boolean} editBioPressed - The state of the bio paragraph.
- * This determines if it is rendering the pre edit stage or the currently
- * editing stage.
- * @property {Function} editFunction - The function that changes the
- * state to bring up the editing form.
- * @property {Function} finishEditFunction - The function that brings up
- * the finished editing model.
- * @returns {HTML} Styled div wrapped around the bio paragraph
- *
- * @package
- * @class
- */
-const EditNameAndPronouns = ({
-  meet,
-  name,
-  pronouns,
-  editBioPressed,
-  editFunction,
-  finishEditFunction,
-}) => {
-  return (
-    <div 
-      style={{
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
-    {meet ? (
-      <>
-        <h1 style={{ margin: "0px" }}>{name}</h1>
-        <h3 style={{ margin: "0px", marginLeft: "0.5rem" }}> ({pronouns})</h3>
-      </>
-      ) : (
-        <div 
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginRight: "1rem",
-          }}
-        >
-        {editBioPressed ? (
-          <>
-            <Input autoSize defaultValue={name} />
-            <Input autoSize defaultValue={pronouns} />
-            <EditButton isEdit={true} editFunction={finishEditFunction} />
-          </>
-        ) : (
-          <>
-            <h1 style={{ margin: "0px" }}>{name}</h1>
-            <h3 style={{ margin: "0px", marginLeft: "0.5rem" }}> ({pronouns})</h3>
-            <EditButton isEdit={false} editFunction={editFunction} />
-          </>
-        )}
-        </div>
-      )}
-    </div>
-  );
-};
-
-/**
- * Bio sub-component used by the Meet and Profile component.
- * Used to create the bio part of the profile. This includes
- * the name, age, and a short bio paragraph of each user.
- *
- * @property {boolean} meet - Whether this component is being used for
- * the PROFILE or MEET page
- * @property {string} content - The content for the bio
- * @returns {HTML} Styled div wrapped around name, age, and bio.
+ * @property {string} content - The content for the name and pronouns.
+ * @returns {HTML} Styled div wrapped around name, age, and pronouns.
  *
  * @package
  * @class
  */
 const NameAndPronouns = ({ meet, content }) => {
   /**
-   * @typedef {Boolean} editBioPressed
-   * @description (Private) state variable controlling whether the
-   * edit bio input form should be displayed.
+   * @typedef {Boolean} editName
+   * @description (Private) state variable with the value
+   * of the name field.
+   * @memberof NameAndPronouns
+   */
+  /**
+   * @typedef {Function} setEditName
+   * @param {Boolean} newState - Changes editName to the newState value.
+   * Changes the name displayed on the screen.
+   * @description Sets `editName` to `newState`
+   * @returns {void}
+   * @memberof Bio
+   * @private
+   */
+  /**
+   * @typedef {Boolean} editPronouns
+   * @description (Private) state variable with the value
+   * of the pronouns field.
    * @memberof Bio
    */
   /**
-   * @typedef {Function} setEditBioPressed
-   * @param {Boolean} newState - If `false`, it should display just
-   * the bio and an edit button.
-   * If `true`, it should display the input form and a check button.
-   * @description Sets `editBioPressed` to `newState`
+   * @typedef {Function} setEditPronouns
+   * @param {Boolean} newState - Changes editPronouns to the newState value.
+   * Changes the pronouns displayed on the screen.
+   * @description Sets `editPronouns` to `newState`
    * @returns {void}
    * @memberof Bio
    * @private
    */
 
-  const [editBioPressed, setEditBioPressed] = useState(false);
-
-  /**
-   * Function to open Edit Bio Confirmation modal. Includes
-   * `OnOK()` and `onCancel()`.
-   *
-   * @returns {void}
-   */
-  function showConfirm() {
-    Modal.confirm({
-      centered: true,
-      title: "Edit Bio",
-      icon: <ExclamationCircleOutlined />,
-      content: "Are you sure you want to edit your bio?",
-      /**
-       * @description Function to actually edit bio if user hits "OK"
-       * @memberof Profile
-       * @returns {void}
-       * @private
-       */
-      onOk() {
-        // TODO: delete acc
-        setEditBioPressed(false);
-      },
-      /**
-       * @description Function to set `editBioPressed` to `false` to close modal.
-       * @memberof Profile
-       * @returns {void}
-       * @private
-       */
-      onCancel() {
-        setEditBioPressed(true);
-      },
-    });
-  }
-
-  /**
-   * Function to change the state of the bio paragraph.
-   *
-   * @memberof Bio
-   * @returns {void}
-   */
-  function editBio() {
-    setEditBioPressed(true);
-  }
-
-  /**
-   * Function to open Edit Bio Confirmation modal.
-   *
-   * @memberof Bio
-   * @returns {void}
-   */
-  function finishedEditBio() {
-    showConfirm();
-  }
+  const [editName, setEditName] = useState(content.name);
+  const [editPronouns, setEditPronouns] = useState(content.pronouns);
 
   return (
-    <div 
+    <div
       style={{
         display: "flex",
         justifyContent: "space-between",
@@ -166,14 +62,54 @@ const NameAndPronouns = ({ meet, content }) => {
         marginBottom: "0.5rem",
       }}
     >
-      <EditNameAndPronouns 
-        meet={meet}
-        name={content.name}
-        pronouns={content.pronouns}
-        editBioPressed={editBioPressed}
-        editFunction={editBio}
-        finishEditFunction={finishedEditBio}
-      />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        {meet ? (
+          <>
+            <Title
+              level={3}
+              className="edit-page"
+              style={{ margin: "0px", color: "white" }}
+              type="secondary"
+            >
+              {content.name}
+            </Title>
+            <Title
+              level={5}
+              className="edit-page"
+              style={{ margin: "0px", marginLeft: "0.5rem", color: "white" }}
+              type="secondary"
+            >
+              ({content.pronouns})
+            </Title>
+          </>
+        ) : (
+          <>
+            <Title
+              level={3}
+              className="edit-page"
+              style={{ margin: "0px", color: "white" }}
+              editable={{ icon: <EditIcon />, onChange: setEditName }}
+              type="secondary"
+            >
+              {editName}
+            </Title>
+            <Title
+              level={5}
+              className="edit-page"
+              style={{ margin: "0px", marginLeft: "0.5rem", color: "white" }}
+              editable={{ icon: <EditIcon />, onChange: setEditPronouns }}
+              type="secondary"
+            >
+              ({editPronouns})
+            </Title>
+          </>
+        )}
+      </div>
       <span>{content.age}</span>
     </div>
   );

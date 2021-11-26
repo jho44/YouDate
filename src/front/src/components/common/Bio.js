@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { Input, Modal } from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { Typography } from "antd";
 import "../../App.css";
-import EditButton from "./EditButton";
+import EditIcon from "./EditIcon";
 
+const { Paragraph } = Typography;
 
 /**
  * Bio sub-component used by the Meet and Profile component.
  * Used to create the bio part of the profile. This includes
- * the name, age, and a short bio paragraph of each user.
+ * the short bio paragraph of each user.
  *
  * @property {boolean} meet - Whether this component is being used for
  * the PROFILE or MEET page
@@ -20,101 +20,36 @@ import EditButton from "./EditButton";
  */
 const Bio = ({ meet, bioParagraph }) => {
   /**
-   * @typedef {Boolean} editBioPressed
-   * @description (Private) state variable controlling whether the
-   * edit bio input form should be displayed.
+   * @typedef {String} editBio
+   * @description (Private) state variable with the value of the
+   * bio paragraph.
    * @memberof Bio
    */
   /**
-   * @typedef {Function} setEditBioPressed
-   * @param {Boolean} newState - If `false`, it should display just
-   * the bio and an edit button.
-   * If `true`, it should display the input form and a check button.
+   * @typedef {Function} setEditBio
+   * @param {String} newState - Changes editBio to the newState value.
+   * Changes the bio paragraph displayed on the screen.
    * @description Sets `editBioPressed` to `newState`
    * @returns {void}
    * @memberof Bio
    * @private
    */
 
-  const [editBioPressed, setEditBioPressed] = useState(false);
+  const [editBio, setEditBio] = useState(bioParagraph);
 
-  /**
-   * Function to open Edit Bio Confirmation modal. Includes
-   * `OnOK()` and `onCancel()`.
-   *
-   * @returns {void}
-   */
-  function showConfirm() {
-    Modal.confirm({
-      centered: true,
-      title: "Edit Bio",
-      icon: <ExclamationCircleOutlined />,
-      content: "Are you sure you want to edit your bio?",
-      /**
-       * @description Function to actually edit bio if user hits "OK"
-       * @memberof Profile
-       * @returns {void}
-       * @private
-       */
-      onOk() {
-        // TODO: delete acc
-        setEditBioPressed(false);
-      },
-      /**
-       * @description Function to set `editBioPressed` to `false` to close modal.
-       * @memberof Profile
-       * @returns {void}
-       * @private
-       */
-      onCancel() {
-        setEditBioPressed(true);
-      },
-    });
-  }
-
-  /**
-   * Function to change the state of the bio paragraph.
-   *
-   * @memberof Bio
-   * @returns {void}
-   */
-  function editBio() {
-    setEditBioPressed(true);
-  }
-
-  /**
-   * Function to open Edit Bio Confirmation modal.
-   *
-   * @memberof Bio
-   * @returns {void}
-   */
-  function finishedEditBio() {
-    showConfirm();
-  }
   return (
-    <span style={{ width: "100%"}}>
+    <span style={{ width: "100%" }}>
       {meet ? (
         bioParagraph
       ) : (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+        <Paragraph
+          className="edit-page"
+          style={{ margin: "0px", color: "white", width: "100%" }}
+          editable={{ icon: <EditIcon />, onChange: setEditBio }}
+          type="secondary"
         >
-        {editBioPressed ? (
-          <>
-            <Input autoSize defaultValue={bioParagraph} />
-            <EditButton isEdit={true} editFunction={finishedEditBio} />
-          </>
-        ) : (
-          <>
-            {bioParagraph}
-            <EditButton isEdit={false} editFunction={editBio} />
-          </>
-        )}
-        </div>
+          {editBio}
+        </Paragraph>
       )}
     </span>
   );

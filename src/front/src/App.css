@@ -88,7 +88,7 @@ span,
 h1.ant-typography,
 .ant-typography h1 {
   color: white;
-  font-size: calc(1vw + 1vh + .5vmin);
+  font-size: calc(1vw + 1vh + 0.5vmin);
 }
 
 .ant-message-custom-content.ant-message-error > span,

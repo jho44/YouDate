@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import "../App.css";
 import Tidbit from "./common/Tidbit";
 import QA from "./common/QA";
-import SpotifyDataBlock from "./common/SpotifyDataBlock"
+import SpotifyDataBlock from "./common/SpotifyDataBlock";
 import { AuthContext } from "../Context";
 import {
   School as SchoolIcon,
@@ -24,14 +24,12 @@ const { Title } = Typography;
 /**
  * Component for the Profile page
  *
- * @property {boolean} meet - Whether this component is being used for
- * the PROFILE or MEET page
  * @returns {React.Fragment} Profile page, including a user's photo,
  * basic information, favorite artists and songs
  *
  * @class
  */
-const Profile = ({ meet }) => {
+const Profile = () => {
   /**
    * @typedef {Boolean} deleteAccChecked
    * @description (Private) state variable controlling whether the
@@ -74,6 +72,7 @@ const Profile = ({ meet }) => {
   /* Parallax effect for scrolling */
   const [offsetY, setOffsetY] = useState(0);
   const handleScroll = () => setOffsetY(window.pageYOffset);
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
 
@@ -212,15 +211,22 @@ const Profile = ({ meet }) => {
             No favorite artists at this time
           </Title>
         )}
-        <SpotifyDataBlock user={user} userContent={user.top_artists} />
-        
+        <SpotifyDataBlock
+          user={user}
+          userContent={user.top_artists}
+          type="artist"
+        />
         <h3>Favorite Songs</h3>
         {(!user || !user.top_songs.length) && (
           <Title level={5} style={{ color: "#dbdbdb" }}>
             No favorite songs at this time
           </Title>
         )}
-        <SpotifyDataBlock user={user} userContent={user.top_songs} />
+        <SpotifyDataBlock
+          user={user}
+          userContent={user.top_songs}
+          type="track"
+        />
         <div className="basic-info column-flex">
           {(!user || !user.tidbits.length) && (
             <Title level={5} style={{ color: "#dbdbdb" }}>

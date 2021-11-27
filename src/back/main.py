@@ -46,7 +46,7 @@ password=config.NEO_PASSWORD
 
 
 QA_LIST = ["life_goal", "believe_or_not", "life_peaked", "feel_famous", "biggest_risk"]
-QA_MAX = 4
+QA_MAX = 5
 TIDBIT_LIST = ["desired_relationship", "education", "occupation", "sexual_orientation", "location", "political_view", "height"]
 FACT_LIST = {"life_goal", "believe_or_not", "life_peaked", "feel_famous", "biggest_risk", "desired_relationship", "education", "occupation", "sexual_orientation", "location", "political_view", "height"}
 
@@ -339,10 +339,10 @@ async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: st
     PUT route for updating a user's information.
 
     Parameters:
-        `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values. 
+       * `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values. 
         Every single tidbit and QA should be included with a string or null. If a string is null, this fact is deleted from the user's profile.
         The require fields are: "life_goal", "believe_or_not", "life_peaked", "feel_famous", "biggest_risk", "desired_relationship", "education", "occupation", "sexual_orientation", "location", "political_view", "height"
-        `email` (str) - user's email
+       * `email` (str) - user's email
 
     Returns:
         * Dictionary either containing `User` properties (if user exists)

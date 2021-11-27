@@ -3,6 +3,7 @@ import { Modal, Button, Avatar } from "antd";
 import { ExclamationCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import "../App.css";
 import { AuthContext } from "../Context";
+import { Person as PersonIcon } from "@mui/icons-material";
 import { Typography } from "antd";
 
 const { Title } = Typography;
@@ -19,29 +20,19 @@ const { Title } = Typography;
  * @package
  * @class
  */
-const Match = ({ index, imgPath, name, contact }) => {
-  /**
-   * @typedef {Boolean} deleteMatchPressed
-   * @description (Private) state variable controlling whether the
-   * Delete Match Confirmation modal should be open.
-   * @memberof Match
-   */
-  /**
-   * @typedef {Function} setDeleteMatchPressed
-   * @param {Boolean} newState - If `false`, Delete Match
-   * Confirmation modal should be closed.
-   * If `true`, modal should be open.
-   * @description Sets `deleteMatchPressed` to `newState`
-   * @returns {void}
-   * @memberof Match
-   * @private
-   */
-
-  const [deleteMatchPressed, setDeleteMatchPressed] = useState(false);
+const Match = ({ user_id, index, imgPath, name, contact, setMatchList }) => {
+  const {
+    /**
+     * `ContextProvider` state of logged-in user's info.
+     * @type {Object}
+     * @memberof Match
+     */
+    user,
+  } = useContext(AuthContext);
 
   /**
    * Function to open Delete Match Confirmation modal. Includes
-   * `OnOK()` and `onCancel()`.
+   * `OnOK()`.
    *
    * @returns {void}
    */
@@ -58,30 +49,32 @@ const Match = ({ index, imgPath, name, contact }) => {
        * @private
        */
       onOk() {
-        // TODO: delete acc
-      },
-      /**
-       * @description Function to set `deleteMatchPressed` to `false` to close modal.
-       * @memberof Match
-       * @returns {void}
-       * @private
-       */
-      onCancel() {
-        setDeleteMatchPressed(false);
+        // DISLIKE this user
+        fetch("http://localhost:8000/dislike", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userid_a: user.user_id,
+            userid_b: user_id,
+          }),
+        })
+          .then((data) => data.json())
+          .then((statusCode) => {
+            if (statusCode !== 200)
+              console.error(
+                "Failed to create DISLIKE relationship between users"
+              );
+
+            // get rid of this user from matchList
+            setMatchList((matchList) => {
+              matchList.splice(index, 1);
+              return matchList;
+            });
+          });
       },
     });
-  }
-
-  /**
-   * Function to open Delete Match Confirmation modal.
-   *
-   * @memberof Match
-   * @returns {void}
-   */
-  function deleteMatch() {
-    setDeleteMatchPressed(true);
-
-    showConfirm();
   }
 
   return (
@@ -102,7 +95,11 @@ const Match = ({ index, imgPath, name, contact }) => {
           alignItems: "center",
         }}
       >
-        <Avatar src={imgPath} size={85} />
+        {imgPath ? (
+          <Avatar src={imgPath} size={85} />
+        ) : (
+          <PersonIcon style={{ color: "white" }} />
+        )}
         <div style={{ marginLeft: "1rem", marginRight: "1rem" }}>
           <h4>{name}</h4>
           <span>{contact}</span>
@@ -114,7 +111,7 @@ const Match = ({ index, imgPath, name, contact }) => {
           style={{ border: 0 }}
           size="medium"
           icon={<CloseOutlined style={{ color: "white" }} />}
-          onClick={deleteMatch}
+          onClick={showConfirm}
           button-testid={`delete-match-${index}`}
         />
       </div>
@@ -143,11 +140,13 @@ const Matched = () => {
             data[0].map((item, index) => {
               return (
                 <Match
+                  setMatchList={setMatchList}
                   key={index}
                   index={index}
-                  imgPath={item.img}
+                  user_id={item.user_id}
+                  imgPath={item.pic}
                   name={item.name}
-                  contact={item.contact}
+                  contact={item.email}
                 />
               );
             })
@@ -155,7 +154,7 @@ const Matched = () => {
         }
       })
       .catch((err) => console.error(err));
-  }, [user.email]);
+  }, [user.email, matchList]);
 
   return (
     <div className="container" style={{ margin: "1rem" }}>

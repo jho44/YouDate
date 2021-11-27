@@ -48,6 +48,7 @@ const SpotifyDataBlock = ({ user, userContent, type }) => {
   const getContent = useCallback(async () => {
     const urls = await Promise.all(
       userContent.map(async (thing) => {
+        console.log(thing);
         const response = await fetch(
           `https://api.spotify.com/v1/search?q=${type}:${thing}&type=${type}`,
           {
@@ -60,8 +61,13 @@ const SpotifyDataBlock = ({ user, userContent, type }) => {
         );
         const js = await response.json();
         let urlTry;
-        if (type === "artist") urlTry = await js.artists.items[0].images[0].url;
-        else urlTry = await js.tracks.items[0].album.images[0].url;
+        await console.log(js);
+        try {
+          if (type === "artist") urlTry = await js.artists.items[0].images[0].url;
+          else urlTry = await js.tracks.items[0].album.images[0].url;
+        } catch (e) {
+          urlTry = null;
+        }
 
         const item = await {
           name: thing,
@@ -76,7 +82,7 @@ const SpotifyDataBlock = ({ user, userContent, type }) => {
   useEffect(() => {
     getContent();
   }, [getContent]);
-
+  
   return (
     <>
       {user &&

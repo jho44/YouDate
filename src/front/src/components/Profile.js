@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import "../App.css";
 import Tidbit from "./common/Tidbit";
 import QA from "./common/QA";
-import SpotifyDataBlock from "./common/SpotifyDataBlock"
+import SpotifyDataBlock from "./common/SpotifyDataBlock";
 import { AuthContext } from "../Context";
 import {
   School as SchoolIcon,
@@ -24,14 +24,12 @@ const { Title } = Typography;
 /**
  * Component for the Profile page
  *
- * @property {boolean} meet - Whether this component is being used for
- * the PROFILE or MEET page
  * @returns {React.Fragment} Profile page, including a user's photo,
  * basic information, favorite artists and songs
  *
  * @class
  */
-const Profile = ({ meet }) => {
+const Profile = () => {
   /**
    * @typedef {Boolean} deleteAccChecked
    * @description (Private) state variable controlling whether the
@@ -49,8 +47,6 @@ const Profile = ({ meet }) => {
    * @private
    */
   const [deleteAccChecked, setDeleteAccChecked] = useState(false);
-  const [artistUrls, setArtistUrls] = useState([]);
-  const [songUrls, setSongUrls] = useState([]);
 
   const {
     /**
@@ -59,12 +55,6 @@ const Profile = ({ meet }) => {
      * @memberof Profile
      */
     user,
-    /**
-     * `ContextProvider` state of logged-in user's access and refresh tokens.
-     * @type {Object}
-     * @memberof PrivateRoute
-     */
-    tokens,
     /**
      * Function from `ContextProvider` for setting logged-in user's access and refresh tokens.
      * @type {Function}
@@ -82,13 +72,9 @@ const Profile = ({ meet }) => {
   /* Parallax effect for scrolling */
   const [offsetY, setOffsetY] = useState(0);
   const handleScroll = () => setOffsetY(window.pageYOffset);
-  const loadArtistData = () => getAllArtists();
-  const loadSongData = () => getAllSongs();
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-
-    loadArtistData();
-    loadSongData();
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -159,52 +145,6 @@ const Profile = ({ meet }) => {
   }
 
   /**
-   * Function to get artists' images
-   */
-   async function getAllArtists() {
-    const urls = await Promise.all(user.top_artists.map(async (artist) => {
-      const response = await fetch("https://api.spotify.com/v1/search?q=artist:" + artist + "&type=artist", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + tokens.accessToken
-          }
-      });
-      const js = await response.json()
-      const urlTry = await js.artists.items[0].images[0].url
-      const item = await {
-        "name": artist,
-        "img": await urlTry
-      }
-      return await item
-    }));
-    setArtistUrls(urls)
-   }
-
-  /**
-   * Function to get favorite songs images
-   */
-   async function getAllSongs() {
-    const urls = await Promise.all(user.top_songs.map(async (track) => {
-      const response = await fetch("https://api.spotify.com/v1/search?q=track:" + track + "&type=track", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + tokens.accessToken
-          }
-      });
-      const js = await response.json()
-      const urlTry = await js.tracks.items[0].album.images[0].url
-      const item = await {
-        "name": track,
-        "img": await urlTry
-      }
-      return await item
-    }));
-    setSongUrls(urls)
-   }
-
-  /**
    * Function to logout the current user.
    *
    * @memberof Profile
@@ -271,14 +211,22 @@ const Profile = ({ meet }) => {
             No favorite artists at this time
           </Title>
         )}
-        <SpotifyDataBlock user={user} userContent={artistUrls} />
+        <SpotifyDataBlock
+          user={user}
+          userContent={user.top_artists}
+          type="artist"
+        />
         <h3>Favorite Songs</h3>
         {(!user || !user.top_songs.length) && (
           <Title level={5} style={{ color: "#dbdbdb" }}>
             No favorite songs at this time
           </Title>
         )}
-        <SpotifyDataBlock user={user} userContent={songUrls} />
+        <SpotifyDataBlock
+          user={user}
+          userContent={user.top_songs}
+          type="track"
+        />
         <div className="basic-info column-flex">
           {(!user || !user.tidbits.length) && (
             <Title level={5} style={{ color: "#dbdbdb" }}>

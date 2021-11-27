@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: components/common/Tidbit.js</title>
+    <title>JSDoc: Source: components/common/SpotifyDataBlock.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: components/common/Tidbit.js</h1>
+    <h1 class="page-title">Source: components/common/SpotifyDataBlock.js</h1>
 
     
 
@@ -28,35 +28,45 @@
         <article>
             <pre class="prettyprint source linenums"><code>import React from "react";
 import "../../App.css";
-import { Person as PersonIcon } from "@mui/icons-material"; // placeholder for now
 
 /**
- * Tidbit sub-component used by Meet and Profile component.
- * For things like a user's desired relationship type or education.
+ * SpotifyDataBlock sub-component used by Meet and Profile component.
+ * For creating the list of common artists and songs (Meet page), 
+ * or top artists and songs (Profile page).
  *
- * @property {Component} Component - Icon Component corresponding to
- * some user's tidbit.
- * @property {string} content - words for this Tidbit
- * @returns {HTML} Styled div wrapped around icon `img` and `span`
- * for `content`
+ * @property {Object} user - `ContextProvider` state of logged-in user's info.
+ * @property {Object} userContent - The Spotify data to generate components for.
+ * Contains artist or song image and name.
+ * @returns {HTML} Styled div wrapped around artist or song image and name.
  *
  * @package
  * @class
  */
-const Tidbit = ({ Component = PersonIcon, content }) => {
+const SpotifyDataBlock = ({ user, userContent }) => {
   return (
-    &lt;div
-      style={{ marginBottom: "1rem", display: "flex", alignItems: "center" }}
-    >
-      &lt;Component
-        style={{ fontSize: "2.5vw", marginRight: "0.1rem", color: "white" }}
-      />
-      &lt;span>{content}&lt;/span>
-    &lt;/div>
+    &lt;>
+    {user &amp;&amp;
+      userContent.map((content, ind) => (
+        &lt;div style={{ display: "flex", alignItems: "center" }} key={ind}>
+          &lt;div
+            className="photo"
+            style={{
+              backgroundImage: `url('${content.img}')`,
+              backgroundColor: "grey",
+              width: 85,
+              height: 85,
+              marginBottom: "1rem",
+            }}
+          />
+
+          &lt;span style={{ paddingLeft: "1rem" }}>{content.name}&lt;/span>
+        &lt;/div>
+      ))}
+    &lt;/>
   );
 };
 
-export default Tidbit;
+export default SpotifyDataBlock;
 </code></pre>
         </article>
     </section>

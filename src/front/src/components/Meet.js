@@ -5,6 +5,7 @@ import "../App.css";
 import data from "./fakeData.json";
 import Tidbit from "./common/Tidbit";
 import QA from "./common/QA";
+import SpotifyDataBlock from "./common/SpotifyDataBlock"
 
 /**
  * Component for the Meet page
@@ -114,42 +115,10 @@ const Meet = ({ meet }) => {
         </Descriptions.Item>
 
         <h3>Artists in Common</h3>
-        {data.user.artists.map((artist, ind) => (
-          <div style={{ display: "flex", alignItems: "center" }} key={ind}>
-            <div
-              className="photo"
-              style={{
-                backgroundImage: `url('${artist.img}')`,
-                backgroundColor: "grey",
-                width: 85,
-                height: 85,
-                marginBottom: "1rem",
-              }}
-            />
-
-            <span style={{ paddingLeft: "1rem" }}>{artist.name}</span>
-          </div>
-        ))}
+        <SpotifyDataBlock user={data.user} userContent={data.user.artists} />
+        
         <h3>Songs in Common</h3>
-        {data.user.songs.map((song, ind) => (
-          <div style={{ display: "flex", alignItems: "center" }} key={ind}>
-            <div
-              className="photo"
-              style={{
-                backgroundImage: `url('${song.img}')`,
-                backgroundColor: "grey",
-                width: 85,
-                height: 85,
-                marginBottom: "1rem",
-              }}
-            />
-
-            <span style={{ paddingLeft: "1rem" }}>
-              {song.name} by {song.artist}
-            </span>
-          </div>
-        ))}
-
+        <SpotifyDataBlock user={data.user} userContent={data.user.songs} />
         <div className="basic-info column-flex">
           <Tidbit
             imgPath="/LookingIcon.png"

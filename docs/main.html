@@ -263,6 +263,25 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         refresh_token = spotify_req.refresh_token,
         user_id=basic_info[&#34;id&#34;]
     )
+
+    &#39;&#39;&#39;
+    # FOR TESTING
+    new_spotify_user = User(
+        name=&#34;Christie Ho&#34;,
+        email=&#34;christieho@gmail.com&#34;,
+        pronouns=spotify_req.pronouns,
+        birth_month=spotify_req.birth_month,
+        description=spotify_req.description,
+        pic=spotify_req.pic,
+        tidbits=spotify_req.tidbits,
+        qas=spotify_req.qas,
+        top_artists = [&#34;ILLENIUM&#34;, &#34;Justin Bieber&#34;, &#34;Drake&#34;, &#34;Marshmello&#34;, &#34;Ed Sheeran&#34;, &#34;Travis Scott&#34;],
+        top_songs = [&#34;Dynasty&#34;, &#34;They Ain&#39;t You&#34;, &#34;Just the way you are&#34;, &#34;Happier&#34;],
+        refresh_token = spotify_req.refresh_token,
+        user_id=basic_info[&#34;id&#34;]
+    )
+    &#39;&#39;&#39;
+
     # STATUS 403: Access token does not contain necessary scope
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
 
@@ -361,13 +380,46 @@ async def like(userid_a: str = Body(...), userid_b: str = Body(...)):
     result = neo_db.like(userid_a, userid_b)
     return result
 
+
+@app.post(&#34;/sharedArtists&#34;)
+async def get_shared_artists(userid_a: str = Body(...), userid_b: str = Body(...)):
+    &#34;&#34;&#34;
+    POST route for getting shared liked artists between userA and userB.
+    Parameters:
+        `userid_a` (`str`) - userA&#39;s Spotify ID
+
+        `userid_b` (`str`) = userB&#39;s Spotify ID
+
+    Returns:
+        * list: of Artist names that userA and userB mutually like
+    &#34;&#34;&#34;
+    result = neo_db.get_shared_artists(userid_a, userid_b)
+    return result
+
+
+@app.post(&#34;/sharedTracks&#34;)
+async def get_shared_tracks(userid_a: str = Body(...), userid_b: str = Body(...)):
+    &#34;&#34;&#34;
+    POST route for getting shared top tracks between userA and userB.
+    Parameters:
+        `userid_a` (`str`) - userA&#39;s Spotify ID
+
+        `userid_b` (`str`) = userB&#39;s Spotify ID
+
+    Returns:
+        * list: of Track names that userA and userB mutually like
+    &#34;&#34;&#34;
+    result = neo_db.get_shared_tracks(userid_a, userid_b)
+    return result
+
+
 @app.put(&#34;/updateUserFacts&#34;)
 async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: str = Body(...)):
     &#34;&#34;&#34;
     PUT route for updating a user&#39;s information.
 
     Parameters:
-       * `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values. 
+       * `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values.
         Every single tidbit and QA should be included with a string or null. If a string is null, this fact is deleted from the user&#39;s profile.
         The require fields are: &#34;life_goal&#34;, &#34;believe_or_not&#34;, &#34;life_peaked&#34;, &#34;feel_famous&#34;, &#34;biggest_risk&#34;, &#34;desired_relationship&#34;, &#34;education&#34;, &#34;occupation&#34;, &#34;sexual_orientation&#34;, &#34;location&#34;, &#34;political_view&#34;, &#34;height&#34;
        * `email` (str) - user&#39;s email
@@ -391,7 +443,7 @@ async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: st
 
     result = neo_db.save_facts(facts, email)
     if result is None:
-       raise HTTPException(status_code=404, detail=&#34;User not found&#34;) 
+       raise HTTPException(status_code=404, detail=&#34;User not found&#34;)
     return result</code></pre>
 </details>
 </section>
@@ -640,6 +692,25 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         refresh_token = spotify_req.refresh_token,
         user_id=basic_info[&#34;id&#34;]
     )
+
+    &#39;&#39;&#39;
+    # FOR TESTING
+    new_spotify_user = User(
+        name=&#34;Christie Ho&#34;,
+        email=&#34;christieho@gmail.com&#34;,
+        pronouns=spotify_req.pronouns,
+        birth_month=spotify_req.birth_month,
+        description=spotify_req.description,
+        pic=spotify_req.pic,
+        tidbits=spotify_req.tidbits,
+        qas=spotify_req.qas,
+        top_artists = [&#34;ILLENIUM&#34;, &#34;Justin Bieber&#34;, &#34;Drake&#34;, &#34;Marshmello&#34;, &#34;Ed Sheeran&#34;, &#34;Travis Scott&#34;],
+        top_songs = [&#34;Dynasty&#34;, &#34;They Ain&#39;t You&#34;, &#34;Just the way you are&#34;, &#34;Happier&#34;],
+        refresh_token = spotify_req.refresh_token,
+        user_id=basic_info[&#34;id&#34;]
+    )
+    &#39;&#39;&#39;
+
     # STATUS 403: Access token does not contain necessary scope
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
 
@@ -756,6 +827,70 @@ async def get_matched(email):
         * `int`: request status code (e.g. `200` means request went fine)
     &#34;&#34;&#34;
     result = neo_db.get_matched(email)
+    return result</code></pre>
+</details>
+</dd>
+<dt id="main.get_shared_artists"><code class="name flex">
+<span>async def <span class="ident">get_shared_artists</span></span>(<span>userid_a: str = Body(Ellipsis), userid_b: str = Body(Ellipsis))</span>
+</code></dt>
+<dd>
+<div class="desc"><p>POST route for getting shared liked artists between userA and userB.</p>
+<h2 id="parameters">Parameters</h2>
+<p><code>userid_a</code> (<code>str</code>) - userA's Spotify ID</p>
+<p><code>userid_b</code> (<code>str</code>) = userB's Spotify ID</p>
+<h2 id="returns">Returns</h2>
+<ul>
+<li>list: of Artist names that userA and userB mutually like</li>
+</ul></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@app.post(&#34;/sharedArtists&#34;)
+async def get_shared_artists(userid_a: str = Body(...), userid_b: str = Body(...)):
+    &#34;&#34;&#34;
+    POST route for getting shared liked artists between userA and userB.
+    Parameters:
+        `userid_a` (`str`) - userA&#39;s Spotify ID
+
+        `userid_b` (`str`) = userB&#39;s Spotify ID
+
+    Returns:
+        * list: of Artist names that userA and userB mutually like
+    &#34;&#34;&#34;
+    result = neo_db.get_shared_artists(userid_a, userid_b)
+    return result</code></pre>
+</details>
+</dd>
+<dt id="main.get_shared_tracks"><code class="name flex">
+<span>async def <span class="ident">get_shared_tracks</span></span>(<span>userid_a: str = Body(Ellipsis), userid_b: str = Body(Ellipsis))</span>
+</code></dt>
+<dd>
+<div class="desc"><p>POST route for getting shared top tracks between userA and userB.</p>
+<h2 id="parameters">Parameters</h2>
+<p><code>userid_a</code> (<code>str</code>) - userA's Spotify ID</p>
+<p><code>userid_b</code> (<code>str</code>) = userB's Spotify ID</p>
+<h2 id="returns">Returns</h2>
+<ul>
+<li>list: of Track names that userA and userB mutually like</li>
+</ul></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@app.post(&#34;/sharedTracks&#34;)
+async def get_shared_tracks(userid_a: str = Body(...), userid_b: str = Body(...)):
+    &#34;&#34;&#34;
+    POST route for getting shared top tracks between userA and userB.
+    Parameters:
+        `userid_a` (`str`) - userA&#39;s Spotify ID
+
+        `userid_b` (`str`) = userB&#39;s Spotify ID
+
+    Returns:
+        * list: of Track names that userA and userB mutually like
+    &#34;&#34;&#34;
+    result = neo_db.get_shared_tracks(userid_a, userid_b)
     return result</code></pre>
 </details>
 </dd>
@@ -907,7 +1042,7 @@ async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: st
     PUT route for updating a user&#39;s information.
 
     Parameters:
-       * `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values. 
+       * `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values.
         Every single tidbit and QA should be included with a string or null. If a string is null, this fact is deleted from the user&#39;s profile.
         The require fields are: &#34;life_goal&#34;, &#34;believe_or_not&#34;, &#34;life_peaked&#34;, &#34;feel_famous&#34;, &#34;biggest_risk&#34;, &#34;desired_relationship&#34;, &#34;education&#34;, &#34;occupation&#34;, &#34;sexual_orientation&#34;, &#34;location&#34;, &#34;political_view&#34;, &#34;height&#34;
        * `email` (str) - user&#39;s email
@@ -931,7 +1066,7 @@ async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: st
 
     result = neo_db.save_facts(facts, email)
     if result is None:
-       raise HTTPException(status_code=404, detail=&#34;User not found&#34;) 
+       raise HTTPException(status_code=404, detail=&#34;User not found&#34;)
     return result</code></pre>
 </details>
 </dd>
@@ -1133,6 +1268,8 @@ async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: st
 <li><code><a title="main.delete_user" href="#main.delete_user">delete_user</a></code></li>
 <li><code><a title="main.dislike" href="#main.dislike">dislike</a></code></li>
 <li><code><a title="main.get_matched" href="#main.get_matched">get_matched</a></code></li>
+<li><code><a title="main.get_shared_artists" href="#main.get_shared_artists">get_shared_artists</a></code></li>
+<li><code><a title="main.get_shared_tracks" href="#main.get_shared_tracks">get_shared_tracks</a></code></li>
 <li><code><a title="main.get_unmet" href="#main.get_unmet">get_unmet</a></code></li>
 <li><code><a title="main.get_user" href="#main.get_user">get_user</a></code></li>
 <li><code><a title="main.like" href="#main.like">like</a></code></li>

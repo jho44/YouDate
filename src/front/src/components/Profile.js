@@ -48,6 +48,8 @@ const Profile = ({ meet }) => {
    * @private
    */
   const [deleteAccChecked, setDeleteAccChecked] = useState(false);
+  const [artistUrls, setArtistUrls] = useState([]);
+  const [songUrls, setSongUrls] = useState([]);
 
   const {
     /**
@@ -56,6 +58,12 @@ const Profile = ({ meet }) => {
      * @memberof Profile
      */
     user,
+    /**
+     * `ContextProvider` state of logged-in user's access and refresh tokens.
+     * @type {Object}
+     * @memberof PrivateRoute
+     */
+    tokens,
     /**
      * Function from `ContextProvider` for setting logged-in user's access and refresh tokens.
      * @type {Function}
@@ -73,8 +81,13 @@ const Profile = ({ meet }) => {
   /* Parallax effect for scrolling */
   const [offsetY, setOffsetY] = useState(0);
   const handleScroll = () => setOffsetY(window.pageYOffset);
+  const loadArtistData = () => getAllArtists();
+  const loadSongData = () => getAllSongs();
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
+
+    loadArtistData();
+    loadSongData();
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -143,6 +156,44 @@ const Profile = ({ meet }) => {
     setDeleteAccChecked(true);
     showConfirm();
   }
+
+  /**
+   * Function to get artists' images
+   */
+   async function getAllArtists() {
+    const urls = await Promise.all(user.top_artists.map(async (artist) => {
+      const response = await fetch("https://api.spotify.com/v1/search?q=artist:" + artist + "&type=artist", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + tokens.accessToken
+          }
+      });
+      const js = await response.json()
+      const urlTry = await js.artists.items[0].images[0].url
+      return await urlTry
+    }));
+    setArtistUrls(urls)
+   }
+
+  /**
+   * Function to get favorite songs images
+   */
+   async function getAllSongs() {
+    const urls = await Promise.all(user.top_songs.map(async (track) => {
+      const response = await fetch("https://api.spotify.com/v1/search?q=track:" + track + "&type=track", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + tokens.accessToken
+          }
+      });
+      const js = await response.json()
+      const urlTry = await js.tracks.items[0].album.images[0].url
+      return await urlTry
+    }));
+    setSongUrls(urls)
+   }
 
   /**
    * Function to logout the current user.
@@ -217,15 +268,15 @@ const Profile = ({ meet }) => {
               <div
                 className="photo"
                 style={{
-                  backgroundImage: `url('${artist.img}')`,
                   backgroundColor: "grey",
+                  backgroundImage: `url('${artistUrls[ind]}')`,
                   width: 85,
                   height: 85,
                   marginBottom: "1rem",
                 }}
               />
 
-              <span style={{ paddingLeft: "1rem" }}>{artist.name}</span>
+              <span style={{ paddingLeft: "1rem" }}>{artist}</span>
             </div>
           ))}
         <h3>Favorite Songs</h3>
@@ -240,7 +291,7 @@ const Profile = ({ meet }) => {
               <div
                 className="photo"
                 style={{
-                  backgroundImage: `url('${song.img}')`,
+                  backgroundImage: `url('${songUrls[ind]}')`,
                   backgroundColor: "grey",
                   width: 85,
                   height: 85,
@@ -249,7 +300,7 @@ const Profile = ({ meet }) => {
               />
 
               <span style={{ paddingLeft: "1rem" }}>
-                {song.name} by {song.artist}
+                {song}
               </span>
             </div>
           ))}

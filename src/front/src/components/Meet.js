@@ -162,7 +162,7 @@ const Meet = () => {
    * @returns {void}
    */
   function dislike() {
-    // create DISLIKES relationship from useer to unmetUser
+    // create DISLIKES relationship from user to unmetUser
     fetch("http://localhost:8000/dislike", {
       method: "POST",
       headers: {

@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import "../App.css";
 import Tidbit from "./common/Tidbit";
 import QA from "./common/QA";
+import SpotifyDataBlock from "./common/SpotifyDataBlock"
 import { AuthContext } from "../Context";
 import {
   School as SchoolIcon,
@@ -211,49 +212,15 @@ const Profile = ({ meet }) => {
             No favorite artists at this time
           </Title>
         )}
-        {user &&
-          user.top_artists.map((artist, ind) => (
-            <div style={{ display: "flex", alignItems: "center" }} key={ind}>
-              <div
-                className="photo"
-                style={{
-                  backgroundImage: `url('${artist.img}')`,
-                  backgroundColor: "grey",
-                  width: 85,
-                  height: 85,
-                  marginBottom: "1rem",
-                }}
-              />
-
-              <span style={{ paddingLeft: "1rem" }}>{artist.name}</span>
-            </div>
-          ))}
+        <SpotifyDataBlock user={user} userContent={user.top_artists} />
+        
         <h3>Favorite Songs</h3>
         {(!user || !user.top_songs.length) && (
           <Title level={5} style={{ color: "#dbdbdb" }}>
             No favorite songs at this time
           </Title>
         )}
-        {user &&
-          user.top_songs.map((song, ind) => (
-            <div style={{ display: "flex", alignItems: "center" }} key={ind}>
-              <div
-                className="photo"
-                style={{
-                  backgroundImage: `url('${song.img}')`,
-                  backgroundColor: "grey",
-                  width: 85,
-                  height: 85,
-                  marginBottom: "1rem",
-                }}
-              />
-
-              <span style={{ paddingLeft: "1rem" }}>
-                {song.name} by {song.artist}
-              </span>
-            </div>
-          ))}
-
+        <SpotifyDataBlock user={user} userContent={user.top_songs} />
         <div className="basic-info column-flex">
           {(!user || !user.tidbits.length) && (
             <Title level={5} style={{ color: "#dbdbdb" }}>

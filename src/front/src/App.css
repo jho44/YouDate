@@ -71,7 +71,12 @@ body {
   padding: 50px;
   margin-left: 5%;
 }
-
+/**
+* Changed font-size from 1.5vw to a new method to
+* calculate font size based on the link:
+* https://css-tricks.com/font-size-viewport-units/ 
+* 1.5vw was too small for mobile
+*/
 h2,
 h3,
 h4,
@@ -83,7 +88,7 @@ span,
 h1.ant-typography,
 .ant-typography h1 {
   color: white;
-  font-size: 1.5vw;
+  font-size: calc(1vw + 1vh + .5vmin);
 }
 
 .ant-message-custom-content.ant-message-error > span,

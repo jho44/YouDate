@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/common/SpotifyDataBlock.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/common/SpotifyDataBlock.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect, useContext, useCallback } from "react";
+import "../../App.css";
+import { AuthContext } from "../../Context";
+
+/**
+ * SpotifyDataBlock sub-component used by Meet and Profile component.
+ * For creating the list of common artists and songs (Meet page),
+ * or top artists and songs (Profile page).
+ *
+ * @param {Object} user - `ContextProvider` state of logged-in user's info.
+ * @param {Object} userContent - The Spotify data to generate components for.
+ * Contains artist or song image and name.
+ * @param {String} type - Type of display we'd like to display. Either `artist` or `track`.
+ * @returns {HTML} Styled div wrapped around artist or song image and name.
+ *
+ * @package
+ * @class
+ */
+const SpotifyDataBlock = ({ user, userContent, type }) => {
+  const {
+    /**
+     * `ContextProvider` state of logged-in user's access and refresh tokens.
+     * @type {Object}
+     * @memberof SpotifyDataBlock
+     */
+    tokens,
+  } = useContext(AuthContext);
+
+  /**
+   * @description An array of Objects containing a song/artist's image URL and name, returned by Spotify's API.
+   * @typedef {Object} content
+   * @memberof SpotifyDataBlock
+   */
+  /**
+   * @typedef {Function} setContent
+   * @param {Array} newState - The newly processed array of Objects containing a song/artist's image URL and name.
+   * @description Sets `content` to `newState`.
+   * @returns {void}
+   * @memberof SpotifyDataBlock
+   */
+  const [content, setContent] = useState([]);
+
+  /**
+   * Function to get artists' or songs' images.
+   *
+   * @returns {React.Fragment} - Containing list of display components for songs' and artists' images and names.
+   */
+  const getContent = useCallback(async () => {
+    const urls = await Promise.all(
+      userContent.map(async (thing) => {
+        const response = await fetch(
+          `https://api.spotify.com/v1/search?q=${type}:${thing}&amp;type=${type}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + tokens.accessToken,
+            },
+          }
+        );
+        const js = await response.json();
+        let urlTry;
+        if (type === "artist") urlTry = await js.artists.items[0].images[0].url;
+        else urlTry = await js.tracks.items[0].album.images[0].url;
+
+        const item = await {
+          name: thing,
+          img: await urlTry,
+        };
+        return await item;
+      })
+    );
+    setContent(urls);
+  }, [tokens, type, userContent]);
+
+  useEffect(() => {
+    getContent();
+  }, [getContent]);
+
+  return (
+    &lt;>
+      {user &amp;&amp;
+        content.map((content, ind) => (
+          &lt;div style={{ display: "flex", alignItems: "center" }} key={ind}>
+            &lt;div
+              className="photo"
+              style={{
+                backgroundImage: `url('${content.img}')`,
+                backgroundColor: "grey",
+                width: 85,
+                height: 85,
+                marginBottom: "1rem",
+              }}
+            />
+
+            &lt;span style={{ paddingLeft: "1rem" }}>{content.name}&lt;/span>
+          &lt;/div>
+        ))}
+    &lt;/>
+  );
+};
+
+export default SpotifyDataBlock;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContextProvider.html">ContextProvider</a></li><li><a href="InfoForm.html">InfoForm</a></li><li><a href="Landing.html">Landing</a></li><li><a href="Match.html">Match</a></li><li><a href="Matched.html">Matched</a></li><li><a href="Meet.html">Meet</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="NavbarBtn.html">NavbarBtn</a></li><li><a href="PrivateRoute.html">PrivateRoute</a></li><li><a href="Profile.html">Profile</a></li><li><a href="QA.html">QA</a></li><li><a href="SpotifyDataBlock.html">SpotifyDataBlock</a></li><li><a href="Tidbit.html">Tidbit</a></li></ul><h3>Global</h3><ul><li><a href="global.html#beforeUpload">beforeUpload</a></li><li><a href="global.html#getBase64">getBase64</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Nov 27 2021 20:12:22 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -152,7 +152,7 @@ class MatchPool:
             MATCH (a:User {email: $email})
             WITH a
             MATCH (b: User)
-            WHERE exists((a)-[:LIKES]->(b)) AND exists((a)<-[:LIKES]-(b))
+            WHERE exists((a)-[:LIKES]->(b)) AND exists((a)<-[:LIKES]-(b)) AND NOT exists((a)<-[:DISLIKES]->(b))
             RETURN b
             '''
         )

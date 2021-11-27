@@ -342,10 +342,10 @@ const InfoForm = () => {
           <InfoFormItem {...content} key={ind} />
         ))}
         <Item className="form-btns">
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" size="large" htmlType="submit">
             Submit
           </Button>
-          <Button htmlType="button" onClick={onReset}>
+          <Button htmlType="button" size="large" onClick={onReset}>
             Reset
           </Button>
         </Item>

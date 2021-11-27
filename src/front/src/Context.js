@@ -40,6 +40,34 @@ export const ContextProvider = ({ children }) => {
    */
   const [user, setUser] = useState(null);
 
+  /**
+   * @description Logged-in user's list of unmet users.
+   * @typedef {Object} unmetList
+   * @memberof ContextProvider
+   */
+  /**
+   * @typedef {Function} setUnmetList
+   * @param {Object} newState - The next set of users the current user hasn't met.
+   * @description Sets `unmetList` to `newState`.
+   * @returns {void}
+   * @memberof ContextProvider
+   */
+  const [unmetList, setUnmetList] = useState([]);
+
+  /**
+   * @description Index of the next unmet user to appear on Meet page.
+   * @typedef {Object} unmetListInd
+   * @memberof ContextProvider
+   */
+  /**
+   * @typedef {Function} setUnmetListInd
+   * @param {Object} newState - The next index in `unmetList` that should appear on Meet page.
+   * @description Sets `unmetListInd` to `newState`.
+   * @returns {void}
+   * @memberof ContextProvider
+   */
+  const [unmetListInd, setUnmetListInd] = useState(0);
+
   return (
     <AuthContext.Provider
       value={{
@@ -47,6 +75,10 @@ export const ContextProvider = ({ children }) => {
         setTokens,
         user,
         setUser,
+        unmetList,
+        setUnmetList,
+        unmetListInd,
+        setUnmetListInd,
       }}
     >
       {children}

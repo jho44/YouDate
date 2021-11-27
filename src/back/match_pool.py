@@ -251,12 +251,12 @@ class MatchPool:
     def _get_shared_artists(tx, userid_a, userid_b):
         query = (
             '''
-            MATCH (:User {email: $email})-[r:FOLLOWS]-(Artist)
+            MATCH (:User {user_id: $user_id})-[r:FOLLOWS]-(Artist)
             RETURN Artist
             '''
         )
-        results_a = tx.run(query, email=userid_a)
-        results_b = tx.run(query, email=userid_b)
+        results_a = tx.run(query, user_id=userid_a)
+        results_b = tx.run(query, user_id=userid_b)
 
         try:
             top_artists_a = set([record["Artist"]["name"] for record in results_a])
@@ -273,9 +273,9 @@ class MatchPool:
 
     @staticmethod
     def _get_shared_tracks(tx, userid_a, userid_b):
-        query = 'MATCH (user:User {email: $email}) RETURN user'
-        results_a = tx.run(query, email=userid_a)
-        results_b = tx.run(query, email=userid_b)
+        query = 'MATCH (user:User {user_id: $user_id}) RETURN user'
+        results_a = tx.run(query, user_id=userid_a)
+        results_b = tx.run(query, user_id=userid_b)
 
         record_a = None
         record_b = None
@@ -286,7 +286,7 @@ class MatchPool:
         for record in results_b:
             record_b = record
             break
-            
+
         try:
             top_tracks_a = set(record_a["user"]["top_songs"])
             top_tracks_b = set(record_b["user"]["top_songs"])

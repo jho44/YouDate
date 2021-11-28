@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { Descriptions, Button, Spin } from "antd";
+import { Button, Spin } from "antd";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import "../App.css";
 import Tidbit from "./common/Tidbit";
@@ -100,6 +100,7 @@ const Meet = () => {
    * Function for fetching next batch of unmet users from our backend.
    */
   const getNextUser = useCallback(() => {
+    console.log("here");
     setLoading(true);
     // get more unmet users
     fetch(`http://localhost:8000/getUnmet?email=${user.email}`)
@@ -197,7 +198,7 @@ const Meet = () => {
         }
       });
   }
-
+  console.log(unmetUser);
   return (
     <>
       {loading ? (
@@ -213,51 +214,47 @@ const Meet = () => {
         </div>
       ) : (
         <>
-          {unmetUser.pic ? (
-            <div
-              className="profilePhoto"
-              style={{
-                backgroundImage: `url('${unmetUser.pic}')`,
-                transform: `translateY(${offsetY * 0.25}px)`,
-              }}
-            />
-          ) : (
-            <div
-              className="profilePhoto"
-              style={{
-                transform: `translateY(${offsetY * 0.25}px)`,
-                padding: 0,
-                border: "solid white",
-              }}
-            >
-              <PersonIcon
-                style={{ height: "100%", width: "100%", color: "white" }}
+          <div className="pic">
+            {unmetUser.pic ? (
+              <div
+                className="profilePhoto"
+                style={{
+                  backgroundImage: `url('${unmetUser.pic}')`,
+                  transform: `translateY(${offsetY * 0.2}px)`,
+                }}
               />
-            </div>
-          )}
+            ) : (
+              <div
+                className="profilePhoto"
+                style={{
+                  transform: `translateY(${offsetY * 0.2}px)`,
+                  padding: 0,
+                  border: "solid white",
+                }}
+              >
+                <PersonIcon
+                  style={{ height: "100%", width: "100%", color: "white" }}
+                />
+              </div>
+            )}
 
-          <div
-            className="userName"
-            style={{ transform: `translateY(${offsetY * 0.4}px)` }}
-          >
-            <Descriptions
-              title={`${unmetUser.name} (${unmetUser.pronouns})`}
-              labelStyle={{ color: "white" }}
-              contentStyle={{ color: "white" }}
-              extra={<span className="extra">{unmetUser.age}</span>}
-            />
+            <div
+              className="userInfo"
+              style={{ transform: `translateY(${offsetY * 0.3}px)` }}
+            >
+              <div className="name">
+                {unmetUser.name} ({unmetUser.pronouns})
+              </div>
+
+              <div className="age">{unmetUser.age}</div>
+
+              <div className="userDescription">
+                {unmetUser.description && unmetUser.description.replace(/\\'/g, "'")}
+              </div>
+            </div>
           </div>
 
           <div className="container">
-            <Descriptions.Item label="">
-              <h2
-                className="description"
-                style={{ transform: `translateY(${offsetY * 0.4}px)` }}
-              >
-                {unmetUser.description}
-              </h2>
-            </Descriptions.Item>
-
             <h3>Artists in Common</h3>
             {(!unmetUser || !unmetUser.artists_in_common.length) && (
               <Title level={5} style={{ color: "#dbdbdb" }}>

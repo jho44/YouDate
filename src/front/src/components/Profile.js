@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Descriptions, Switch, Modal } from "antd";
+import { Switch, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import "../App.css";
@@ -187,7 +187,7 @@ const Profile = () => {
           <div className="age">{user.age}</div>
 
           <div className="userDescription">
-            {user.description.replace(/\\'/g, "'")}
+            {unmetUser.description && unmetUser.description.replace(/\\'/g, "'")}
           </div>
         </div>
       </div>

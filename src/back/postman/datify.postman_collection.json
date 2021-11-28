@@ -165,51 +165,6 @@
 			"response": []
 		},
 		{
-			"name": "Create User",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
-							"pm.test(\"Expected name\", function () {",
-							"    const responseJson = pm.response.json();",
-							"    pm.expect(responseJson[0].name).to.eql(\"Athya\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Athya\",\n    \"email\": \"athyauk@gmail.com\",\n    \"top_artists\": [\"Adele\"],\n    \"top_songs\": [\"Hello\"]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "127.0.0.1:8000/createUser",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"createUser"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Delete User (Successful)",
 			"event": [
 				{
@@ -550,7 +505,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"athyauk@gmail.com\",\n}",
+					"raw": "{\n    \"email\": \"athyauk@gmail.com\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -574,7 +529,7 @@
 			"response": []
 		},
 		{
-			"name": "Get Matched Copy",
+			"name": "Get Unmet",
 			"event": [
 				{
 					"listen": "test",
@@ -710,58 +665,6 @@
 						{
 							"key": "token",
 							"value": "undefined"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Artist",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "BQCwieK4Ju_6rsv6wCGOpL6opDIWgIacwc--fqw-hSTvT8xO4hlasIEEFJulm-9xFHM_liSXXO-pkY9ddtrwidosv0OnWa9Skd9pZgrGRagJLd2LxOPa6SVlfwpv8DWWJ-ARPuEMRJOhJjZzIJLtiiatpOVbA02lGZVfEdk49_UwWgkf",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "https://api.spotify.com/v1/search?q=artist:Marina&type=artist",
-					"protocol": "https",
-					"host": [
-						"api",
-						"spotify",
-						"com"
-					],
-					"path": [
-						"v1",
-						"search"
-					],
-					"query": [
-						{
-							"key": "q",
-							"value": "artist:Marina"
-						},
-						{
-							"key": "type",
-							"value": "artist"
 						}
 					]
 				}

@@ -9,13 +9,13 @@ const InfoFormItem = ({ child, ...props }) => {
 };
 
 /**
- * InputForm sub-component used by EditInfo subcomponent 
+ * InputForm sub-component used by EditInfo subcomponent
  * (used by the Profile component) and the InfoForm component.
  * Used to create the form for editing the Tidbits and QAs
  * for a user and the inital info gathering form for a new user.
  *
  * @returns {HTML} Styled div wrapped around a form just for Tidbits
- * and QAs, or a form including name, email, Tidbits, QAs, etc 
+ * and QAs, or a form including name, email, Tidbits, QAs, etc
  * for new users.
  *
  * @package

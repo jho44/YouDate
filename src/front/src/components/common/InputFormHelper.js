@@ -5,12 +5,11 @@ import { Input, Select } from "antd";
 const { Option } = Select;
 
 /**
- * Useful functions for the EditInfo subcomponent 
+ * Useful functions for the EditInfo subcomponent
  * (used by the Profile component) and the InfoForm component.
- * Used to create the form items for editing the Tidbits and QAs 
+ * Used to create the form items for editing the Tidbits and QAs
  * for a user and the inital info gathering form for a new user.
  */
-
 
 /* Tidbits */
 const DesiredRelationship = () => {
@@ -233,13 +232,13 @@ export function createInfoItems(contents) {
 }
 
 /**
- * Function to match the Tidbits and QAs with the form onFinish 
+ * Function to match the Tidbits and QAs with the form onFinish
  * in the EditInfo subcomponent.
- * @param {Object} values - the values of the fields of the edit Tidbits 
+ * @param {Object} values - the values of the fields of the edit Tidbits
  * and QAs form
  * @returns {Object}
  */
- export function factsData(values) {
+export function factsData(values) {
   return {
     ...tidbitData(values),
     ...QAData(values),
@@ -251,7 +250,7 @@ export function createInfoItems(contents) {
  * @param {Object} values - the values of the fields of the edit Tidbits
  * @returns {Object}
  */
- export function tidbitData(values) {
+export function tidbitData(values) {
   return {
     desired_relationship: values.desired_relationship || null,
     education: values.education || null,
@@ -265,15 +264,15 @@ export function createInfoItems(contents) {
 
 /**
  * Function to match the QAs with the form the InfoForm component.
- * @param {Object} values - the values of the fields of the edit Tidbits 
+ * @param {Object} values - the values of the fields of the edit Tidbits
  * @returns {Object}
  */
- export function QAData(values) {
+export function QAData(values) {
   return {
     life_goal: values.life_goal || null,
     believe_or_not: values.believe_or_not || null,
     life_peaked: values.life_peaked || null,
     feel_famous: values.feel_famous || null,
     biggest_risk: values.biggest_risk || null,
-  }
+  };
 }

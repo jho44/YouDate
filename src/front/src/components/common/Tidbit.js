@@ -21,7 +21,7 @@ const Tidbit = ({ Component = PersonIcon, content }) => {
       style={{ marginBottom: "1rem", display: "flex", alignItems: "center" }}
     >
       <Component
-        style={{ fontSize: "2.5vw", marginRight: "0.1rem", color: "white" }}
+        style={{ fontSize: "2rem", marginRight: "0.5rem", color: "white" }}
       />
       <span>{content}</span>
     </div>

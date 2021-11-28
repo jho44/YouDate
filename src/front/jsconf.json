@@ -9,10 +9,13 @@
       "src/components/Landing.js",
       "src/components/Navbar.js",
       "src/PrivateRoute.js",
+      "src/helpers.js",
       "src/components/common/QA.js",
       "src/components/common/Tidbit.js",
       "src/components/common/SpotifyDataBlock.js",
       "src/components/InfoForm.js",
+      "src/components/common/EditInfo.js",
+      "src/components/common/InputForm.js",
       "src/fileUpload.js",
       "src/Context.js"
     ]

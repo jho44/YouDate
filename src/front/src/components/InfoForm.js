@@ -1,27 +1,15 @@
 import React, { useState, useContext } from "react";
-import {
-  Form,
-  Input,
-  Button,
-  DatePicker,
-  Upload,
-  Typography,
-  Select,
-} from "antd";
+import { Form, Input, DatePicker, Upload, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { getBase64, beforeUpload } from "../fileUpload";
 import "../App.css";
 import { AuthContext } from "../Context";
 import { useNavigate } from "react-router-dom";
 import { processUserInfo } from "../helpers";
+import { createInfoItems, tidbitData, QAData } from "../helpers";
+import InputForm from "./common/InputForm";
 
-const { Item } = Form;
 const { Title, Paragraph } = Typography;
-const { Option } = Select;
-
-const InfoFormItem = ({ child, ...props }) => {
-  return <Item {...props}>{child}</Item>;
-};
 
 /**
  * Form for new Datify user to fill in their basic information.
@@ -129,22 +117,8 @@ const InfoForm = () => {
       birth_month: values.birth_month._d,
       description: values.description,
       pic: img,
-      qas: {
-        life_goal: values.life_goal || null,
-        believe_or_not: values.believe_or_not || null,
-        life_peaked: values.life_peaked || null,
-        feel_famous: values.feel_famous || null,
-        biggest_risk: values.biggest_risk || null,
-      },
-      tidbits: {
-        desired_relationship: values.desired_relationship || null,
-        education: values.education || null,
-        occupation: values.occupation || null,
-        sexual_orientation: values.sexual_orientation || null,
-        location: values.location || null,
-        political_view: values.political_view || null,
-        height: values.height || null,
-      },
+      qas: QAData(values),
+      tidbits: tidbitData(values),
       access_token: tokens.accessToken,
       refresh_token: tokens.refreshToken,
     };
@@ -171,14 +145,13 @@ const InfoForm = () => {
   };
 
   /**
-   * Function to reset form fields to empty.
+   * Function to reset the image field.
    * @memberof InfoForm
    * @returns {void}
    * @private
    */
-  const onReset = () => {
+  const resetImg = () => {
     setImg();
-    form.resetFields();
   };
 
   const contents = [
@@ -249,107 +222,19 @@ const InfoForm = () => {
       label: "Profile Picture",
       valuePropName: "props",
     },
-    {
-      child: (
-        <Select style={{ width: "50%" }}>
-          <Option value="casual">Go with the flow</Option>
-          <Option value="short-term">Short Term</Option>
-          <Option value="long-term">Long Term</Option>
-          <Option value="other">Other</Option>
-        </Select>
-      ),
-      name: "desired_relationship",
-      label: "Desired Relationship",
-      rules: [{ required: true }],
-    },
-    {
-      child: <Input />,
-      name: "education",
-      label: "Education",
-    },
-    {
-      child: <Input />,
-      name: "occupation",
-      label: "Occupation",
-    },
-    {
-      child: <Input />,
-      name: "sexual_orientation",
-      label: "Sexual Orientation",
-    },
-    {
-      child: <Input />,
-      name: "location",
-      label: "My Location",
-    },
-    {
-      child: (
-        <Select style={{ width: "50%" }} allowClear>
-          <Option value="anarchism">Anarchism</Option>
-          <Option value="communism">Communism</Option>
-          <Option value="conservatism">Conservatism</Option>
-          <Option value="environmentalism">Environmentalism</Option>
-          <Option value="fascism">Fascism</Option>
-          <Option value="feminism">Feminism</Option>
-          <Option value="liberalism">Liberalism</Option>
-          <Option value="nationalism">Nationalism</Option>
-          <Option value="populism">Populism</Option>
-          <Option value="socialism">Socialism</Option>
-          <Option value="other">Other</Option>
-        </Select>
-      ),
-      name: "political_view",
-      label: "Political View",
-    },
-    {
-      child: <Input />,
-      name: "height",
-      label: "Height",
-    },
-    {
-      child: <Input />,
-      name: "life_goal",
-      label: "Life goal of mine...",
-    },
-    {
-      child: <Input />,
-      name: "believe_or_not",
-      label: "Believe it or not, I...",
-    },
-    {
-      child: <Input />,
-      name: "life_peaked",
-      label: "My life peaked when...",
-    },
-    {
-      child: <Input />,
-      name: "feel_famous",
-      label: "I feel famous when...",
-    },
-    {
-      child: <Input />,
-      name: "biggest_risk",
-      label: "Biggest risk I've ever taken",
-    },
   ];
 
   return (
     <div className="container">
       <Title>Basic Info</Title>
       <Paragraph>Help us help you build your profile!</Paragraph>
-      <Form layout="vertical" form={form} name="basic-info" onFinish={onFinish}>
-        {contents.map((content, ind) => (
-          <InfoFormItem {...content} key={ind} />
-        ))}
-        <Item className="form-btns">
-          <Button type="primary" size="large" htmlType="submit">
-            Submit
-          </Button>
-          <Button htmlType="button" size="large" onClick={onReset}>
-            Reset
-          </Button>
-        </Item>
-      </Form>
+      <InputForm
+        profile={false}
+        resetImg={resetImg}
+        form={form}
+        onFinish={onFinish}
+        contents={createInfoItems(contents)}
+      />
     </div>
   );
 };

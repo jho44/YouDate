@@ -60,8 +60,13 @@ const SpotifyDataBlock = ({ user, userContent, type }) => {
         );
         const js = await response.json();
         let urlTry;
-        if (type === "artist") urlTry = await js.artists.items[0].images[0].url;
-        else urlTry = await js.tracks.items[0].album.images[0].url;
+        try {
+          if (type === "artist")
+            urlTry = await js.artists.items[0].images[0].url;
+          else urlTry = await js.tracks.items[0].album.images[0].url;
+        } catch (e) {
+          urlTry = null;
+        }
 
         const item = await {
           name: thing,

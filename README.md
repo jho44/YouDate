@@ -130,71 +130,80 @@ Postman tests must be imported as a collection into Postman in order to run them
 
 **Create User from Spotify Profile**
 - Create a valid, previously unseen user from their Spotify credentials
+- Input: valid Spotify credentials and user data (name, pronouns, birth month, etc)
     1. assert that response code is 200
     2. assert that user data matches the user data of the test Spotify user
 
 **Create User from Spotify Profile with Invalid Credentials**
 - Create a valid, previously unseen user from invalid Spotify credentials
+- Input: invalid Spotify credentials and valid user data (name, pronouns, birth month, etc)
     1. assert that response code is 404
 
 **Create Artist**
 - Create a valid test artist
+- Input: artist name
     1. assert that response code is 200
     2. assert that the artist name is returned
 
 **Delete User**
 - Delete a created user
+- Input: valid user email
     1. assert that response code is 200
 
 **Delete User (User Not Found)**
 - Delete a nonexistant user
+- Input: invalid user email
     1. assert that response code is 404 (User Not Found)
 
 **Update User Facts**
 - Update user facts of existing user
+- Input: valid user email and updated user facts (school: UCLA)
     1. assert that response code is 200
     2. assert that data has changed (e.g. school changed to UCLA)
 
 **Update User Facts (Invalid Email)**
 - Update user facts of invalid user
+- Input: invalid user email and updated user facts
     1. assert that response code is 404 (User Not Found)
 
 **Like User**
 - Send a like from User A to User B for two valid users
+- Input: two valid user IDs
     1. assert that response code is 200
 
 **Dislike User**
 - Send a dislike from User A to User B for two valid users
+- Input: two valid user IDs
     1. assert that response code is 200
 
 **Get Shared Artists**
 - Get shared artists between User A and User B for two valid users
+- Input: two valid user IDs
     1. assert that response code is 200
     2. assert that shared artists are correct
 
 **Get Matches**
 - Get matches for an existing user
+- Input: valid user email
     1. assert that response code is 200
     2. assert that there is a list of matches
 
 **Get Unmet**
 - Get dislikes for an existing user
+- Input: valid user email
     1. assert that response code is 200
     2. assert that there is a list of disliked users
 
 **Get User**
 - Get a valid user
+- Input: valid user access token
     1. assert that response code is 200
     2. assert that user data matches the user data of the test Spotify user
 
 **Get User (User Not Found)**
 - Get a nonexistant user
+- Input: invalid user access token
     1. assert that response code is 404 (User Not Found)
-
-**Get User**
-- Get a valid user
-    1. assert that response code is 200
-    2. assert that user data matches the user data of the test Spotify user
 
 ### Backend (Unit tests via Pytest and Monkeypatch)
 

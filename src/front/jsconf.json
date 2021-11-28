@@ -13,6 +13,9 @@
       "src/components/common/Tidbit.js",
       "src/components/common/SpotifyDataBlock.js",
       "src/components/InfoForm.js",
+      "src/components/common/EditInfo.js",
+      "src/components/common/InputForm.js",
+      "src/components/common/InputFormHelper.js",
       "src/fileUpload.js",
       "src/Context.js"
     ]

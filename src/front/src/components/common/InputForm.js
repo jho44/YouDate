@@ -21,7 +21,7 @@ const InfoFormItem = ({ child, ...props }) => {
  * @package
  * @class
  */
-const InputForm = ({ profile, form, onFinish, contents }) => {
+const InputForm = ({ profile, resetImg, form, onFinish, contents }) => {
   /**
    * Function to reset form fields back to the original answers.
    * @memberof InputForm
@@ -29,6 +29,7 @@ const InputForm = ({ profile, form, onFinish, contents }) => {
    * @private
    */
   const onReset = () => {
+    if (!profile) resetImg();
     form.resetFields();
   };
   return (

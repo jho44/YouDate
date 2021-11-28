@@ -152,7 +152,7 @@ const QAs = [
  * Function to generate the Tidbits and QAs in the EditInfo subcomponent.
  * @param {Object} user - the user that is viewing their Profile page to edit
  * their Tidbits or QAs
- * @returns {Object Array}
+ * @returns {Array.<Object>}
  */
 export function createEditInfoItems(user) {
   let content = [];
@@ -217,9 +217,9 @@ export function createEditInfoItems(user) {
 
 /**
  * Function to generate the Tidbits and QAs in the InfoForm component.
- * @param {Object Array} contents - the other fields of the form that the Tidbits
+ * @param {Array.<Object>} contents - the other fields of the form that the Tidbits
  * and QAs will be added onto
- * @returns {Object Array}
+ * @returns {Array.<Object>}
  */
 export function createInfoItems(contents) {
   tidbits.map((tidbit, ind) => {
@@ -264,7 +264,7 @@ export function tidbitData(values) {
 
 /**
  * Function to match the QAs with the form the InfoForm component.
- * @param {Object} values - the values of the fields of the edit Tidbits
+ * @param {Object} values - the values of the fields of the edit QAs
  * @returns {Object}
  */
 export function QAData(values) {

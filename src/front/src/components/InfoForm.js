@@ -144,6 +144,16 @@ const InfoForm = () => {
       .catch((err) => console.error(err));
   };
 
+  /**
+   * Function to reset the image field.
+   * @memberof InfoForm
+   * @returns {void}
+   * @private
+   */
+   const resetImg = () => {
+    setImg();
+  };
+
   const contents = [
     {
       child: <Input />,
@@ -220,6 +230,7 @@ const InfoForm = () => {
       <Paragraph>Help us help you build your profile!</Paragraph>
       <InputForm
         profile={false}
+        resetImg={resetImg}
         form={form}
         onFinish={onFinish}
         contents={createInfoItems(contents)}

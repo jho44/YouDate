@@ -54,8 +54,8 @@ class MatchPool:
                 user.user_id
             )
 
-            for artist in user.top_artists:
-                self.top_artist(user.email, artist)
+            # for artist in user.top_artists:
+            #     self.top_artist(user.email, artist)
 
             if status_code != 200:
                 return new_user, status_code
@@ -251,16 +251,17 @@ class MatchPool:
     def _get_shared_artists(tx, userid_a, userid_b):
         query = (
             '''
-            MATCH (:User {user_id: $user_id})-[r:FOLLOWS]-(Artist)
-            RETURN Artist
+            MATCH (u:User {user_id: $user_id}) RETURN u
             '''
         )
         results_a = tx.run(query, user_id=userid_a)
         results_b = tx.run(query, user_id=userid_b)
 
         try:
-            top_artists_a = set([record["Artist"]["name"] for record in results_a])
-            top_artists_b = set([record["Artist"]["name"] for record in results_b])
+            artists = [record['u']['top_artists'] for record in results_a.data()]
+            top_artists_a = set([artist for artists in artists for artist in artists])
+            artists = [record['u']['top_artists'] for record in results_b.data()]
+            top_artists_b = set([artist for artists in artists for artist in artists])
             shared_artists = list(top_artists_a.intersection(top_artists_b))
             return shared_artists, 200
         except ServiceUnavailable as exception:

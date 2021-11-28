@@ -6,19 +6,7 @@ import { AuthContext } from "../Context";
 import { Person as PersonIcon } from "@mui/icons-material";
 import { Typography } from "antd";
 import { processUserInfo } from "../helpers";
-import About from "./common/About";
-import Tidbit from "./common/Tidbit";
-import QA from "./common/QA";
-import SpotifyDataBlock from "./common/SpotifyDataBlock";
-import {
-  School as SchoolIcon,
-  Search as SearchIcon,
-  Work as WorkIcon,
-  Favorite as FavoriteIcon,
-  LocationOn as LocationOnIcon,
-  AccountBalance as AccountBalanceIcon,
-  Height as HeightIcon,
-} from "@mui/icons-material";
+import MatchInfo from "./common/MatchInfo";
 
 const { Title } = Typography;
 
@@ -209,78 +197,7 @@ const Match = ({
           backgroundColor: 'black'
       }}
       >
-        <About user={matchUser} offsetY={offsetY} />
-          <div className="container">
-            <h3>Artists in Common</h3>
-            {(!matchUser || !matchUser.artists_in_common.length) && (
-              <Title level={5} style={{ color: "#dbdbdb" }}>
-                No top artists in common
-              </Title>
-            )}
-            <SpotifyDataBlock
-              user={matchUser}
-              userContent={matchUser.artists_in_common}
-              type="artist"
-            />
-
-            <h3>Songs in Common</h3>
-            {(!matchUser || !matchUser.songs_in_common.length) && (
-              <Title level={5} style={{ color: "#dbdbdb" }}>
-                No top songs in common
-              </Title>
-            )}
-            <SpotifyDataBlock
-              user={matchUser}
-              userContent={matchUser.songs_in_common}
-              type="track"
-            />
-
-            {matchUser && matchUser.tidbits && <h3>Tidbits</h3>}
-            <div className="basic-info column-flex">
-              {matchUser &&
-                matchUser.tidbits.map((tidbit, ind) => {
-                  const { key, val } = tidbit;
-                  if (val) {
-                    let component;
-                    switch (key) {
-                      case "desired_relationship":
-                        component = SearchIcon;
-                        break;
-                      case "education":
-                        component = SchoolIcon;
-                        break;
-                      case "occupation":
-                        component = WorkIcon;
-                        break;
-                      case "sexual_orientation":
-                        component = FavoriteIcon;
-                        break;
-                      case "location":
-                        component = LocationOnIcon;
-                        break;
-                      case "political_view":
-                        component = AccountBalanceIcon;
-                        break;
-                      case "height":
-                        component = HeightIcon;
-                        break;
-                      default:
-                    }
-
-                    return (
-                      <Tidbit key={ind} Component={component} content={val} />
-                    );
-                  } else return <></>;
-                })}
-            </div>
-
-            {matchUser && matchUser.QAs && <h3>QAs</h3>}
-            {matchUser &&
-              matchUser.QAs.map((qa, ind) => {
-                if (qa.A) return <QA Q={qa.Q} A={qa.A} key={ind} />;
-                else return <></>;
-              })}
-            </div>
+        <MatchInfo meet={false} user={matchUser} offsetY={offsetY} />
       </Modal>
     </div>
   );

@@ -212,7 +212,7 @@ const Meet = () => {
         </div>
       ) : (
         <>
-          <About user={unmetUser} offsetY={offsetY} />
+          <About isOffsetY={true} user={unmetUser} offsetY={offsetY} />
           <div className="container">
             <h3>Artists in Common</h3>
             {(!unmetUser || !unmetUser.artists_in_common.length) && (

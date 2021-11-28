@@ -13,26 +13,40 @@ import "../../App.css";
  * @package
  * @class
  */
-const About = ({ user, offsetY }) => {
+const About = ({ isOffsetY, user, offsetY }) => {
+  let profilePicStyle = {
+    backgroundImage: `url('${user.pic}')`,
+  };
+  let profileIconStyle = {
+    padding: 0,
+    border: "solid white",
+  };
+  let userInfoStyle = {};
+  if (isOffsetY) {
+    profilePicStyle = {
+      backgroundImage: `url('${user.pic}')`,
+      transform: `translateY(${offsetY * 0.2}px)`,
+    };
+    profileIconStyle = {
+      transform: `translateY(${offsetY * 0.2}px)`,
+      padding: 0,
+      border: "solid white",
+    };
+    userInfoStyle = { transform: `translateY(${offsetY * 0.3}px)` };
+  }
+
   return (
     <>
       <div className="pic">
         {user.pic ? (
           <div
             className="profilePhoto"
-            style={{
-              backgroundImage: `url('${user.pic}')`,
-              transform: `translateY(${offsetY * 0.2}px)`,
-            }}
+            style={profilePicStyle}
           />
         ) : (
           <div
             className="profilePhoto"
-            style={{
-              transform: `translateY(${offsetY * 0.2}px)`,
-              padding: 0,
-              border: "solid white",
-            }}
+            style={profileIconStyle}
           >
             <PersonIcon
               style={{ height: "100%", width: "100%", color: "white" }}
@@ -42,7 +56,7 @@ const About = ({ user, offsetY }) => {
 
         <div
           className="userInfo"
-          style={{ transform: `translateY(${offsetY * 0.3}px)` }}
+          style={userInfoStyle}
         >
           <div className="nameAndAge">
             <div className="name">{user.name}</div>

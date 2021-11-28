@@ -3,20 +3,10 @@ import { Descriptions, Switch, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import "../App.css";
-import Tidbit from "./common/Tidbit";
-import QA from "./common/QA";
+import EditInfo from "./common/EditInfo";
 import SpotifyDataBlock from "./common/SpotifyDataBlock";
 import { AuthContext } from "../Context";
-import {
-  School as SchoolIcon,
-  Search as SearchIcon,
-  Work as WorkIcon,
-  Favorite as FavoriteIcon,
-  LocationOn as LocationOnIcon,
-  AccountBalance as AccountBalanceIcon,
-  Height as HeightIcon,
-  Person as PersonIcon,
-} from "@mui/icons-material";
+import { Person as PersonIcon } from "@mui/icons-material";
 import { Typography } from "antd";
 
 const { Title } = Typography;
@@ -224,52 +214,8 @@ const Profile = () => {
           userContent={user.top_songs}
           type="track"
         />
-        <div className="basic-info column-flex">
-          {(!user || !user.tidbits.length) && (
-            <Title level={5} style={{ color: "#dbdbdb" }}>
-              No tidbits at this time
-            </Title>
-          )}
-          {user &&
-            user.tidbits.map((tidbit, ind) => {
-              const { key, val } = tidbit;
-              if (val) {
-                let component;
-                switch (key) {
-                  case "desired_relationship":
-                    component = SearchIcon;
-                    break;
-                  case "education":
-                    component = SchoolIcon;
-                    break;
-                  case "occupation":
-                    component = WorkIcon;
-                    break;
-                  case "sexual_orientation":
-                    component = FavoriteIcon;
-                    break;
-                  case "location":
-                    component = LocationOnIcon;
-                    break;
-                  case "political_view":
-                    component = AccountBalanceIcon;
-                    break;
-                  case "height":
-                    component = HeightIcon;
-                    break;
-                  default:
-                }
-
-                return <Tidbit key={ind} Component={component} content={val} />;
-              } else return <></>;
-            })}
-        </div>
-
-        {user.QAs.map((qa, ind) => {
-          if (qa.A) return <QA Q={qa.Q} A={qa.A} key={ind} />;
-          else return <></>;
-        })}
-
+        <h3>Edit Info</h3>
+        {user && <EditInfo />}
         <div
           className="deleteTxt"
           style={{ display: "flex", justifyContent: "space-between" }}

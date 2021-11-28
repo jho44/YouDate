@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Navbar</title>
+    <title>JSDoc: Class: ProfileModal</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Navbar</h1>
+    <h1 class="page-title">Class: ProfileModal</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Navbar<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h2>
+        <h2><span class="attribs"><span class="type-signature">(package) </span></span>ProfileModal<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="Navbar"><span class="type-signature"></span>new Navbar<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h4>
+    <h4 class="name" id="ProfileModal"><span class="type-signature">(package) </span>new ProfileModal<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h4>
     
 
     
@@ -49,8 +49,8 @@
 
 
 <div class="description">
-    <p>Navbar Component that clings to the bottom of the screen on every
-page. Takes no props.</p>
+    <p>ProfileModal sub-component used exclusively by Match subcomponent.
+Displays the modal containing the match's info.</p>
 </div>
 
 
@@ -61,6 +61,104 @@ page. Takes no props.</p>
 
 
 
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>openModal</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>whether the modal is open or not</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>closeProfile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>function for close button</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>matchUser</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>User object for match</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -94,7 +192,7 @@ page. Takes no props.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_Navbar.js.html">components/Navbar.js</a>, <a href="components_Navbar.js.html#line34">line 34</a>
+        <a href="components_Matched.js.html">components/Matched.js</a>, <a href="components_Matched.js.html#line26">line 26</a>
     </li></ul></dd>
     
 
@@ -123,8 +221,8 @@ page. Takes no props.</p>
 
         
 <div class="param-desc">
-    <p>Styled div containing 3 buttons, each of which
-lead to a different page of our app.</p>
+    <p>Styled div wrapped around the modal for the profile
+of the match.</p>
 </div>
 
 

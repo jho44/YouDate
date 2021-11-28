@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: QA</title>
+    <title>JSDoc: Class: MatchInfo</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: QA</h1>
+    <h1 class="page-title">Class: MatchInfo</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature">(package) </span></span>QA<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h2>
+        <h2><span class="attribs"><span class="type-signature">(package) </span></span>MatchInfo<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="QA"><span class="type-signature">(package) </span>new QA<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h4>
+    <h4 class="name" id="MatchInfo"><span class="type-signature">(package) </span>new MatchInfo<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h4>
     
 
     
@@ -49,8 +49,8 @@
 
 
 <div class="description">
-    <p>QA sub-component used by Meet and Profile component.
-User specified question and answer pairs.</p>
+    <p>MatchInfo sub-component used by Meet and Matched component.
+Template for displaying a match or a unmet potential match.</p>
 </div>
 
 
@@ -91,13 +91,13 @@ User specified question and answer pairs.</p>
 
         <tr>
             
-                <td class="name"><code>Q</code></td>
+                <td class="name"><code>meet</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Boolean</span>
 
 
             
@@ -107,20 +107,21 @@ User specified question and answer pairs.</p>
 
             
 
-            <td class="description last"><p>question about the user</p></td>
+            <td class="description last"><p>determines if this is for the Meet component or
+Matched component</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>A</code></td>
+                <td class="name"><code>user</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
             
@@ -130,7 +131,76 @@ User specified question and answer pairs.</p>
 
             
 
-            <td class="description last"><p>user's answer to that question</p></td>
+            <td class="description last"><p>User object</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offsetY</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>offset of Y used for formatting calcuations</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dislike</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>function to dislike a user for the Meet component</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>like</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>function to like a user for the Meet component</p></td>
         </tr>
 
     
@@ -169,7 +239,7 @@ User specified question and answer pairs.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_common_QA.js.html">components/common/QA.js</a>, <a href="components_common_QA.js.html#line15">line 15</a>
+        <a href="components_common_MatchInfo.js.html">components/common/MatchInfo.js</a>, <a href="components_common_MatchInfo.js.html#line38">line 38</a>
     </li></ul></dd>
     
 
@@ -198,7 +268,8 @@ User specified question and answer pairs.</p>
 
         
 <div class="param-desc">
-    <p>Styled div wrapped around said <code>Q</code> and <code>A</code>.</p>
+    <p>Styled div wrapped around said common artists, common songs,
+Tidbits, QAs, and like and dislike buttons (for Meet component only).</p>
 </div>
 
 

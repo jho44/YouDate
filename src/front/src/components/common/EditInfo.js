@@ -1,15 +1,10 @@
 import React, { useContext } from "react";
 import "../../App.css";
-import { Form, Input, Button, Select } from "antd";
+import { Form } from "antd";
 import { AuthContext } from "../../Context";
 import { processUserInfo } from "../../helpers";
-
-const { Item } = Form;
-const { Option } = Select;
-
-const InfoFormItem = ({ child, ...props }) => {
-  return <Item {...props}>{child}</Item>;
-};
+import { createEditInfoItems } from "./InputFormHelper";
+import InputForm from "./InputForm";
 
 /**
  * EditInfo sub-component used by Profile component.
@@ -87,156 +82,14 @@ const EditInfo = () => {
       .catch((err) => console.error(err));
   };
 
-  /**
-   * Function to reset form fields back to the original answers.
-   * @memberof EditInfo
-   * @returns {void}
-   * @private
-   */
-  const onReset = () => {
-    form.resetFields();
-  };
-
-  /**
-   * Function to generate the Tidbits and QAs items in the form.
-   * @memberof EditInfo
-   * @returns {Array}
-   * @private
-   */
-  const CreateQAs = () => {
-    let content = [];
-    user.tidbits.map((tidbit, ind) => {
-      const { key, val } = tidbit;
-      let item;
-      switch (key) {
-        case "desired_relationship":
-          item = {
-            child: (
-              <Select style={{ width: "50%" }}>
-                <Option value="casual">Go with the flow</Option>
-                <Option value="short-term">Short Term</Option>
-                <Option value="long-term">Long Term</Option>
-                <Option value="other">Other</Option>
-              </Select>
-            ),
-            name: "desired_relationship",
-            label: "Desired Relationship",
-            rules: [{ required: true }],
-          };
-          break;
-        case "education":
-          item = {
-            child: <Input />,
-            name: "education",
-            label: "Education",
-          };
-          break;
-        case "occupation":
-          item = {
-            child: <Input />,
-            name: "occupation",
-            label: "Occupation",
-          };
-          break;
-        case "sexual_orientation":
-          item = {
-            child: <Input />,
-            name: "sexual_orientation",
-            label: "Sexual Orientation",
-          };
-          break;
-        case "location":
-          item = {
-            child: <Input />,
-            name: "location",
-            label: "My Location",
-          };
-          break;
-        case "political_view":
-          item = {
-            child: (
-              <Select style={{ width: "50%" }} allowClear>
-                <Option value="anarchism">Anarchism</Option>
-                <Option value="communism">Communism</Option>
-                <Option value="conservatism">Conservatism</Option>
-                <Option value="environmentalism">Environmentalism</Option>
-                <Option value="fascism">Fascism</Option>
-                <Option value="feminism">Feminism</Option>
-                <Option value="liberalism">Liberalism</Option>
-                <Option value="nationalism">Nationalism</Option>
-                <Option value="populism">Populism</Option>
-                <Option value="socialism">Socialism</Option>
-                <Option value="other">Other</Option>
-              </Select>
-            ),
-            name: "political_view",
-            label: "Political View",
-          };
-          break;
-        case "height":
-          item = {
-            child: <Input />,
-            name: "height",
-            label: "Height",
-          };
-          break;
-        default:
-      }
-      if (val) {
-        item["initialValue"] = val;
-        item["defaultValue"] = val;
-      }
-      content.push(item);
-    });
-    user.QAs.map((QA, ind) => {
-      let itemName;
-      switch (QA.Q) {
-        case "Life goal of mine...":
-          itemName = "life_goal";
-          break;
-        case "Believe it or not, I...":
-          itemName = "believe_or_not";
-          break;
-        case "My life peaked when...":
-          itemName = "life_peaked";
-          break;
-        case "I feel famous when...":
-          itemName = "feel_famous";
-          break;
-        case "Biggest risk I've ever taken":
-          itemName = "biggest_risk";
-          break;
-        default:
-      }
-      let item = {
-        child: <Input />,
-        name: itemName,
-        label: QA.Q,
-      };
-      if (QA.A) item["initialValue"] = QA.A;
-      content.push(item);
-    });
-    return content;
-  };
-
-  let contents = CreateQAs();
-
+  let contents = createEditInfoItems(user);
   return (
-    <>
-      <Form layout="vertical" form={form} name="basic-info" onFinish={onFinish}>
-        {contents.map((content, ind) => (
-          <InfoFormItem {...content} key={ind} />
-        ))}
-        <Item className="form-btns">
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-          <Button htmlType="button" onClick={onReset}>
-            Reset
-          </Button>
-        </Item>
-      </Form>
-    </>
+    <InputForm
+      profile={true}
+      form={form}
+      onFinish={onFinish}
+      contents={contents}
+    />
   );
 };
 

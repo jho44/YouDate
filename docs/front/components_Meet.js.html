@@ -27,9 +27,10 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import React, { useState, useEffect, useContext, useCallback } from "react";
-import { Descriptions, Button, Spin } from "antd";
+import { Button, Spin } from "antd";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import "../App.css";
+import About from "./common/About";
 import Tidbit from "./common/Tidbit";
 import QA from "./common/QA";
 import SpotifyDataBlock from "./common/SpotifyDataBlock";
@@ -43,7 +44,6 @@ import {
   LocationOn as LocationOnIcon,
   AccountBalance as AccountBalanceIcon,
   Height as HeightIcon,
-  Person as PersonIcon,
 } from "@mui/icons-material";
 import { Typography } from "antd";
 
@@ -225,7 +225,6 @@ const Meet = () => {
         }
       });
   }
-
   return (
     &lt;>
       {loading ? (
@@ -241,51 +240,8 @@ const Meet = () => {
         &lt;/div>
       ) : (
         &lt;>
-          {unmetUser.pic ? (
-            &lt;div
-              className="profilePhoto"
-              style={{
-                backgroundImage: `url('${unmetUser.pic}')`,
-                transform: `translateY(${offsetY * 0.25}px)`,
-              }}
-            />
-          ) : (
-            &lt;div
-              className="profilePhoto"
-              style={{
-                transform: `translateY(${offsetY * 0.25}px)`,
-                padding: 0,
-                border: "solid white",
-              }}
-            >
-              &lt;PersonIcon
-                style={{ height: "100%", width: "100%", color: "white" }}
-              />
-            &lt;/div>
-          )}
-
-          &lt;div
-            className="userName"
-            style={{ transform: `translateY(${offsetY * 0.4}px)` }}
-          >
-            &lt;Descriptions
-              title={`${unmetUser.name} (${unmetUser.pronouns})`}
-              labelStyle={{ color: "white" }}
-              contentStyle={{ color: "white" }}
-              extra={&lt;span className="extra">{unmetUser.age}&lt;/span>}
-            />
-          &lt;/div>
-
+          &lt;About user={unmetUser} offsetY={offsetY} />
           &lt;div className="container">
-            &lt;Descriptions.Item label="">
-              &lt;h2
-                className="description"
-                style={{ transform: `translateY(${offsetY * 0.4}px)` }}
-              >
-                {unmetUser.description}
-              &lt;/h2>
-            &lt;/Descriptions.Item>
-
             &lt;h3>Artists in Common&lt;/h3>
             {(!unmetUser || !unmetUser.artists_in_common.length) &amp;&amp; (
               &lt;Title level={5} style={{ color: "#dbdbdb" }}>
@@ -310,6 +266,7 @@ const Meet = () => {
               type="track"
             />
 
+            {unmetUser &amp;&amp; unmetUser.tidbits &amp;&amp; &lt;h3>Tidbits&lt;/h3>}
             &lt;div className="basic-info column-flex">
               {unmetUser &amp;&amp;
                 unmetUser.tidbits.map((tidbit, ind) => {
@@ -348,10 +305,12 @@ const Meet = () => {
                 })}
             &lt;/div>
 
-            {unmetUser.QAs.map((qa, ind) => {
-              if (qa.A) return &lt;QA Q={qa.Q} A={qa.A} key={ind} />;
-              else return &lt;>&lt;/>;
-            })}
+            {unmetUser &amp;&amp; unmetUser.QAs &amp;&amp; &lt;h3>QAs&lt;/h3>}
+            {unmetUser &amp;&amp;
+              unmetUser.QAs.map((qa, ind) => {
+                if (qa.A) return &lt;QA Q={qa.Q} A={qa.A} key={ind} />;
+                else return &lt;>&lt;/>;
+              })}
 
             &lt;div
               style={{
@@ -404,13 +363,13 @@ export default Meet;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContextProvider.html">ContextProvider</a></li><li><a href="EditInfo.html">EditInfo</a></li><li><a href="InfoForm.html">InfoForm</a></li><li><a href="InputForm.html">InputForm</a></li><li><a href="Landing.html">Landing</a></li><li><a href="Match.html">Match</a></li><li><a href="Matched.html">Matched</a></li><li><a href="Meet.html">Meet</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="NavbarBtn.html">NavbarBtn</a></li><li><a href="NotFound.html">NotFound</a></li><li><a href="PrivateRoute.html">PrivateRoute</a></li><li><a href="Profile.html">Profile</a></li><li><a href="QA.html">QA</a></li><li><a href="SpotifyDataBlock.html">SpotifyDataBlock</a></li><li><a href="Tidbit.html">Tidbit</a></li></ul><h3>Global</h3><ul><li><a href="global.html#beforeUpload">beforeUpload</a></li><li><a href="global.html#createEditInfoItems">createEditInfoItems</a></li><li><a href="global.html#createInfoItems">createInfoItems</a></li><li><a href="global.html#factsData">factsData</a></li><li><a href="global.html#getBase64">getBase64</a></li><li><a href="global.html#processUserInfo">processUserInfo</a></li><li><a href="global.html#QAData">QAData</a></li><li><a href="global.html#tidbitData">tidbitData</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="About.html">About</a></li><li><a href="App.html">App</a></li><li><a href="ContextProvider.html">ContextProvider</a></li><li><a href="EditInfo.html">EditInfo</a></li><li><a href="InfoForm.html">InfoForm</a></li><li><a href="InputForm.html">InputForm</a></li><li><a href="Landing.html">Landing</a></li><li><a href="Match.html">Match</a></li><li><a href="Matched.html">Matched</a></li><li><a href="Meet.html">Meet</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="NavbarBtn.html">NavbarBtn</a></li><li><a href="NotFound.html">NotFound</a></li><li><a href="PrivateRoute.html">PrivateRoute</a></li><li><a href="Profile.html">Profile</a></li><li><a href="QA.html">QA</a></li><li><a href="SpotifyDataBlock.html">SpotifyDataBlock</a></li><li><a href="Tidbit.html">Tidbit</a></li></ul><h3>Global</h3><ul><li><a href="global.html#beforeUpload">beforeUpload</a></li><li><a href="global.html#createEditInfoItems">createEditInfoItems</a></li><li><a href="global.html#createInfoItems">createInfoItems</a></li><li><a href="global.html#factsData">factsData</a></li><li><a href="global.html#getBase64">getBase64</a></li><li><a href="global.html#processUserInfo">processUserInfo</a></li><li><a href="global.html#QAData">QAData</a></li><li><a href="global.html#tidbitData">tidbitData</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Nov 28 2021 09:28:20 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Nov 28 2021 15:51:56 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: fileUpload.js</title>
+    <title>JSDoc: Source: components/common/About.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: fileUpload.js</h1>
+    <h1 class="page-title">Source: components/common/About.js</h1>
 
     
 
@@ -26,42 +26,69 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { message } from "antd";
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { Person as PersonIcon } from "@mui/icons-material";
+import "../../App.css";
 
 /**
- * Function to turn File into base64 string then pass control to
- * callback. Taken from Ant Design's docs.
- * @param {File} img - The new image user's trying to upload.
- * @param {Function} callback - Function to run after FileReader has
- * loaded the `img` successfully.
- * @returns {void}
+ * About sub-component used by Meet and Profile component.
+ * Used to create the about section
+ * (name, pronouns, age, picture, etc) of an user.
+ *
+ * @returns {HTML} Styled div wrapped around the name, pronouns,
+ * age, an picture of an user.
+ *
+ * @package
+ * @class
  */
-export function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
+const About = ({ user, offsetY }) => {
+  return (
+    &lt;>
+      &lt;div className="pic">
+        {user.pic ? (
+          &lt;div
+            className="profilePhoto"
+            style={{
+              backgroundImage: `url('${user.pic}')`,
+              transform: `translateY(${offsetY * 0.2}px)`,
+            }}
+          />
+        ) : (
+          &lt;div
+            className="profilePhoto"
+            style={{
+              transform: `translateY(${offsetY * 0.2}px)`,
+              padding: 0,
+              border: "solid white",
+            }}
+          >
+            &lt;PersonIcon
+              style={{ height: "100%", width: "100%", color: "white" }}
+            />
+          &lt;/div>
+        )}
 
-/**
- * Function to ensure uploaded image's type is jpeg/png and smaller than 2MB.
- * Mostly taken from Ant Design's docs.
- * @param {File} file - The new image user's trying to upload.
- * @param {Function} callback - Function that sets state in caller with whether or not the newly uploaded image is valid.
- * @returns {Boolean} - Always returns `false` because we want to handle uploads manually.
- */
-export function beforeUpload(file, callback) {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-  if (!isJpgOrPng) {
-    message.error("You can only upload JPG/PNG file!");
-  }
-  const isLt2M = file.size / 1024 / 1024 &lt; 2;
-  if (!isLt2M) {
-    message.error("Image must smaller than 2MB!");
-  }
+        &lt;div
+          className="userInfo"
+          style={{ transform: `translateY(${offsetY * 0.3}px)` }}
+        >
+          &lt;div className="nameAndAge">
+            &lt;div className="name">{user.name}&lt;/div>
+            &lt;div className="age">{user.age}&lt;/div>
+          &lt;/div>
 
-  callback(isJpgOrPng &amp;&amp; isLt2M);
-  return false;
-}
+          &lt;div className="pronouns">({user.pronouns})&lt;/div>
+
+          &lt;div className="userDescription">
+            {user.description &amp;&amp; user.description.replace(/\\'/g, "'")}
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+    &lt;/>
+  );
+};
+
+export default About;
 </code></pre>
         </article>
     </section>

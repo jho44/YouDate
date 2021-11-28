@@ -74,7 +74,7 @@ body {
 /**
 * Changed font-size from 1.5vw to a new method to
 * calculate font size based on the link:
-* https://css-tricks.com/font-size-viewport-units/ 
+* https://css-tricks.com/font-size-viewport-units/
 * 1.5vw was too small for mobile
 */
 h2,
@@ -164,97 +164,92 @@ h2 {
   }
 }
 
-@media screen and (min-width: 320px) {
+/* Phone screens in portrait view */
+@media screen and (max-width: 768px) {
   .profilePhoto {
-    height: 12vh;
-    width: 12vh;
+    height: 13vh;
+    width: 13vh;
     border-radius: 50%;
-    float: left;
-    padding: 50px;
-    margin-left: 3%;
+    margin-top: 5%;
   }
 
-  .ant-descriptions-title {
-    color: white;
-    font-size: 16px;
-    position: absolute;
-    top: 3%;
-    left: 28%;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
+  .photo {
+    height: 13vh;
+    width: 13vh;
+    border-radius: 50%;
   }
 
-  .extra {
-    position: absolute;
-    top: 15%;
-    left: 25.5%;
-    right: 0;
-    bottom: 0%;
-    padding: 3px 8px;
+  .userInfo {
+    display: grid;
+    grid-template-rows: 30px 30px 30px;
+    font-size: calc(10px + 1.7vmin);
+    font-family: "gothambold";
     color: white;
-    z-index: 1;
-    font-size: 15px;
+    padding-left: 5%;
+    padding-top: 5%;
   }
 
-  .container h2 {
-    position: absolute;
-    top: 11%;
-    left: 32%;
-    right: 0;
-    bottom: 0%;
-    color: white;
-    font-size: 14px;
+  .container {
+    display: flex;
+    flex-direction: column;
   }
 
   .container h3,
   h2 {
     color: #e8bffb;
     font-family: "gothambold";
-    font-size: 16px;
+    font-size: calc(10px + 1.7vmin);
+  }
+
+  .container span,
+  .deleteTxt p {
+    font-size: calc(10px + 0.5vmin);
   }
 }
 
-@media screen and (min-width: 1390px) {
-  .ant-descriptions-title {
-    color: white;
-    font-size: 30px;
-    position: absolute;
-    top: 15%;
-    left: 45%;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
-  }
-
-  .extra {
-    position: absolute;
-    top: 30%;
-    left: 44.5%;
-    right: 0;
-    bottom: 0%;
-    padding: 3px 8px;
-    color: white;
-    z-index: 1;
-    font-size: 30px;
-  }
-
-  .container h2 {
-    position: absolute;
-    top: 33%;
-    left: 45.5%;
-    right: 0;
-    bottom: 0%;
-    color: white;
-    font-size: 20px;
-  }
-
+/* Larger screens like laptops */
+@media screen and (min-width: 768px) {
   .profilePhoto {
-    height: 45vh;
-    width: 45vh;
+    height: 35vh;
+    width: 35vh;
     border-radius: 50%;
-    float: left;
-    padding: 50px;
-    margin-left: 20%;
+    margin-top: 5%;
+  }
+
+  .photo {
+    height: 20vh;
+    width: 20vh;
+    border-radius: 50%;
+  }
+
+  .userInfo {
+    display: grid;
+    grid-template-rows: 60px 60px 60px;
+    font-size: calc(10px + 2vmin);
+    font-family: "gothambold";
+    color: white;
+    padding-left: 5%;
+    padding-top: 7%;
+  }
+
+  .pic {
+    display: flex;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container h3,
+  h2 {
+    color: #e8bffb;
+    font-family: "gothambold";
+    font-size: calc(10px + 1.7vmin);
+  }
+
+  .container span,
+  .deleteTxt p {
+    font-size: calc(10px + 1vmin);
   }
 }

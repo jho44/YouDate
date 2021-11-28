@@ -5,6 +5,20 @@ import "../App.css";
 import { AuthContext } from "../Context";
 import { Person as PersonIcon } from "@mui/icons-material";
 import { Typography } from "antd";
+import { processUserInfo } from "../helpers";
+import About from "./common/About";
+import Tidbit from "./common/Tidbit";
+import QA from "./common/QA";
+import SpotifyDataBlock from "./common/SpotifyDataBlock";
+import {
+  School as SchoolIcon,
+  Search as SearchIcon,
+  Work as WorkIcon,
+  Favorite as FavoriteIcon,
+  LocationOn as LocationOnIcon,
+  AccountBalance as AccountBalanceIcon,
+  Height as HeightIcon,
+} from "@mui/icons-material";
 
 const { Title } = Typography;
 
@@ -28,6 +42,7 @@ const Match = ({
   name,
   contact,
   setMatchList,
+  matchUser,
 }) => {
   const {
     /**
@@ -38,6 +53,31 @@ const Match = ({
     user,
   } = useContext(AuthContext);
 
+  /**
+   * @typedef {Boolean} openModal
+   * @description (Private) state variable controlling whether the
+   * Display Match Profile modal should be open.
+   * @memberof Profile
+   */
+  /**
+   * @typedef {Function} setOpenModal
+   * @param {Boolean} newState - If `false`, Display Match Profile 
+   * modal should be closed.
+   * If `true`, modal should be open.
+   * @description Sets `openModal` to `newState`
+   * @returns {void}
+   * @memberof Profile
+   * @private
+   */
+   const [openModal, setOpenModal] = useState(false);
+
+   const [offsetY, setOffsetY] = useState(0);
+   const handleScroll = () => setOffsetY(window.pageYOffset);
+   useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   /**
    * Function to open Delete Match Confirmation modal. Includes
    * `OnOK()`.
@@ -85,6 +125,33 @@ const Match = ({
     });
   }
 
+  /**
+   * Function to open Delete Match Confirmation modal. Includes
+   * `OnOK()`.
+   *
+   * @returns {void}
+   */
+   function showProfile() {
+    setOpenModal(true);
+  }
+
+  /**
+   * Function to open Delete Match Confirmation modal. Includes
+   * `OnOK()`.
+   *
+   * @returns {void}
+   */
+   function closeProfile() {
+    setOpenModal(false);
+  }
+
+  matchUser = processUserInfo(matchUser);
+  matchUser.artists_in_common = user.top_artists.filter((artist) =>
+    matchUser.top_artists.includes(artist)
+  );
+  matchUser.songs_in_common = user.top_songs.filter((song) =>
+    matchUser.top_songs.includes(song)
+  );
   return (
     <div
       data-testid="match"
@@ -103,11 +170,19 @@ const Match = ({
           alignItems: "center",
         }}
       >
-        {imgPath ? (
-          <Avatar src={imgPath} size={85} />
-        ) : (
-          <PersonIcon style={{ color: "white" }} />
-        )}
+        <div onClick={showProfile}>
+          {imgPath ? (
+            <Avatar 
+              src={imgPath} 
+              size={{ xs: 50, sm: 70, md: 90, lg: 110, xl: 130, xxl: 150 }}
+              />
+          ) : (
+            <Avatar 
+              icon={<PersonIcon />}
+              size={{ xs: 50, sm: 70, md: 90, lg: 110, xl: 130, xxl: 150 }}
+              />
+          )}
+        </div>
         <div style={{ marginLeft: "1rem", marginRight: "1rem" }}>
           <h4>{name}</h4>
           <span>{contact}</span>
@@ -123,6 +198,90 @@ const Match = ({
           button-testid={`delete-match-${index}`}
         />
       </div>
+      <Modal
+        visible={openModal}
+        footer={[
+          <Button key="back" onClick={closeProfile}>
+            Close
+          </Button>,
+        ]}
+        style={{
+          backgroundColor: 'black'
+      }}
+      >
+        <About user={matchUser} offsetY={offsetY} />
+          <div className="container">
+            <h3>Artists in Common</h3>
+            {(!matchUser || !matchUser.artists_in_common.length) && (
+              <Title level={5} style={{ color: "#dbdbdb" }}>
+                No top artists in common
+              </Title>
+            )}
+            <SpotifyDataBlock
+              user={matchUser}
+              userContent={matchUser.artists_in_common}
+              type="artist"
+            />
+
+            <h3>Songs in Common</h3>
+            {(!matchUser || !matchUser.songs_in_common.length) && (
+              <Title level={5} style={{ color: "#dbdbdb" }}>
+                No top songs in common
+              </Title>
+            )}
+            <SpotifyDataBlock
+              user={matchUser}
+              userContent={matchUser.songs_in_common}
+              type="track"
+            />
+
+            {matchUser && matchUser.tidbits && <h3>Tidbits</h3>}
+            <div className="basic-info column-flex">
+              {matchUser &&
+                matchUser.tidbits.map((tidbit, ind) => {
+                  const { key, val } = tidbit;
+                  if (val) {
+                    let component;
+                    switch (key) {
+                      case "desired_relationship":
+                        component = SearchIcon;
+                        break;
+                      case "education":
+                        component = SchoolIcon;
+                        break;
+                      case "occupation":
+                        component = WorkIcon;
+                        break;
+                      case "sexual_orientation":
+                        component = FavoriteIcon;
+                        break;
+                      case "location":
+                        component = LocationOnIcon;
+                        break;
+                      case "political_view":
+                        component = AccountBalanceIcon;
+                        break;
+                      case "height":
+                        component = HeightIcon;
+                        break;
+                      default:
+                    }
+
+                    return (
+                      <Tidbit key={ind} Component={component} content={val} />
+                    );
+                  } else return <></>;
+                })}
+            </div>
+
+            {matchUser && matchUser.QAs && <h3>QAs</h3>}
+            {matchUser &&
+              matchUser.QAs.map((qa, ind) => {
+                if (qa.A) return <QA Q={qa.Q} A={qa.A} key={ind} />;
+                else return <></>;
+              })}
+            </div>
+      </Modal>
     </div>
   );
 };
@@ -176,6 +335,7 @@ const Matched = () => {
                   imgPath={item.pic}
                   name={item.name}
                   contact={item.email}
+                  matchUser={item}
                 />
               );
             })

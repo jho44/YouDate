@@ -10,7 +10,8 @@ const { Option } = Select;
  */
 
 /**
- * Function to create an user object.
+ * Function to process an user object into the proper form for
+ * Tidbits and QAs.
  * @param {Object} user - the user that is being processed
  * @returns {Object}
  */

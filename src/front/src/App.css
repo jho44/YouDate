@@ -82,6 +82,11 @@ body {
   margin-left: 1rem;
 }
 
+.ant-modal-body, 
+.ant-modal-footer {
+  background-color: linear-gradient(#8a65be, black);
+}
+
 /**
 * Changed font-size from 1.5vw to a new method to
 * calculate font size based on the link:

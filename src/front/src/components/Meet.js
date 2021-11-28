@@ -100,7 +100,6 @@ const Meet = () => {
    * Function for fetching next batch of unmet users from our backend.
    */
   const getNextUser = useCallback(() => {
-    console.log("here");
     setLoading(true);
     // get more unmet users
     fetch(`http://localhost:8000/getUnmet?email=${user.email}`)
@@ -198,7 +197,6 @@ const Meet = () => {
         }
       });
   }
-  console.log(unmetUser);
   return (
     <>
       {loading ? (

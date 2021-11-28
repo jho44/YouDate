@@ -70,7 +70,7 @@ const PrivateRoute = ({ children }) => {
         top_artists: [],
         top_songs: [],
         life_goal: "fake life goal",
-        believe_it_or_not: "fake believe it or not",
+        believe_or_not: "fake believe it or not",
         life_peaked: "fake life peaked",
         feel_famous: "fake feel famous",
         biggest_risk: "fake biggest risk",

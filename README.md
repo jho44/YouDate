@@ -50,7 +50,7 @@ login with the following information.
     top_artists: [],
     top_songs: [],
     life_goal: "fake life goal",
-    believe_it_or_not: "fake believe it or not",
+    believe_or_not: "fake believe it or not",
     life_peaked: "fake life peaked",
     feel_famous: "fake feel famous",
     biggest_risk: "fake biggest risk",
@@ -83,9 +83,9 @@ so something shows on the Matched page.
 - Profile page renders
     1. check that fake user's name, pronouns, age, description,
     artists, and songs rendered.
-    2. check that tidbits and tidbits' corresponding icons
-    rendered.
-    3. check that QAs rendered.
+    2. check that input fields for tidbits and QAs rendered.
+    3. check that Submit and Reset buttons rendered (for edit info form)
+    4. check that Logout button rendered
 
 - Toggle Delete Account Confirmation modal open
     1. click on the "Delete Account" button/switch

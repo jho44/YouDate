@@ -12,53 +12,51 @@ describe("Profile Page", () => {
     cy.contains("No favorite artists at this time");
     cy.contains("No favorite songs at this time");
 
-    const icons = [
-      "SearchIcon",
-      "SchoolIcon",
-      "WorkIcon",
-      "FavoriteIcon",
-      "LocationOnIcon",
-      "AccountBalanceIcon",
-      "HeightIcon",
-    ];
-    const iconContents = [
-      "Other",
+    const textContents = [
       "fake education",
       "fake occupation",
       "fake sexual orientation",
       "fake location",
-      "fake political view",
       "fake height",
+      "fake life goal",
+      "fake believe it or not",
+      "fake life peaked",
+      "fake feel famous",
+      "fake biggest risk",
     ];
-    let genArr = Array.from({ length: icons.length }, (v, k) => k + 1);
-    cy.wrap(genArr).each((index) => {
-      cy.get(`[data-testid="${icons[index - 1]}"]`);
-      cy.contains(iconContents[index - 1]);
+
+    const selectContents = ["Other", "fake political view"];
+
+    // have to handle "Other" and "Political View" separately since
+    // they're select inputs rather than text inputs
+    cy.get(".ant-select-selection-item").each((el, ind) => {
+      cy.wrap(el).should("have.attr", "title", selectContents[ind]);
+    });
+    cy.get('input[type="text"]').each((el, ind) => {
+      cy.wrap(el).should("have.value", textContents[ind]);
     });
 
-    const qas = [
-      {
-        Q: "Life goal of mine",
-        A: "fake life goal",
-      },
-      {
-        Q: "My life peaked when...",
-        A: "fake life peaked",
-      },
-      {
-        Q: "I feel famous when...",
-        A: "fake feel famous",
-      },
-      {
-        Q: "Biggest risk I've ever taken",
-        A: "fake biggest risk",
-      },
+    const labels = [
+      "Desired Relationship",
+      "Education",
+      "Occupation",
+      "Sexual Orientation",
+      "My Location",
+      "Political View",
+      "Height",
+      "Life goal of mine...",
+      "Believe it or not, I...",
+      "My life peaked when...",
+      "I feel famous when...",
+      "Biggest risk I've ever taken",
     ];
-    genArr = Array.from({ length: qas.length }, (v, k) => k + 1);
-    cy.wrap(genArr).each((index) => {
-      cy.contains(qas[index - 1]["Q"]);
-      cy.contains(qas[index - 1]["A"]);
+    cy.get("label").each((el, ind) => {
+      cy.wrap(el).should("have.attr", "title", labels[ind]);
     });
+
+    cy.contains("Submit");
+    cy.contains("Reset");
+    cy.contains("Logout");
   });
 
   it("Toggle Delete Account Confirmation modal open", () => {

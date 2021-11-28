@@ -231,3 +231,49 @@ export function createInfoItems(contents) {
   });
   return contents;
 }
+
+/**
+ * Function to match the Tidbits and QAs with the form onFinish 
+ * in the EditInfo subcomponent.
+ * @param {Object} values - the values of the fields of the edit Tidbits 
+ * and QAs form
+ * @returns {Object}
+ */
+ export function factsData(values) {
+  return {
+    ...tidbitData(values),
+    ...QAData(values),
+  };
+}
+
+/**
+ * Function to match the Tidbits with the form in the InfoForm component.
+ * @param {Object} values - the values of the fields of the edit Tidbits
+ * @returns {Object}
+ */
+ export function tidbitData(values) {
+  return {
+    desired_relationship: values.desired_relationship || null,
+    education: values.education || null,
+    occupation: values.occupation || null,
+    sexual_orientation: values.sexual_orientation || null,
+    location: values.location || null,
+    political_view: values.political_view || null,
+    height: values.height || null,
+  };
+}
+
+/**
+ * Function to match the QAs with the form the InfoForm component.
+ * @param {Object} values - the values of the fields of the edit Tidbits 
+ * @returns {Object}
+ */
+ export function QAData(values) {
+  return {
+    life_goal: values.life_goal || null,
+    believe_or_not: values.believe_or_not || null,
+    life_peaked: values.life_peaked || null,
+    feel_famous: values.feel_famous || null,
+    biggest_risk: values.biggest_risk || null,
+  }
+}

@@ -6,7 +6,7 @@ import "../App.css";
 import { AuthContext } from "../Context";
 import { useNavigate } from "react-router-dom";
 import { processUserInfo } from "../helpers";
-import { createInfoItems } from "./common/InputFormHelper";
+import { createInfoItems, tidbitData, QAData } from "./common/InputFormHelper";
 import InputForm from "./common/InputForm";
 
 const { Title, Paragraph } = Typography;
@@ -117,22 +117,8 @@ const InfoForm = () => {
       birth_month: values.birth_month._d,
       description: values.description,
       pic: img,
-      qas: {
-        life_goal: values.life_goal || null,
-        believe_or_not: values.believe_or_not || null,
-        life_peaked: values.life_peaked || null,
-        feel_famous: values.feel_famous || null,
-        biggest_risk: values.biggest_risk || null,
-      },
-      tidbits: {
-        desired_relationship: values.desired_relationship || null,
-        education: values.education || null,
-        occupation: values.occupation || null,
-        sexual_orientation: values.sexual_orientation || null,
-        location: values.location || null,
-        political_view: values.political_view || null,
-        height: values.height || null,
-      },
+      qas: QAData(values),
+      tidbits: tidbitData(values),
       access_token: tokens.accessToken,
       refresh_token: tokens.refreshToken,
     };

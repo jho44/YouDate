@@ -20,7 +20,15 @@ const { Title } = Typography;
  * @package
  * @class
  */
-const Match = ({ user_id, index, imgPath, name, contact, setMatchList }) => {
+const Match = ({
+  matchList,
+  user_id,
+  index,
+  imgPath,
+  name,
+  contact,
+  setMatchList,
+}) => {
   const {
     /**
      * `ContextProvider` state of logged-in user's info.
@@ -68,10 +76,10 @@ const Match = ({ user_id, index, imgPath, name, contact, setMatchList }) => {
               );
 
             // get rid of this user from matchList
-            setMatchList((matchList) => {
-              matchList.splice(index, 1);
-              return matchList;
-            });
+            const newList = [...matchList];
+            newList.splice(index, 1);
+
+            setMatchList(newList);
           });
       },
     });
@@ -128,7 +136,27 @@ const Match = ({ user_id, index, imgPath, name, contact, setMatchList }) => {
  * @class
  */
 const Matched = () => {
-  const { user } = useContext(AuthContext);
+  const {
+    /**
+     * `ContextProvider` state of logged-in user's info.
+     * @type {Object}
+     * @memberof Matched
+     */
+    user,
+  } = useContext(AuthContext);
+
+  /**
+   * @description The list of people the current user's in mutual like with.
+   * @typedef {Array} matchList
+   * @memberof Matched
+   */
+  /**
+   * @typedef {Function} setMatchList
+   * @param {Object} newState - The new list of people the current
+   * user's in mutual like with. Used when deleting a match.
+   * @returns {void}
+   * @memberof Matched
+   */
   const [matchList, setMatchList] = useState([]);
 
   useEffect(() => {
@@ -140,7 +168,8 @@ const Matched = () => {
             data[0].map((item, index) => {
               return (
                 <Match
-                  setMatchList={setMatchList}
+                  matchList={matchList}
+                  setMatchList={handleChange}
                   key={index}
                   index={index}
                   user_id={item.user_id}
@@ -154,7 +183,11 @@ const Matched = () => {
         }
       })
       .catch((err) => console.error(err));
-  }, [user.email, matchList]);
+  }, [user.email, matchList.length]);
+
+  function handleChange(list) {
+    setMatchList(list);
+  }
 
   return (
     <div className="container" style={{ margin: "1rem" }}>

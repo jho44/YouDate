@@ -69,7 +69,15 @@ const Meet = () => {
   const [offsetY, setOffsetY] = useState(0);
 
   /**
-   *
+   * @description The unmet user at `unmetListInd` of `unmetList`.
+   * @typedef {Object} unmetUser
+   * @memberof Meet
+   */
+  /**
+   * @typedef {Function} setUnmetUser
+   * @param {Object} newState - The next unmet user on `unmetList`.
+   * @returns {void}
+   * @memberof Meet
    */
   const [unmetUser, setUnmetUser] = useState({
     user_id: "",
@@ -88,6 +96,9 @@ const Meet = () => {
   const [loading, setLoading] = useState(true);
   const handleScroll = () => setOffsetY(window.pageYOffset);
 
+  /**
+   * Function for fetching next batch of unmet users from our backend.
+   */
   const getNextUser = useCallback(() => {
     setLoading(true);
     // get more unmet users

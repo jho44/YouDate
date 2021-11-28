@@ -50,7 +50,40 @@ const PrivateRoute = ({ children }) => {
   useEffect(() => {
     const code = new URLSearchParams(location.search).get("code");
     let localToken = null;
-    if (tokens === null && code) {
+    if (
+      tokens === null &&
+      process.env.REACT_APP_ENVIRONMENT &&
+      process.env.REACT_APP_ENVIRONMENT === "test"
+    ) {
+      setTokens({
+        access_token: "fake_token",
+        refresh_token: "fake_token",
+      });
+      const user = processUserInfo({
+        user_id: "fake_test_user_id",
+        email: "fakeemail@fake.com",
+        pic: null,
+        name: "Fake User",
+        pronouns: "fake pronouns",
+        age: 0,
+        description: "fake description",
+        top_artists: [],
+        top_songs: [],
+        life_goal: "fake life goal",
+        believe_it_or_not: "fake believe it or not",
+        life_peaked: "fake life peaked",
+        feel_famous: "fake feel famous",
+        biggest_risk: "fake biggest risk",
+        desired_relationship: "Other",
+        education: "fake education",
+        occupation: "fake occupation",
+        sexual_orientation: "fake sexual orientation",
+        location: "fake location",
+        political_view: "fake political view",
+        height: "fake height",
+      });
+      setUser(user);
+    } else if (tokens === null && code) {
       fetch(
         `http://localhost:8000/accessToken?code=${code}&redirect=http://localhost:3000${location.pathname}`
       )

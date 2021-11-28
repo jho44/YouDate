@@ -94,14 +94,16 @@ export function processUserInfo(user) {
     delete datifyUser[tidbit];
   }
 
-  const today = new Date();
-  let age =
-    today.getFullYear() - datifyUser.birth_month._DateTime__date._Date__year;
-  const m =
-    today.getMonth() - datifyUser.birth_month._DateTime__date._Date__month;
-  if (m < 0) age--;
+  if (!process.env.REACT_APP_ENVIRONMENT) {
+    const today = new Date();
+    let age =
+      today.getFullYear() - datifyUser.birth_month._DateTime__date._Date__year;
+    const m =
+      today.getMonth() - datifyUser.birth_month._DateTime__date._Date__month;
+    if (m < 0) age--;
+    datifyUser["age"] = age;
+  }
 
-  datifyUser["age"] = age;
   return datifyUser;
 }
 

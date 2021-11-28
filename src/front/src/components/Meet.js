@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { Descriptions, Button, Spin } from "antd";
+import { Button, Spin } from "antd";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import "../App.css";
+import About from "./common/About";
 import Tidbit from "./common/Tidbit";
 import QA from "./common/QA";
 import SpotifyDataBlock from "./common/SpotifyDataBlock";
@@ -15,7 +16,6 @@ import {
   LocationOn as LocationOnIcon,
   AccountBalance as AccountBalanceIcon,
   Height as HeightIcon,
-  Person as PersonIcon,
 } from "@mui/icons-material";
 import { Typography } from "antd";
 
@@ -197,7 +197,6 @@ const Meet = () => {
         }
       });
   }
-
   return (
     <>
       {loading ? (
@@ -213,51 +212,8 @@ const Meet = () => {
         </div>
       ) : (
         <>
-          {unmetUser.pic ? (
-            <div
-              className="profilePhoto"
-              style={{
-                backgroundImage: `url('${unmetUser.pic}')`,
-                transform: `translateY(${offsetY * 0.25}px)`,
-              }}
-            />
-          ) : (
-            <div
-              className="profilePhoto"
-              style={{
-                transform: `translateY(${offsetY * 0.25}px)`,
-                padding: 0,
-                border: "solid white",
-              }}
-            >
-              <PersonIcon
-                style={{ height: "100%", width: "100%", color: "white" }}
-              />
-            </div>
-          )}
-
-          <div
-            className="userName"
-            style={{ transform: `translateY(${offsetY * 0.4}px)` }}
-          >
-            <Descriptions
-              title={`${unmetUser.name} (${unmetUser.pronouns})`}
-              labelStyle={{ color: "white" }}
-              contentStyle={{ color: "white" }}
-              extra={<span className="extra">{unmetUser.age}</span>}
-            />
-          </div>
-
+          <About user={unmetUser} offsetY={offsetY} />
           <div className="container">
-            <Descriptions.Item label="">
-              <h2
-                className="description"
-                style={{ transform: `translateY(${offsetY * 0.4}px)` }}
-              >
-                {unmetUser.description}
-              </h2>
-            </Descriptions.Item>
-
             <h3>Artists in Common</h3>
             {(!unmetUser || !unmetUser.artists_in_common.length) && (
               <Title level={5} style={{ color: "#dbdbdb" }}>
@@ -282,6 +238,7 @@ const Meet = () => {
               type="track"
             />
 
+            {unmetUser && unmetUser.tidbits && <h3>Tidbits</h3>}
             <div className="basic-info column-flex">
               {unmetUser &&
                 unmetUser.tidbits.map((tidbit, ind) => {
@@ -320,10 +277,12 @@ const Meet = () => {
                 })}
             </div>
 
-            {unmetUser.QAs.map((qa, ind) => {
-              if (qa.A) return <QA Q={qa.Q} A={qa.A} key={ind} />;
-              else return <></>;
-            })}
+            {unmetUser && unmetUser.QAs && <h3>QAs</h3>}
+            {unmetUser &&
+              unmetUser.QAs.map((qa, ind) => {
+                if (qa.A) return <QA Q={qa.Q} A={qa.A} key={ind} />;
+                else return <></>;
+              })}
 
             <div
               style={{

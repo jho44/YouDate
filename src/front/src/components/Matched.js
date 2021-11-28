@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Modal, Button, Avatar } from "antd";
+import { Modal, Button } from "antd";
 import { ExclamationCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import "../App.css";
 import { AuthContext } from "../Context";
@@ -196,11 +196,7 @@ const Match = ({
       >
         <div onClick={showProfile}>
           {imgPath ? (
-            <img
-              className="matchPhoto"
-              src={imgPath}
-              alt="pfp"
-            />
+            <img className="matchPhoto" src={imgPath} alt="pfp" />
           ) : (
             <div
               className="matchPhoto"

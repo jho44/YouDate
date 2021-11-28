@@ -162,49 +162,43 @@ const Profile = () => {
 
   return (
     <>
-      {user.pic ? (
-        <div
-          className="profilePhoto"
-          style={{
-            backgroundImage: `url('${user.pic}')`,
-            transform: `translateY(${offsetY * 0.25}px)`,
-          }}
-        />
-      ) : (
-        <div
-          className="profilePhoto"
-          style={{
-            transform: `translateY(${offsetY * 0.25}px)`,
-            padding: 0,
-            border: "solid white",
-          }}
-        >
-          <PersonIcon
-            style={{ height: "100%", width: "100%", color: "white" }}
+      <div className="pic">
+        {user.pic ? (
+          <div
+            className="profilePhoto"
+            style={{
+              backgroundImage: `url('${user.pic}')`,
+              transform: `translateY(${offsetY * 0.2}px)`,
+            }}
           />
-        </div>
-      )}
-      <div
-        className="userName"
-        style={{ transform: `translateY(${offsetY * 0.4}px)` }}
-      >
-        <Descriptions
-          title={`${user.name} (${user.pronouns})`}
-          labelStyle={{ color: "white" }}
-          contentStyle={{ color: "white" }}
-          extra={<span className="extra">{user.age}</span>}
-        />
-      </div>
-      <div className="container">
-        <Descriptions.Item label="">
-          <h2
-            className="description"
-            style={{ transform: `translateY(${offsetY * 0.4}px)` }}
+        ) : (
+          <div
+            className="profilePhoto"
+            style={{
+              transform: `translateY(${offsetY * 0.2}px)`,
+              padding: 0,
+              border: "solid white",
+            }}
           >
-            {user.description.replace(/\\'/g, "'")}
-          </h2>
-        </Descriptions.Item>
+            <PersonIcon
+              style={{ height: "100%", width: "100%", color: "white" }}
+            />
+          </div>
+        )}
 
+        <div
+          className="userInfo"
+          style={{ transform: `translateY(${offsetY * 0.3}px)` }}
+        >
+          <div className="name">{user.name} ({user.pronouns})</div>
+
+          <div className="age">{user.age}</div>
+
+          <div className="userDescription">{user.description.replace(/\\'/g, "'")}</div>
+        </div>
+      </div>
+
+      <div className="container">
         <h3>Favorite Artists</h3>
         {(!user || !user.top_artists.length) && (
           <Title level={5} style={{ color: "#dbdbdb" }}>
@@ -273,7 +267,7 @@ const Profile = () => {
           else return <></>;
         })}
 
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="deleteTxt" style={{ display: "flex", justifyContent: "space-between" }}>
           <p style={{ color: "#E8BFFB" }}>Delete Account</p>
           <Switch
             checked={deleteAccChecked}

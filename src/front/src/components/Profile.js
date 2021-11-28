@@ -152,7 +152,7 @@ const Profile = () => {
 
   return (
     <>
-      <About isOffsetY={true} user={user} offsetY={offsetY} />
+      <About user={user} offsetY={offsetY} />
       <div className="container">
         <h3>Favorite Artists</h3>
         {(!user || !user.top_artists.length) && (

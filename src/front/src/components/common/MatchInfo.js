@@ -36,14 +36,9 @@ const { Title } = Typography;
  * @class
  */
 const MatchInfo = ({ meet, user, offsetY, dislike, like }) => {
-  let isOffsetY = true;
-  if (!meet) {
-    offsetY = null;
-    isOffsetY = false;
-  }
   return (
     <>
-      <About isOffsetY={isOffsetY} user={user} offsetY={offsetY} />
+      <About user={user} offsetY={offsetY} />
       <div className="container">
         <h3>Artists in Common</h3>
         {(!user || !user.artists_in_common.length) && (

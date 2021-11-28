@@ -7,7 +7,6 @@ import "../../App.css";
  * Used to create the about section
  * (name, pronouns, age, picture, etc) of an user.
  *
- * @property {Boolean} isOffsetY - determines if there is an offsetY
  * @property {Object} user - User object
  * @property {Number} offsetY - offset of Y used for formatting calcuations
  * @returns {HTML} Styled div wrapped around the name, pronouns,
@@ -16,42 +15,37 @@ import "../../App.css";
  * @package
  * @class
  */
-const About = ({ isOffsetY, user, offsetY }) => {
-  let profilePicStyle = {
-    backgroundImage: `url('${user.pic}')`,
-  };
-  let profileIconStyle = {
-    padding: 0,
-    border: "solid white",
-  };
-  let userInfoStyle = {};
-  if (isOffsetY) {
-    profilePicStyle = {
-      backgroundImage: `url('${user.pic}')`,
-      transform: `translateY(${offsetY * 0.2}px)`,
-    };
-    profileIconStyle = {
-      transform: `translateY(${offsetY * 0.2}px)`,
-      padding: 0,
-      border: "solid white",
-    };
-    userInfoStyle = { transform: `translateY(${offsetY * 0.3}px)` };
-  }
-
+const About = ({ user, offsetY }) => {
   return (
     <>
       <div className="pic">
         {user.pic ? (
-          <div className="profilePhoto" style={profilePicStyle} />
+          <div
+            className="profilePhoto"
+            style={{
+              backgroundImage: `url('${user.pic}')`,
+              transform: `translateY(${offsetY * 0.2}px)`,
+            }}
+          />
         ) : (
-          <div className="profilePhoto" style={profileIconStyle}>
+          <div
+            className="profilePhoto"
+            style={{
+              transform: `translateY(${offsetY * 0.2}px)`,
+              padding: 0,
+              border: "solid white",
+            }}
+          >
             <PersonIcon
               style={{ height: "100%", width: "100%", color: "white" }}
             />
           </div>
         )}
 
-        <div className="userInfo" style={userInfoStyle}>
+        <div
+          className="userInfo"
+          style={{ transform: `translateY(${offsetY * 0.3}px)` }}
+        >
           <div className="nameAndAge">
             <div className="name">{user.name}</div>
             <div className="age">{user.age}</div>

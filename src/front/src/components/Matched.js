@@ -11,6 +11,51 @@ import MatchInfo from "./common/MatchInfo";
 const { Title } = Typography;
 
 /**
+ * ProfileModal sub-component used exclusively by Match subcomponent.
+ * Displays the modal containing the match's info.
+ *
+ * @property {Boolean} openModal - whether the modal is open or not
+ * @property {Function} closeProfile - function for close button
+ * @property {Object} matchUser - User object for match
+ * @returns {HTML} Styled div wrapped around the modal for the profile
+ * of the match.
+ *
+ * @package
+ * @class
+ */
+const ProfileModal = ({ openModal, closeProfile, matchUser }) => {
+  /* Parallax effect for scrolling */
+  const [offsetY, setOffsetY] = useState(0);
+  const handleScroll = () => setOffsetY(window.pageYOffset);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <Modal
+      visible={openModal}
+      closable={false}
+      footer={[
+        <Button key="back" onClick={closeProfile}>
+          Close
+        </Button>,
+      ]}
+      bodyStyle={{
+        backgroundColor: "black",
+      }}
+      style={{
+        width: "100%",
+      }}
+    >
+      <MatchInfo meet={false} user={matchUser} offsetY={offsetY} />
+    </Modal>
+  );
+};
+
+/**
  * Match sub-component used exclusively by Matched component.
  * Displays a match's profile picture, name, and contact info.
  *
@@ -177,19 +222,11 @@ const Match = ({
           button-testid={`delete-match-${index}`}
         />
       </div>
-      <Modal
-        visible={openModal}
-        footer={[
-          <Button key="back" onClick={closeProfile}>
-            Close
-          </Button>,
-        ]}
-        style={{
-          backgroundColor: "black",
-        }}
-      >
-        <MatchInfo meet={false} user={matchUser} />
-      </Modal>
+      <ProfileModal
+        openModal={openModal}
+        closeProfile={closeProfile}
+        matchUser={matchUser}
+      />
     </div>
   );
 };

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: components/common/EditInfo.js</title>
+    <title>JSDoc: Source: components/NotFound.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: components/common/EditInfo.js</h1>
+    <h1 class="page-title">Source: components/NotFound.js</h1>
 
     
 
@@ -26,89 +26,34 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React, { useContext } from "react";
-import "../../App.css";
-import { Form } from "antd";
-import { AuthContext } from "../../Context";
-import { processUserInfo } from "../../helpers";
-import { createEditInfoItems, factsData } from "../../helpers";
-import InputForm from "./InputForm";
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { Typography } from "antd";
+
+const { Title } = Typography;
 
 /**
- * EditInfo sub-component used by Profile component.
- * Used to create the form for editing the Tidbits and QAs
- * for a user.
+ * Component for the Not Found page
  *
- * @returns {HTML} Styled div wrapped around a form for Tidbits
- * and QAs
+ * @returns {HTML} Page telling user their path is invalid.
  *
- * @package
  * @class
  */
-const EditInfo = () => {
-  const {
-    /**
-     * `ContextProvider` state of logged-in user's info.
-     * @type {Object}
-     * @memberof EditInfo
-     */
-    user,
-    /**
-     * Function from `ContextProvider` for setting logged-in user's info.
-     * @type {Function}
-     * @memberof EditInfo
-     */
-    setUser,
-  } = useContext(AuthContext);
-
-  const [form] = Form.useForm();
-
-  /**
-   * Function to send user's new Tidbits and QAs to our Neo4j.
-   * @memberof EditInfo
-   * @returns {void}
-   * @private
-   */
-  const onFinish = (values) => {
-    // for tidbits and qas, need to send `null` if have `undefined` field
-    // so that our server doesn't discard the `undefined` vals
-    const data = {
-      facts: factsData(values),
-      email: user.email,
-    };
-
-    fetch("http://localhost:8000/updateUserFacts", {
-      method: "PUT",
-      mode: "cors",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((res_data) => {
-        if (res_data[1] === 200) {
-          let datifyUser = res_data[0];
-          const user = processUserInfo(datifyUser);
-          setUser(user);
-        } // TODO: error handling
-      })
-      .catch((err) => console.error(err));
-  };
-
-  let contents = createEditInfoItems(user);
+const NotFound = () => {
   return (
-    &lt;InputForm
-      profile={true}
-      form={form}
-      onFinish={onFinish}
-      contents={contents}
-    />
+    &lt;div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "90vh",
+      }}
+    >
+      &lt;Title>404 Page not found&lt;/Title>
+    &lt;/div>
   );
 };
 
-export default EditInfo;
+export default NotFound;
 </code></pre>
         </article>
     </section>

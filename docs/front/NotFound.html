@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: components/common/InputForm.js</title>
+    <title>JSDoc: Class: NotFound</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,83 +17,159 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: components/common/InputForm.js</h1>
+    <h1 class="page-title">Class: NotFound</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import React from "react";
-import "../../App.css";
-import { Form, Button } from "antd";
+        <h2><span class="attribs"><span class="type-signature"></span></span>NotFound<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h2>
+        
+    
+</header>
 
-const { Item } = Form;
+<article>
+    <div class="container-overview">
+    
+        
 
-const InfoFormItem = ({ child, ...props }) => {
-  return &lt;Item {...props}>{child}&lt;/Item>;
-};
+    
 
-/**
- * InputForm sub-component used by EditInfo subcomponent
- * (used by the Profile component) and the InfoForm component.
- * Used to create the form for editing the Tidbits and QAs
- * for a user and the inital info gathering form for a new user.
- *
- * @returns {HTML} Styled div wrapped around a form just for Tidbits
- * and QAs, or a form including name, email, Tidbits, QAs, etc
- * for new users.
- *
- * @package
- * @class
- */
-const InputForm = ({ profile, resetImg, form, onFinish, contents }) => {
-  /**
-   * Function to reset form fields back to the original answers.
-   * @memberof InputForm
-   * @returns {void}
-   * @private
-   */
-  const onReset = () => {
-    if (!profile) resetImg();
-    form.resetFields();
-  };
-  return (
-    &lt;>
-      &lt;Form layout="vertical" form={form} name="basic-info" onFinish={onFinish}>
-        {contents.map((content, ind) => (
-          &lt;InfoFormItem {...content} key={ind} />
-        ))}
-        {profile ? (
-          &lt;Item className="form-btns">
-            &lt;Button type="primary" htmlType="submit">
-              Submit
-            &lt;/Button>
-            &lt;Button htmlType="button" onClick={onReset}>
-              Reset
-            &lt;/Button>
-          &lt;/Item>
-        ) : (
-          &lt;Item className="form-btns">
-            &lt;Button type="primary" size="large" htmlType="submit">
-              Submit
-            &lt;/Button>
-            &lt;Button htmlType="button" size="large" onClick={onReset}>
-              Reset
-            &lt;/Button>
-          &lt;/Item>
-        )}
-      &lt;/Form>
-    &lt;/>
-  );
-};
+    
+    <h4 class="name" id="NotFound"><span class="type-signature"></span>new NotFound<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h4>
+    
 
-export default InputForm;
-</code></pre>
-        </article>
-    </section>
+    
+
+
+
+<div class="description">
+    <p>Component for the Not Found page</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_NotFound.js.html">components/NotFound.js</a>, <a href="components_NotFound.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Page telling user their path is invalid.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">HTML</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

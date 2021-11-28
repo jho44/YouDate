@@ -48,7 +48,15 @@ const { Title } = Typography;
  * @package
  * @class
  */
-const Match = ({ user_id, index, imgPath, name, contact, setMatchList }) => {
+const Match = ({
+  matchList,
+  user_id,
+  index,
+  imgPath,
+  name,
+  contact,
+  setMatchList,
+}) => {
   const {
     /**
      * `ContextProvider` state of logged-in user's info.
@@ -96,10 +104,10 @@ const Match = ({ user_id, index, imgPath, name, contact, setMatchList }) => {
               );
 
             // get rid of this user from matchList
-            setMatchList((matchList) => {
-              matchList.splice(index, 1);
-              return matchList;
-            });
+            const newList = [...matchList];
+            newList.splice(index, 1);
+
+            setMatchList(newList);
           });
       },
     });
@@ -156,7 +164,27 @@ const Match = ({ user_id, index, imgPath, name, contact, setMatchList }) => {
  * @class
  */
 const Matched = () => {
-  const { user } = useContext(AuthContext);
+  const {
+    /**
+     * `ContextProvider` state of logged-in user's info.
+     * @type {Object}
+     * @memberof Matched
+     */
+    user,
+  } = useContext(AuthContext);
+
+  /**
+   * @description The list of people the current user's in mutual like with.
+   * @typedef {Array} matchList
+   * @memberof Matched
+   */
+  /**
+   * @typedef {Function} setMatchList
+   * @param {Object} newState - The new list of people the current
+   * user's in mutual like with. Used when deleting a match.
+   * @returns {void}
+   * @memberof Matched
+   */
   const [matchList, setMatchList] = useState([]);
 
   useEffect(() => {
@@ -168,7 +196,8 @@ const Matched = () => {
             data[0].map((item, index) => {
               return (
                 &lt;Match
-                  setMatchList={setMatchList}
+                  matchList={matchList}
+                  setMatchList={handleChange}
                   key={index}
                   index={index}
                   user_id={item.user_id}
@@ -182,7 +211,11 @@ const Matched = () => {
         }
       })
       .catch((err) => console.error(err));
-  }, [user.email, matchList]);
+  }, [user.email, matchList.length]);
+
+  function handleChange(list) {
+    setMatchList(list);
+  }
 
   return (
     &lt;div className="container" style={{ margin: "1rem" }}>
@@ -208,13 +241,13 @@ export default Matched;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContextProvider.html">ContextProvider</a></li><li><a href="EditInfo.html">EditInfo</a></li><li><a href="InfoForm.html">InfoForm</a></li><li><a href="InputForm.html">InputForm</a></li><li><a href="Landing.html">Landing</a></li><li><a href="Match.html">Match</a></li><li><a href="Matched.html">Matched</a></li><li><a href="Meet.html">Meet</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="NavbarBtn.html">NavbarBtn</a></li><li><a href="PrivateRoute.html">PrivateRoute</a></li><li><a href="Profile.html">Profile</a></li><li><a href="QA.html">QA</a></li><li><a href="SpotifyDataBlock.html">SpotifyDataBlock</a></li><li><a href="Tidbit.html">Tidbit</a></li></ul><h3>Global</h3><ul><li><a href="global.html#beforeUpload">beforeUpload</a></li><li><a href="global.html#createEditInfoItems">createEditInfoItems</a></li><li><a href="global.html#createInfoItems">createInfoItems</a></li><li><a href="global.html#factsData">factsData</a></li><li><a href="global.html#getBase64">getBase64</a></li><li><a href="global.html#processUserInfo">processUserInfo</a></li><li><a href="global.html#QAData">QAData</a></li><li><a href="global.html#tidbitData">tidbitData</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContextProvider.html">ContextProvider</a></li><li><a href="EditInfo.html">EditInfo</a></li><li><a href="InfoForm.html">InfoForm</a></li><li><a href="InputForm.html">InputForm</a></li><li><a href="Landing.html">Landing</a></li><li><a href="Match.html">Match</a></li><li><a href="Matched.html">Matched</a></li><li><a href="Meet.html">Meet</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="NavbarBtn.html">NavbarBtn</a></li><li><a href="NotFound.html">NotFound</a></li><li><a href="PrivateRoute.html">PrivateRoute</a></li><li><a href="Profile.html">Profile</a></li><li><a href="QA.html">QA</a></li><li><a href="SpotifyDataBlock.html">SpotifyDataBlock</a></li><li><a href="Tidbit.html">Tidbit</a></li></ul><h3>Global</h3><ul><li><a href="global.html#beforeUpload">beforeUpload</a></li><li><a href="global.html#createEditInfoItems">createEditInfoItems</a></li><li><a href="global.html#createInfoItems">createInfoItems</a></li><li><a href="global.html#factsData">factsData</a></li><li><a href="global.html#getBase64">getBase64</a></li><li><a href="global.html#processUserInfo">processUserInfo</a></li><li><a href="global.html#QAData">QAData</a></li><li><a href="global.html#tidbitData">tidbitData</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Nov 28 2021 07:16:25 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Nov 28 2021 09:28:20 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

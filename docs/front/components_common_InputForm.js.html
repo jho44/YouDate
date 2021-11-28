@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: fileUpload.js</title>
+    <title>JSDoc: Source: components/common/InputForm.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: fileUpload.js</h1>
+    <h1 class="page-title">Source: components/common/InputForm.js</h1>
 
     
 
@@ -26,42 +26,71 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { message } from "antd";
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import "../../App.css";
+import { Form, Button } from "antd";
+
+const { Item } = Form;
+
+const InfoFormItem = ({ child, ...props }) => {
+  return &lt;Item {...props}>{child}&lt;/Item>;
+};
 
 /**
- * Function to turn File into base64 string then pass control to
- * callback. Taken from Ant Design's docs.
- * @param {File} img - The new image user's trying to upload.
- * @param {Function} callback - Function to run after FileReader has
- * loaded the `img` successfully.
- * @returns {void}
+ * InputForm sub-component used by EditInfo subcomponent
+ * (used by the Profile component) and the InfoForm component.
+ * Used to create the form for editing the Tidbits and QAs
+ * for a user and the inital info gathering form for a new user.
+ *
+ * @returns {HTML} Styled div wrapped around a form just for Tidbits
+ * and QAs, or a form including name, email, Tidbits, QAs, etc
+ * for new users.
+ *
+ * @package
+ * @class
  */
-export function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
+const InputForm = ({ profile, resetImg, form, onFinish, contents }) => {
+  /**
+   * Function to reset form fields back to the original answers.
+   * @memberof InputForm
+   * @returns {void}
+   * @private
+   */
+  const onReset = () => {
+    if (!profile) resetImg();
+    form.resetFields();
+  };
+  return (
+    &lt;>
+      &lt;Form layout="vertical" form={form} name="basic-info" onFinish={onFinish}>
+        {contents.map((content, ind) => (
+          &lt;InfoFormItem {...content} key={ind} />
+        ))}
+        {profile ? (
+          &lt;Item className="form-btns">
+            &lt;Button type="primary" htmlType="submit">
+              Submit
+            &lt;/Button>
+            &lt;Button htmlType="button" onClick={onReset}>
+              Reset
+            &lt;/Button>
+          &lt;/Item>
+        ) : (
+          &lt;Item className="form-btns">
+            &lt;Button type="primary" size="large" htmlType="submit">
+              Submit
+            &lt;/Button>
+            &lt;Button htmlType="button" size="large" onClick={onReset}>
+              Reset
+            &lt;/Button>
+          &lt;/Item>
+        )}
+      &lt;/Form>
+    &lt;/>
+  );
+};
 
-/**
- * Function to ensure uploaded image's type is jpeg/png and smaller than 2MB.
- * Mostly taken from Ant Design's docs.
- * @param {File} file - The new image user's trying to upload.
- * @param {Function} callback - Function that sets state in caller with whether or not the newly uploaded image is valid.
- * @returns {Boolean} - Always returns `false` because we want to handle uploads manually.
- */
-export function beforeUpload(file, callback) {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-  if (!isJpgOrPng) {
-    message.error("You can only upload JPG/PNG file!");
-  }
-  const isLt2M = file.size / 1024 / 1024 &lt; 2;
-  if (!isLt2M) {
-    message.error("Image must smaller than 2MB!");
-  }
-
-  callback(isJpgOrPng &amp;&amp; isLt2M);
-  return false;
-}
+export default InputForm;
 </code></pre>
         </article>
     </section>

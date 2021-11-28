@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Match</title>
+    <title>JSDoc: Class: EditInfo</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Match</h1>
+    <h1 class="page-title">Class: EditInfo</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature">(package) </span></span>Match<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h2>
+        <h2><span class="attribs"><span class="type-signature">(package) </span></span>EditInfo<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="Match"><span class="type-signature">(package) </span>new Match<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h4>
+    <h4 class="name" id="EditInfo"><span class="type-signature">(package) </span>new EditInfo<span class="signature">()</span><span class="type-signature"> &rarr; {HTML}</span></h4>
     
 
     
@@ -49,8 +49,9 @@
 
 
 <div class="description">
-    <p>Match sub-component used exclusively by Matched component.
-Displays a match's profile picture, name, and contact info.</p>
+    <p>EditInfo sub-component used by Profile component.
+Used to create the form for editing the Tidbits and QAs
+for a user.</p>
 </div>
 
 
@@ -61,104 +62,6 @@ Displays a match's profile picture, name, and contact info.</p>
 
 
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>imgPath</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>path to match's image file</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>name of match</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>contact</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>contact of match</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -192,7 +95,7 @@ Displays a match's profile picture, name, and contact info.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_Matched.js.html">components/Matched.js</a>, <a href="components_Matched.js.html#line23">line 23</a>
+        <a href="components_common_EditInfo.js.html">components/common/EditInfo.js</a>, <a href="components_common_EditInfo.js.html#line20">line 20</a>
     </li></ul></dd>
     
 
@@ -221,7 +124,8 @@ Displays a match's profile picture, name, and contact info.</p>
 
         
 <div class="param-desc">
-    <p>Styled div wrapped around said match component.</p>
+    <p>Styled div wrapped around a form for Tidbits
+and QAs</p>
 </div>
 
 
@@ -261,6 +165,78 @@ Displays a match's profile picture, name, and contact info.</p>
 
     
         <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id=".setUser"><span class="type-signature">(static) </span>setUser<span class="type-signature"> :function</span></h4>
+
+
+
+
+<div class="description">
+    <p>Function from <code>ContextProvider</code> for setting logged-in user's info.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">function</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="components_common_EditInfo.js.html">components/common/EditInfo.js</a>, <a href="components_common_EditInfo.js.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
 
         
             
@@ -318,7 +294,7 @@ Displays a match's profile picture, name, and contact info.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_Matched.js.html">components/Matched.js</a>, <a href="components_Matched.js.html#line30">line 30</a>
+        <a href="components_common_EditInfo.js.html">components/common/EditInfo.js</a>, <a href="components_common_EditInfo.js.html#line27">line 27</a>
     </li></ul></dd>
     
 
@@ -346,7 +322,7 @@ Displays a match's profile picture, name, and contact info.</p>
     
 
     
-    <h4 class="name" id=".onOk"><span class="type-signature">(private, static) </span>onOk<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id=".onFinish"><span class="type-signature">(private, static) </span>onFinish<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
     
@@ -354,7 +330,7 @@ Displays a match's profile picture, name, and contact info.</p>
 
 
 <div class="description">
-    <p>Function to actually delete match if user hits &quot;OK&quot;</p>
+    <p>Function to send user's new Tidbits and QAs to our Neo4j.</p>
 </div>
 
 
@@ -398,114 +374,7 @@ Displays a match's profile picture, name, and contact info.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_Matched.js.html">components/Matched.js</a>, <a href="components_Matched.js.html#line51">line 51</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="~showConfirm"><span class="type-signature">(inner) </span>showConfirm<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Function to open Delete Match Confirmation modal. Includes
-<code>OnOK()</code>.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="components_Matched.js.html">components/Matched.js</a>, <a href="components_Matched.js.html#line39">line 39</a>
+        <a href="components_common_EditInfo.js.html">components/common/EditInfo.js</a>, <a href="components_common_EditInfo.js.html#line44">line 44</a>
     </li></ul></dd>
     
 

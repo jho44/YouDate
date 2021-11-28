@@ -31,20 +31,10 @@ import { Descriptions, Switch, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import "../App.css";
-import Tidbit from "./common/Tidbit";
-import QA from "./common/QA";
+import EditInfo from "./common/EditInfo";
 import SpotifyDataBlock from "./common/SpotifyDataBlock";
 import { AuthContext } from "../Context";
-import {
-  School as SchoolIcon,
-  Search as SearchIcon,
-  Work as WorkIcon,
-  Favorite as FavoriteIcon,
-  LocationOn as LocationOnIcon,
-  AccountBalance as AccountBalanceIcon,
-  Height as HeightIcon,
-  Person as PersonIcon,
-} from "@mui/icons-material";
+import { Person as PersonIcon } from "@mui/icons-material";
 import { Typography } from "antd";
 
 const { Title } = Typography;
@@ -252,52 +242,8 @@ const Profile = () => {
           userContent={user.top_songs}
           type="track"
         />
-        &lt;div className="basic-info column-flex">
-          {(!user || !user.tidbits.length) &amp;&amp; (
-            &lt;Title level={5} style={{ color: "#dbdbdb" }}>
-              No tidbits at this time
-            &lt;/Title>
-          )}
-          {user &amp;&amp;
-            user.tidbits.map((tidbit, ind) => {
-              const { key, val } = tidbit;
-              if (val) {
-                let component;
-                switch (key) {
-                  case "desired_relationship":
-                    component = SearchIcon;
-                    break;
-                  case "education":
-                    component = SchoolIcon;
-                    break;
-                  case "occupation":
-                    component = WorkIcon;
-                    break;
-                  case "sexual_orientation":
-                    component = FavoriteIcon;
-                    break;
-                  case "location":
-                    component = LocationOnIcon;
-                    break;
-                  case "political_view":
-                    component = AccountBalanceIcon;
-                    break;
-                  case "height":
-                    component = HeightIcon;
-                    break;
-                  default:
-                }
-
-                return &lt;Tidbit key={ind} Component={component} content={val} />;
-              } else return &lt;>&lt;/>;
-            })}
-        &lt;/div>
-
-        {user.QAs.map((qa, ind) => {
-          if (qa.A) return &lt;QA Q={qa.Q} A={qa.A} key={ind} />;
-          else return &lt;>&lt;/>;
-        })}
-
+        &lt;h3>Edit Info&lt;/h3>
+        {user &amp;&amp; &lt;EditInfo />}
         &lt;div
           className="deleteTxt"
           style={{ display: "flex", justifyContent: "space-between" }}
@@ -330,13 +276,13 @@ export default Profile;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContextProvider.html">ContextProvider</a></li><li><a href="InfoForm.html">InfoForm</a></li><li><a href="Landing.html">Landing</a></li><li><a href="Match.html">Match</a></li><li><a href="Matched.html">Matched</a></li><li><a href="Meet.html">Meet</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="NavbarBtn.html">NavbarBtn</a></li><li><a href="PrivateRoute.html">PrivateRoute</a></li><li><a href="Profile.html">Profile</a></li><li><a href="QA.html">QA</a></li><li><a href="SpotifyDataBlock.html">SpotifyDataBlock</a></li><li><a href="Tidbit.html">Tidbit</a></li></ul><h3>Global</h3><ul><li><a href="global.html#beforeUpload">beforeUpload</a></li><li><a href="global.html#getBase64">getBase64</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="App.html">App</a></li><li><a href="ContextProvider.html">ContextProvider</a></li><li><a href="EditInfo.html">EditInfo</a></li><li><a href="InfoForm.html">InfoForm</a></li><li><a href="InputForm.html">InputForm</a></li><li><a href="Landing.html">Landing</a></li><li><a href="Match.html">Match</a></li><li><a href="Matched.html">Matched</a></li><li><a href="Meet.html">Meet</a></li><li><a href="Navbar.html">Navbar</a></li><li><a href="NavbarBtn.html">NavbarBtn</a></li><li><a href="PrivateRoute.html">PrivateRoute</a></li><li><a href="Profile.html">Profile</a></li><li><a href="QA.html">QA</a></li><li><a href="SpotifyDataBlock.html">SpotifyDataBlock</a></li><li><a href="Tidbit.html">Tidbit</a></li></ul><h3>Global</h3><ul><li><a href="global.html#beforeUpload">beforeUpload</a></li><li><a href="global.html#createEditInfoItems">createEditInfoItems</a></li><li><a href="global.html#createInfoItems">createInfoItems</a></li><li><a href="global.html#factsData">factsData</a></li><li><a href="global.html#getBase64">getBase64</a></li><li><a href="global.html#processUserInfo">processUserInfo</a></li><li><a href="global.html#QAData">QAData</a></li><li><a href="global.html#tidbitData">tidbitData</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Nov 28 2021 07:05:31 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sun Nov 28 2021 07:16:25 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

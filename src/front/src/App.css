@@ -72,6 +72,17 @@ body {
   margin-left: 5%;
 }
 
+.matchPhoto {
+  background-color: "gray";
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 8vh;
+  width: 8vh;
+  border-radius: 50%;
+  float: left;
+}
+
 .nameAndAge {
   display: flex;
   justify-content: space-between;
@@ -107,13 +118,16 @@ h3,
 h4,
 p,
 span,
-.ant-btn.ant-btn-primary > span,
 .ant-form-item-label > label,
 .ant-typography,
 h1.ant-typography,
 .ant-typography h1 {
   color: white;
   font-size: calc(1vw + 1vh + 0.5vmin);
+}
+
+.ant-btn.ant-btn-primary > span {
+  color: white;
 }
 
 .ant-message-custom-content.ant-message-error > span,
@@ -198,6 +212,17 @@ h2 {
     margin-top: 5%;
   }
 
+  .matchPhoto {
+    background-color: "gray";
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 10vh;
+    width: 10vh;
+    border-radius: 50%;
+    float: left;
+  }
+
   .photo {
     height: 13vh;
     width: 13vh;
@@ -239,6 +264,17 @@ h2 {
     width: 35vh;
     border-radius: 50%;
     margin-top: 5%;
+  }
+
+  .matchPhoto {
+    background-color: "gray";
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 15vh;
+    width: 15vh;
+    border-radius: 50%;
+    float: left;
   }
 
   .photo {

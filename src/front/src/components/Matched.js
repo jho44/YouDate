@@ -196,15 +196,23 @@ const Match = ({
       >
         <div onClick={showProfile}>
           {imgPath ? (
-            <Avatar
+            <img
+              className="matchPhoto"
               src={imgPath}
-              size={{ xs: 50, sm: 70, md: 90, lg: 110, xl: 130, xxl: 150 }}
+              alt="pfp"
             />
           ) : (
-            <Avatar
-              icon={<PersonIcon />}
-              size={{ xs: 50, sm: 70, md: 90, lg: 110, xl: 130, xxl: 150 }}
-            />
+            <div
+              className="matchPhoto"
+              style={{
+                padding: 0,
+                border: "solid white",
+              }}
+            >
+              <PersonIcon
+                style={{ height: "100%", width: "100%", color: "white" }}
+              />
+            </div>
           )}
         </div>
         <div style={{ marginLeft: "1rem", marginRight: "1rem" }}>

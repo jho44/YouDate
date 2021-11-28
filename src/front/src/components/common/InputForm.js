@@ -14,9 +14,13 @@ const InfoFormItem = ({ child, ...props }) => {
  * Used to create the form for editing the Tidbits and QAs
  * for a user and the inital info gathering form for a new user.
  *
- * @returns {HTML} Styled div wrapped around a form just for Tidbits
- * and QAs, or a form including name, email, Tidbits, QAs, etc
- * for new users.
+ * @property {Boolean} profile - determines if this is for
+ * the Profile component or EditInfo subcomponent
+ * @property {Function} resetImg - function for reseting an image on
+ * the form
+ * @property {Object} form - form hook from Ant Design
+ * @property {Function} onFinish - function called when form is submitted
+ * @property {Array.<Object>} contents - the fields of the form
  *
  * @package
  * @class

@@ -1,12 +1,59 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Modal, Button, Avatar } from "antd";
+import { Modal, Button } from "antd";
 import { ExclamationCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import "../App.css";
 import { AuthContext } from "../Context";
 import { Person as PersonIcon } from "@mui/icons-material";
 import { Typography } from "antd";
+import { processUserInfo } from "../helpers";
+import MatchInfo from "./common/MatchInfo";
 
 const { Title } = Typography;
+
+/**
+ * ProfileModal sub-component used exclusively by Match subcomponent.
+ * Displays the modal containing the match's info.
+ *
+ * @property {Boolean} openModal - whether the modal is open or not
+ * @property {Function} closeProfile - function for close button
+ * @property {Object} matchUser - User object for match
+ * @returns {HTML} Styled div wrapped around the modal for the profile
+ * of the match.
+ *
+ * @package
+ * @class
+ */
+const ProfileModal = ({ openModal, closeProfile, matchUser }) => {
+  /* Parallax effect for scrolling */
+  const [offsetY, setOffsetY] = useState(0);
+  const handleScroll = () => setOffsetY(window.pageYOffset);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <Modal
+      className="profile-modal"
+      centered
+      width="100vw"
+      visible={openModal}
+      closable={false}
+      footer={[
+        <Button key="back" onClick={closeProfile}>
+          Close
+        </Button>,
+      ]}
+      bodyStyle={{
+        backgroundColor: "black",
+      }}
+    >
+      <MatchInfo meet={false} user={matchUser} offsetY={offsetY} />
+    </Modal>
+  );
+};
 
 /**
  * Match sub-component used exclusively by Matched component.
@@ -28,6 +75,7 @@ const Match = ({
   name,
   contact,
   setMatchList,
+  matchUser,
 }) => {
   const {
     /**
@@ -37,6 +85,24 @@ const Match = ({
      */
     user,
   } = useContext(AuthContext);
+
+  /**
+   * @typedef {Boolean} openModal
+   * @description (Private) state variable controlling whether the
+   * Display Match Profile modal should be open.
+   * @memberof Match
+   */
+  /**
+   * @typedef {Function} setOpenModal
+   * @param {Boolean} newState - If `false`, Display Match Profile
+   * modal should be closed.
+   * If `true`, modal should be open.
+   * @description Sets `openModal` to `newState`
+   * @returns {void}
+   * @memberof Match
+   * @private
+   */
+  const [openModal, setOpenModal] = useState(false);
 
   /**
    * Function to open Delete Match Confirmation modal. Includes
@@ -85,6 +151,31 @@ const Match = ({
     });
   }
 
+  /**
+   * Function to open Display Match modal.
+   *
+   * @returns {void}
+   */
+  function showProfile() {
+    setOpenModal(true);
+  }
+
+  /**
+   * Function to open Display Match modal.
+   *
+   * @returns {void}
+   */
+  function closeProfile() {
+    setOpenModal(false);
+  }
+
+  matchUser = processUserInfo(matchUser);
+  matchUser.artists_in_common = user.top_artists.filter((artist) =>
+    matchUser.top_artists.includes(artist)
+  );
+  matchUser.songs_in_common = user.top_songs.filter((song) =>
+    matchUser.top_songs.includes(song)
+  );
   return (
     <div
       data-testid="match"
@@ -103,11 +194,23 @@ const Match = ({
           alignItems: "center",
         }}
       >
-        {imgPath ? (
-          <Avatar src={imgPath} size={85} />
-        ) : (
-          <PersonIcon style={{ color: "white" }} />
-        )}
+        <div onClick={showProfile}>
+          {imgPath ? (
+            <img className="matchPhoto" src={imgPath} alt="pfp" />
+          ) : (
+            <div
+              className="matchPhoto"
+              style={{
+                padding: 0,
+                border: "solid white",
+              }}
+            >
+              <PersonIcon
+                style={{ height: "100%", width: "100%", color: "white" }}
+              />
+            </div>
+          )}
+        </div>
         <div style={{ marginLeft: "1rem", marginRight: "1rem" }}>
           <h4>{name}</h4>
           <span>{contact}</span>
@@ -123,6 +226,11 @@ const Match = ({
           button-testid={`delete-match-${index}`}
         />
       </div>
+      <ProfileModal
+        openModal={openModal}
+        closeProfile={closeProfile}
+        matchUser={matchUser}
+      />
     </div>
   );
 };
@@ -176,6 +284,7 @@ const Matched = () => {
                   imgPath={item.pic}
                   name={item.name}
                   contact={item.email}
+                  matchUser={item}
                 />
               );
             })

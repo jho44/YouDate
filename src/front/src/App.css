@@ -71,6 +71,13 @@ body {
   padding: 50px;
   margin-left: 5%;
 }
+
+.nameAndAge {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 1rem;
+}
+
 /**
 * Changed font-size from 1.5vw to a new method to
 * calculate font size based on the link:

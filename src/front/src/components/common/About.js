@@ -44,11 +44,12 @@ const About = ({ user, offsetY }) => {
           className="userInfo"
           style={{ transform: `translateY(${offsetY * 0.3}px)` }}
         >
-          <div className="name">
-            {user.name} ({user.pronouns})
+          <div className="nameAndAge">
+            <div className="name">{user.name}</div>
+            <div className="age">{user.age}</div>
           </div>
 
-          <div className="age">{user.age}</div>
+          <div className="pronouns">({user.pronouns})</div>
 
           <div className="userDescription">
             {user.description && user.description.replace(/\\'/g, "'")}

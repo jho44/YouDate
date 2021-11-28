@@ -82,7 +82,7 @@ body {
   margin-left: 1rem;
 }
 
-.ant-modal-body, 
+.ant-modal-body,
 .ant-modal-footer {
   background-color: linear-gradient(#8a65be, black);
 }

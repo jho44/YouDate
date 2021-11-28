@@ -45,27 +45,20 @@ const Match = ({
    * @typedef {Boolean} openModal
    * @description (Private) state variable controlling whether the
    * Display Match Profile modal should be open.
-   * @memberof Profile
+   * @memberof Match
    */
   /**
    * @typedef {Function} setOpenModal
-   * @param {Boolean} newState - If `false`, Display Match Profile 
+   * @param {Boolean} newState - If `false`, Display Match Profile
    * modal should be closed.
    * If `true`, modal should be open.
    * @description Sets `openModal` to `newState`
    * @returns {void}
-   * @memberof Profile
+   * @memberof Match
    * @private
    */
-   const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
-   const [offsetY, setOffsetY] = useState(0);
-   const handleScroll = () => setOffsetY(window.pageYOffset);
-   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
   /**
    * Function to open Delete Match Confirmation modal. Includes
    * `OnOK()`.
@@ -114,22 +107,20 @@ const Match = ({
   }
 
   /**
-   * Function to open Delete Match Confirmation modal. Includes
-   * `OnOK()`.
+   * Function to open Display Match modal.
    *
    * @returns {void}
    */
-   function showProfile() {
+  function showProfile() {
     setOpenModal(true);
   }
 
   /**
-   * Function to open Delete Match Confirmation modal. Includes
-   * `OnOK()`.
+   * Function to open Display Match modal.
    *
    * @returns {void}
    */
-   function closeProfile() {
+  function closeProfile() {
     setOpenModal(false);
   }
 
@@ -160,15 +151,15 @@ const Match = ({
       >
         <div onClick={showProfile}>
           {imgPath ? (
-            <Avatar 
-              src={imgPath} 
+            <Avatar
+              src={imgPath}
               size={{ xs: 50, sm: 70, md: 90, lg: 110, xl: 130, xxl: 150 }}
-              />
+            />
           ) : (
-            <Avatar 
+            <Avatar
               icon={<PersonIcon />}
               size={{ xs: 50, sm: 70, md: 90, lg: 110, xl: 130, xxl: 150 }}
-              />
+            />
           )}
         </div>
         <div style={{ marginLeft: "1rem", marginRight: "1rem" }}>
@@ -194,10 +185,10 @@ const Match = ({
           </Button>,
         ]}
         style={{
-          backgroundColor: 'black'
-      }}
+          backgroundColor: "black",
+        }}
       >
-        <MatchInfo meet={false} user={matchUser} offsetY={offsetY} />
+        <MatchInfo meet={false} user={matchUser} />
       </Modal>
     </div>
   );

@@ -3,6 +3,7 @@ import { Switch, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
 import "../App.css";
+import About from "./common/About";
 import EditInfo from "./common/EditInfo";
 import SpotifyDataBlock from "./common/SpotifyDataBlock";
 import { AuthContext } from "../Context";
@@ -152,45 +153,7 @@ const Profile = () => {
 
   return (
     <>
-      <div className="pic">
-        {user.pic ? (
-          <div
-            className="profilePhoto"
-            style={{
-              backgroundImage: `url('${user.pic}')`,
-              transform: `translateY(${offsetY * 0.2}px)`,
-            }}
-          />
-        ) : (
-          <div
-            className="profilePhoto"
-            style={{
-              transform: `translateY(${offsetY * 0.2}px)`,
-              padding: 0,
-              border: "solid white",
-            }}
-          >
-            <PersonIcon
-              style={{ height: "100%", width: "100%", color: "white" }}
-            />
-          </div>
-        )}
-
-        <div
-          className="userInfo"
-          style={{ transform: `translateY(${offsetY * 0.3}px)` }}
-        >
-          <div className="name">
-            {user.name} ({user.pronouns})
-          </div>
-
-          <div className="age">{user.age}</div>
-
-          <div className="userDescription">
-            {unmetUser.description && unmetUser.description.replace(/\\'/g, "'")}
-          </div>
-        </div>
-      </div>
+      <About user={user} offsetY={offsetY} />
       <div className="container">
         <h3>Favorite Artists</h3>
         {(!user || !user.top_artists.length) && (

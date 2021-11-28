@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Button, Spin } from "antd";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import "../App.css";
+import About from "./common/About";
 import Tidbit from "./common/Tidbit";
 import QA from "./common/QA";
 import SpotifyDataBlock from "./common/SpotifyDataBlock";
@@ -15,7 +16,6 @@ import {
   LocationOn as LocationOnIcon,
   AccountBalance as AccountBalanceIcon,
   Height as HeightIcon,
-  Person as PersonIcon,
 } from "@mui/icons-material";
 import { Typography } from "antd";
 
@@ -214,46 +214,7 @@ const Meet = () => {
         </div>
       ) : (
         <>
-          <div className="pic">
-            {unmetUser.pic ? (
-              <div
-                className="profilePhoto"
-                style={{
-                  backgroundImage: `url('${unmetUser.pic}')`,
-                  transform: `translateY(${offsetY * 0.2}px)`,
-                }}
-              />
-            ) : (
-              <div
-                className="profilePhoto"
-                style={{
-                  transform: `translateY(${offsetY * 0.2}px)`,
-                  padding: 0,
-                  border: "solid white",
-                }}
-              >
-                <PersonIcon
-                  style={{ height: "100%", width: "100%", color: "white" }}
-                />
-              </div>
-            )}
-
-            <div
-              className="userInfo"
-              style={{ transform: `translateY(${offsetY * 0.3}px)` }}
-            >
-              <div className="name">
-                {unmetUser.name} ({unmetUser.pronouns})
-              </div>
-
-              <div className="age">{unmetUser.age}</div>
-
-              <div className="userDescription">
-                {unmetUser.description && unmetUser.description.replace(/\\'/g, "'")}
-              </div>
-            </div>
-          </div>
-
+          <About user={unmetUser} offsetY={offsetY} />
           <div className="container">
             <h3>Artists in Common</h3>
             {(!unmetUser || !unmetUser.artists_in_common.length) && (

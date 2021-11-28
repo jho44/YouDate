@@ -12,8 +12,17 @@ const firebaseConfig = {
   storageBucket: "datify-49ddc.appspot.com",
   messagingSenderId: "426040737519",
   appId: "1:426040737519:web:68c4717f117fff6344651a",
-  measurementId: "G-2D806J8GZC"
+  measurementId: "G-2D806J8GZC",
 };
 
 // Initialize Firebase
 initializeApp(firebaseConfig);
+
+export const backendUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:8000"
+    : "http://ec2-3-144-103-133.us-east-2.compute.amazonaws.com:8000";
+export const frontendUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : "https://datify-49ddc.web.app";

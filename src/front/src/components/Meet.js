@@ -18,6 +18,7 @@ import {
   Height as HeightIcon,
 } from "@mui/icons-material";
 import { Typography } from "antd";
+import { backendUrl } from "../firebase";
 
 const { Title } = Typography;
 
@@ -102,7 +103,7 @@ const Meet = () => {
   const getNextUser = useCallback(() => {
     setLoading(true);
     // get more unmet users
-    fetch(`http://localhost:8000/getUnmet?email=${user.email}`)
+    fetch(`${backendUrl}/getUnmet?email=${user.email}`)
       .then((data) => data.json())
       .then((data) => {
         if (data[1] !== 200) {
@@ -144,7 +145,7 @@ const Meet = () => {
    */
   function like() {
     // create LIKES relationship from user to unmetUser
-    fetch("http://localhost:8000/like", {
+    fetch(`${backendUrl}/like`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -176,7 +177,7 @@ const Meet = () => {
    */
   function dislike() {
     // create DISLIKES relationship from user to unmetUser
-    fetch("http://localhost:8000/dislike", {
+    fetch(`${backendUrl}/dislike`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

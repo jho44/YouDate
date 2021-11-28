@@ -122,7 +122,6 @@ const Meet = () => {
         setUnmetList(newList);
         setUnmetUser(processUserInfo(newList[0]));
         setUnmetListInd(0);
-        setLoading(false);
       })
       .catch((err) => console.error(err));
   }, [user.email]);
@@ -130,6 +129,9 @@ const Meet = () => {
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     if (unmetListInd >= unmetList.length) getNextUser();
+    else setUnmetUser(processUserInfo(unmetList[unmetListInd]));
+
+    setLoading(false);
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [getNextUser]);

@@ -3,7 +3,7 @@ import "../../App.css";
 import { Form } from "antd";
 import { AuthContext } from "../../Context";
 import { processUserInfo } from "../../helpers";
-import { createEditInfoItems, factsData } from "./InputFormHelper";
+import { createEditInfoItems, factsData } from "../../helpers";
 import InputForm from "./InputForm";
 
 /**

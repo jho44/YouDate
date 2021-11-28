@@ -6,7 +6,7 @@ import "../App.css";
 import { AuthContext } from "../Context";
 import { useNavigate } from "react-router-dom";
 import { processUserInfo } from "../helpers";
-import { createInfoItems, tidbitData, QAData } from "./common/InputFormHelper";
+import { createInfoItems, tidbitData, QAData } from "../helpers";
 import InputForm from "./common/InputForm";
 
 const { Title, Paragraph } = Typography;
@@ -150,7 +150,7 @@ const InfoForm = () => {
    * @returns {void}
    * @private
    */
-   const resetImg = () => {
+  const resetImg = () => {
     setImg();
   };
 

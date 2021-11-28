@@ -8,6 +8,7 @@
       "src/components/Matched.js",
       "src/components/Landing.js",
       "src/components/Navbar.js",
+      "src/components/NotFound.js",
       "src/PrivateRoute.js",
       "src/helpers.js",
       "src/components/common/QA.js",

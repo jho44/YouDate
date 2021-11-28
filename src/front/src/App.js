@@ -7,6 +7,7 @@ import Matched from "./components/Matched";
 import Landing from "./components/Landing";
 import Navbar from "./components/Navbar";
 import InfoForm from "./components/InfoForm";
+import NotFound from "./components/NotFound";
 import "./App.css";
 
 /**
@@ -48,6 +49,7 @@ const App = () => {
             </PrivateRoute>
           }
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Navbar />

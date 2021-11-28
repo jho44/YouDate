@@ -40,8 +40,8 @@
     "doc": "jsdoc -d ../../docs/front --configure jsconf.json --readme ./src/API_README.md -p",
     "cy:run": "yarn run cypress run -C cypress.json",
     "cy:open": "yarn run cypress open",
-    "e2e": "concurrently \"env BROWSER=none yarn start\" \"wait-on http-get://localhost:3000 && yarn cy:run\" --kill-others --success first",
-    "e2e-gui": "concurrently \"env BROWSER=none yarn start\" \"wait-on http-get://localhost:3000 && yarn cy:open\" --kill-others --success first"
+    "e2e": "concurrently \"env BROWSER=none REACT_APP_ENVIRONMENT=test yarn start\" \"wait-on http-get://localhost:3000 && yarn cy:run\" --kill-others --success first",
+    "e2e-gui": "concurrently \"env BROWSER=none REACT_APP_ENVIRONMENT=test yarn start\" \"wait-on http-get://localhost:3000 && yarn cy:open\" --kill-others --success first"
   },
   "eslintConfig": {
     "extends": [

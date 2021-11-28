@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "Create Spotify User",
+			"name": "Create Spotify User (Successful)",
 			"event": [
 				{
 					"listen": "test",
@@ -21,6 +21,54 @@
 							"    const responseJson = pm.response.json();",
 							"    pm.expect(responseJson.email).to.eql(\"athyauk@gmail.com\");",
 							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t\"access_token\": \"BQBULZMVynwsUHAS8DRZrV5Z1mBJqfOw-Jx1VMbehFlYQq5VABfD0x-HJmR-yA53tZlHQ9hogSpDRJABA-Hok0Tn6bggpgecoP0GOP7xzfgwgHHPbsXplG-JZc-YnQQxwKI_l1u1YL5A3C5DyElv6ygkB-Sc6nPPaYYolsJPna5Y4yId\",\n\t\t\"refresh_token\": \"AQDPexZZ0nAFbEG9VrBa8cV_C3pmmCX1wB5f9Hfn7dCRzSrzJsg51uednZh37FdpsxpCvYGAm-LMVDfQ0_PVHkffVF2DqxOceAMDiSv6K-Y3oVYC7Wt1o8b7fxj-e3Ul7_c\",\n        \"pronouns\": \"she/her\",\n        \"birth_month\": \"08\",\n        \"description\": \"Hi!\",\n        \"tidbits\": {},\n        \"qas\": {},\n        \"name\": \"Athya\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/createUserFromAccessToken",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"createUserFromAccessToken"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "{ name:\"hi\",email\"hi@gmail.com\"  }",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Spotify User (Invalid Credentials)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () { pm.response.to.have.status(404); });"
 						],
 						"type": "text/javascript"
 					}
@@ -117,52 +165,7 @@
 			"response": []
 		},
 		{
-			"name": "Create User",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
-							"pm.test(\"Expected name\", function () {",
-							"    const responseJson = pm.response.json();",
-							"    pm.expect(responseJson[0].name).to.eql(\"Athya\");",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Athya\",\n    \"email\": \"athyauk@gmail.com\",\n    \"top_artists\": [\"Adele\"],\n    \"top_songs\": [\"Hello\"]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "127.0.0.1:8000/createUser",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"createUser"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete User",
+			"name": "Delete User (Successful)",
 			"event": [
 				{
 					"listen": "test",
@@ -197,6 +200,551 @@
 					"port": "8000",
 					"path": [
 						"deleteUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User (User Not Found)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () { pm.response.to.have.status(404); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"athyauk@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/deleteUser",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"deleteUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User (Successful)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"pm.test(\"Expected name\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson[0].education).to.eql(\"UCLA\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": {\n        \"life_goal\": \"to write good code\",\n        \"believe_or_not\": null,\n        \"life_peaked\": \"Update\",\n        \"feel_famous\": \"NEW\",\n        \"biggest_risk\": \"WRONG\",\n        \"education\": \"UCLA\", \n        \"occupation\": \"Student\", \n        \"sexual_orientation\": \"N/a\", \n        \"location\": \"Los Angeles\",\n        \"political_view\": \"Liberal\", \n        \"height\": \"5' 6'\"\n    },\n    \"email\": \"athyauk@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/updateUserFacts",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"updateUserFacts"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User (Bad Email)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () { pm.response.to.have.status(404); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"facts\": {\n        \"life_goal\": \"fix buggy code\"\n    },\n    \"email\": \"athyauk@gmail.cm\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/updateUserFacts",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"updateUserFacts"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Like User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userid_a\": \"1\",\n    \"userid_b\": \"2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/like",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dislike User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userid_a\": \"1\",\n    \"userid_b\": \"2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/dislike",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"dislike"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Shared Artists",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"pm.test(\"Expected list\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson[0].list).to.eql(\"\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userid_a\": \"1\",\n    \"userid_b\": \"2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/sharedArtists",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"sharedArtists"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Matched",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"pm.test(\"Expected list\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson[0].list).to.eql(\"\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"athyauk@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/getMatched",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"getMatched"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Unmet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"pm.test(\"Expected list\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson[0].list).to.eql(\"\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"athyauk@gmail.com\",\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/getUnmet",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"getUnmet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User (Successful)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+							"pm.test(\"Expected name\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.name).to.eql(\"Athya Uthayakumar\");",
+							"});",
+							"pm.test(\"Valid email\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.email).to.eql(\"athyauk@gmail.com\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/getUser?token=BQBqqrZoW7CLaA_QXXcigDSM4PPfLb_12CWaidTvUO2a7In6RSUrYOfbh5X8jeiih7N_tZ06cJIy4qfPRSjM-w3J8g9MC5TbyDH1138Tuzt8OTJgvMCHNDMF2SOmmrDKbUSqqYevLSmwHPKAoPHnDppoM1Atvq9MxQfhPrsaJxAjFCSdsCTI7RbTVy0FqaV3oXuPPtJPK92GJ1kJ8PnYpoUicSZCdXQtP77ez7Zbh51fB9dR4PKP-ZUtQievTnCxupLgvyziBJlE9I4BhyjRUqRBsScPVYGHZCvWPqidMRxTR2p8eg",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"getUser"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "BQBqqrZoW7CLaA_QXXcigDSM4PPfLb_12CWaidTvUO2a7In6RSUrYOfbh5X8jeiih7N_tZ06cJIy4qfPRSjM-w3J8g9MC5TbyDH1138Tuzt8OTJgvMCHNDMF2SOmmrDKbUSqqYevLSmwHPKAoPHnDppoM1Atvq9MxQfhPrsaJxAjFCSdsCTI7RbTVy0FqaV3oXuPPtJPK92GJ1kJ8PnYpoUicSZCdXQtP77ez7Zbh51fB9dR4PKP-ZUtQievTnCxupLgvyziBJlE9I4BhyjRUqRBsScPVYGHZCvWPqidMRxTR2p8eg"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User (User Not Found)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () { pm.response.to.have.status(404); });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/getUser?token=undefined",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"getUser"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "undefined"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Spotify Credentials",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "scope",
+							"value": "playlist-read-private playlist-modify-private",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "5a3e477035af4a9988ef308405d83239",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "Hi okay",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "fbbb7c8a525e45a8b1e47c28f83535b3",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "https://accounts.spotify.com/api/token",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "https://accounts.spotify.com/authorize",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://accounts.spotify.com/authorize?client_id=fbbb7c8a525e45a8b1e47c28f83535b3&redirect_uri=https://www.getpostman.com/oauth2/callback&response_type=code",
+					"protocol": "https",
+					"host": [
+						"accounts",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"authorize"
+					],
+					"query": [
+						{
+							"key": "client_id",
+							"value": "fbbb7c8a525e45a8b1e47c28f83535b3"
+						},
+						{
+							"key": "scope",
+							"value": "\"playlist-modify-private user-library-read\"",
+							"disabled": true
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://www.getpostman.com/oauth2/callback"
+						},
+						{
+							"key": "response_type",
+							"value": "code"
+						}
 					]
 				}
 			},

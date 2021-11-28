@@ -240,6 +240,7 @@ const Meet = () => {
               type="track"
             />
 
+            {unmetUser && unmetUser.tidbits && <h3>Tidbits</h3>}
             <div className="basic-info column-flex">
               {unmetUser &&
                 unmetUser.tidbits.map((tidbit, ind) => {
@@ -278,10 +279,12 @@ const Meet = () => {
                 })}
             </div>
 
-            {unmetUser.QAs.map((qa, ind) => {
-              if (qa.A) return <QA Q={qa.Q} A={qa.A} key={ind} />;
-              else return <></>;
-            })}
+            {unmetUser && unmetUser.QAs && <h3>QAs</h3>}
+            {unmetUser &&
+              unmetUser.QAs.map((qa, ind) => {
+                if (qa.A) return <QA Q={qa.Q} A={qa.A} key={ind} />;
+                else return <></>;
+              })}
 
             <div
               style={{

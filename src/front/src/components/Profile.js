@@ -190,14 +190,17 @@ const Profile = () => {
           className="userInfo"
           style={{ transform: `translateY(${offsetY * 0.3}px)` }}
         >
-          <div className="name">{user.name} ({user.pronouns})</div>
+          <div className="name">
+            {user.name} ({user.pronouns})
+          </div>
 
           <div className="age">{user.age}</div>
 
-          <div className="userDescription">{user.description.replace(/\\'/g, "'")}</div>
+          <div className="userDescription">
+            {user.description.replace(/\\'/g, "'")}
+          </div>
         </div>
       </div>
-
       <div className="container">
         <h3>Favorite Artists</h3>
         {(!user || !user.top_artists.length) && (
@@ -267,7 +270,10 @@ const Profile = () => {
           else return <></>;
         })}
 
-        <div className="deleteTxt" style={{ display: "flex", justifyContent: "space-between" }}>
+        <div
+          className="deleteTxt"
+          style={{ display: "flex", justifyContent: "space-between" }}
+        >
           <p style={{ color: "#E8BFFB" }}>Delete Account</p>
           <Switch
             checked={deleteAccChecked}

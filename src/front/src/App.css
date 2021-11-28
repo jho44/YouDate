@@ -74,7 +74,7 @@ body {
 /**
 * Changed font-size from 1.5vw to a new method to
 * calculate font size based on the link:
-* https://css-tricks.com/font-size-viewport-units/ 
+* https://css-tricks.com/font-size-viewport-units/
 * 1.5vw was too small for mobile
 */
 h2,
@@ -188,23 +188,24 @@ h2 {
     padding-left: 5%;
     padding-top: 5%;
   }
-  
+
   .container {
     display: flex;
     flex-direction: column;
   }
 
-  .container h3, h2 {
+  .container h3,
+  h2 {
     color: #e8bffb;
     font-family: "gothambold";
     font-size: calc(10px + 1.7vmin);
   }
 
-  .container span, .deleteTxt p {
+  .container span,
+  .deleteTxt p {
     font-size: calc(10px + 0.5vmin);
   }
 }
-
 
 /* Larger screens like laptops */
 @media screen and (min-width: 768px) {
@@ -240,13 +241,15 @@ h2 {
     flex-direction: column;
   }
 
-  .container h3, h2 {
+  .container h3,
+  h2 {
     color: #e8bffb;
     font-family: "gothambold";
     font-size: calc(10px + 1.7vmin);
   }
 
-  .container span, .deleteTxt p {
+  .container span,
+  .deleteTxt p {
     font-size: calc(10px + 1vmin);
   }
 }

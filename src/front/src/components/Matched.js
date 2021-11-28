@@ -36,6 +36,9 @@ const ProfileModal = ({ openModal, closeProfile, matchUser }) => {
 
   return (
     <Modal
+      className="profile-modal"
+      centered
+      width="100vw"
       visible={openModal}
       closable={false}
       footer={[
@@ -45,9 +48,6 @@ const ProfileModal = ({ openModal, closeProfile, matchUser }) => {
       ]}
       bodyStyle={{
         backgroundColor: "black",
-      }}
-      style={{
-        width: "100%",
       }}
     >
       <MatchInfo meet={false} user={matchUser} offsetY={offsetY} />

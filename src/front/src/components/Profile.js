@@ -7,7 +7,6 @@ import About from "./common/About";
 import EditInfo from "./common/EditInfo";
 import SpotifyDataBlock from "./common/SpotifyDataBlock";
 import { AuthContext } from "../Context";
-import { Person as PersonIcon } from "@mui/icons-material";
 import { Typography } from "antd";
 
 const { Title } = Typography;

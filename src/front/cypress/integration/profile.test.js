@@ -4,7 +4,7 @@ beforeEach(() => {
 });
 
 describe("Profile Page", () => {
-  it("Profile page requires login", () => {
+  it("Profile page renders", () => {
     cy.contains("Fake User (fake pronouns)");
     cy.contains("0");
     cy.contains("fake description");

@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { Button, Spin } from "antd";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import { Spin } from "antd";
 import "../App.css";
-import About from "./common/About";
-import Tidbit from "./common/Tidbit";
-import QA from "./common/QA";
-import SpotifyDataBlock from "./common/SpotifyDataBlock";
+import MatchInfo from "./common/MatchInfo";
 import { AuthContext } from "../Context";
 import { processUserInfo } from "../helpers";
 import {
@@ -55,7 +51,7 @@ const Meet = () => {
     /**
      * `ContextProvider` state of index of the next unmet user to appear
      * on Meet page.
-     * @type {Object}
+     * @type {Number}
      * @memberof Meet
      */
     unmetListInd,
@@ -215,112 +211,13 @@ const Meet = () => {
         </div>
       ) : (
         <>
-          <About user={unmetUser} offsetY={offsetY} />
-          <div className="container">
-            <h3>Artists in Common</h3>
-            {(!unmetUser || !unmetUser.artists_in_common.length) && (
-              <Title level={5} style={{ color: "#dbdbdb" }}>
-                No top artists in common
-              </Title>
-            )}
-            <SpotifyDataBlock
-              user={unmetUser}
-              userContent={unmetUser.artists_in_common}
-              type="artist"
-            />
-
-            <h3>Songs in Common</h3>
-            {(!unmetUser || !unmetUser.songs_in_common.length) && (
-              <Title level={5} style={{ color: "#dbdbdb" }}>
-                No top songs in common
-              </Title>
-            )}
-            <SpotifyDataBlock
-              user={unmetUser}
-              userContent={unmetUser.songs_in_common}
-              type="track"
-            />
-
-            {unmetUser && unmetUser.tidbits && <h3>Tidbits</h3>}
-            <div className="basic-info column-flex">
-              {unmetUser &&
-                unmetUser.tidbits.map((tidbit, ind) => {
-                  const { key, val } = tidbit;
-                  if (val) {
-                    let component;
-                    switch (key) {
-                      case "desired_relationship":
-                        component = SearchIcon;
-                        break;
-                      case "education":
-                        component = SchoolIcon;
-                        break;
-                      case "occupation":
-                        component = WorkIcon;
-                        break;
-                      case "sexual_orientation":
-                        component = FavoriteIcon;
-                        break;
-                      case "location":
-                        component = LocationOnIcon;
-                        break;
-                      case "political_view":
-                        component = AccountBalanceIcon;
-                        break;
-                      case "height":
-                        component = HeightIcon;
-                        break;
-                      default:
-                    }
-
-                    return (
-                      <Tidbit key={ind} Component={component} content={val} />
-                    );
-                  } else return <></>;
-                })}
-            </div>
-
-            {unmetUser && unmetUser.QAs && <h3>QAs</h3>}
-            {unmetUser &&
-              unmetUser.QAs.map((qa, ind) => {
-                if (qa.A) return <QA Q={qa.Q} A={qa.A} key={ind} />;
-                else return <></>;
-              })}
-
-            <div
-              style={{
-                position: "fixed",
-                bottom: 75,
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <div style={{ marginRight: "5rem" }}>
-                  <Button
-                    ghost
-                    size="large"
-                    icon={<CloseOutlined style={{ color: "white" }} />}
-                    onClick={dislike}
-                    data-testid="left-swipe"
-                  />
-                </div>
-                <Button
-                  ghost
-                  size="large"
-                  icon={<CheckOutlined style={{ color: "white" }} />}
-                  onClick={like}
-                  data-testid="right-swipe"
-                />
-              </div>
-            </div>
-          </div>
+          <MatchInfo
+            meet={true}
+            user={unmetUser}
+            offsetY={offsetY}
+            dislike={dislike}
+            like={like}
+          />
         </>
       )}
     </>

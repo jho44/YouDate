@@ -7,6 +7,8 @@ import "../../App.css";
  * Used to create the about section
  * (name, pronouns, age, picture, etc) of an user.
  *
+ * @property {Object} user - User object
+ * @property {Number} offsetY - offset of Y used for formatting calcuations
  * @returns {HTML} Styled div wrapped around the name, pronouns,
  * age, an picture of an user.
  *

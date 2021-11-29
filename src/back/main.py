@@ -133,6 +133,12 @@ async def accessToken(code: str, redirect: str):
 
 @app.get("/ping")
 def pong():
+    """
+    GET route for testing server connection.
+
+    Returns:
+        `Object`
+    """
     return {"ping": "pong!"}
 
 @app.post("/createArtist")
@@ -167,21 +173,21 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
     Parameters:
         `spotify_req` (SpotifyUserRequest): a request body consisting of the authenticated user's:
 
-        * `str pronouns`
-        * `datetime birth_month`
-        * `str description`
-        * `str pic` - Optional
-        * `Dict[str, str] tidbits`:
-            * `str desired_relationship` - one of:
+        * `str pronouns` - user's preferred pronouns.
+        * `datetime birth_month` - month and year user was born in.
+        * `str description` - e.g. a short bio about the user.
+        * `str pic` - Optional - base64 string of user's profile picture.
+        * `Dict[str, str] tidbits` - extra facts about the user (separate from `QAs` because they're presented differently on the frontend):
+            * `str desired_relationship` - what kind of relationship the user wants from Datify. One of:
                 * `casual`
                 * `short-term`
                 * `long-term`
                 * `other`
-            * `str education` - Optional
-            * `str occupation` - Optional
-            * `str sexual_orientation` - Optional
-            * `str location` - Optional
-            * `str political_view` - Optional and one of:
+            * `str education` - Optional - e.g. highest degree, college, BA vs BS vs Master's vs PhD.
+            * `str occupation` - Optional - what job the user has right now.
+            * `str sexual_orientation` - Optional - e.g. heterosexual, homosexual, asexual, pansexual.
+            * `str location` - Optional - user's general vicinity (e.g. city, neighborhood, etc)
+            * `str political_view` - Optional - user's political school of thought. One of:
                 * `anarchism`
                 * `communism`
                 * `conservatism`
@@ -193,13 +199,13 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
                 * `populism`
                 * `socialism`
                 * `other`
-            * `str height` - Optional
-        * QAs:
-            * `str life_goal`
-            * `str believe_or_not`
-            * `str life_peaked`
-            * `str feel_famous`
-            * `str biggest_risk`
+            * `str height` - Optional - user's height.
+        * QAs - extra facts about the user (separate from `tidbits` because they're presented differently on the frontend):
+            * `str life_goal` - Optional - user's life goal.
+            * `str believe_or_not` - Optional - something about the user that's unbelievable.
+            * `str life_peaked` - Optional - circumstances of user's life's pinnacle.
+            * `str feel_famous` - Optional - circumstances that make the user feel famous.
+            * `str biggest_risk` - Optional - biggest risk user has taken.
 
     Returns:
         Tuple containing:
@@ -300,7 +306,7 @@ async def dislike(userid_a: str = Body(...), userid_b: str = Body(...)):
     return result
 
 @app.get("/getMatched")
-async def get_matched(email):
+async def get_matched(email: str):
     """
     GET route for retrieving users a userA mutually liked / swiped
     right on.
@@ -311,14 +317,14 @@ async def get_matched(email):
     Returns:
         Tuple containing:
 
-        * list: of User objects that userA mutually likes
+        * `list`: of `User` objects that userA mutually likes
         * `int`: request status code (e.g. `200` means request went fine)
     """
     result = neo_db.get_matched(email)
     return result
 
 @app.get("/getUnmet")
-async def get_unmet(email):
+async def get_unmet(email: str):
     """
     GET route for retrieving 10 users a userA has never liked/disliked
     before.
@@ -329,7 +335,7 @@ async def get_unmet(email):
     Returns:
         Tuple containing:
 
-        * list: of User objects that userA has never liked/disliked
+        * `list`: of `User` objects that userA has never liked/disliked
         * `int`: request status code (e.g. `200` means request went fine)
     """
     result = neo_db.get_unmet(email)
@@ -363,7 +369,7 @@ async def get_shared_artists(userid_a: str = Body(...), userid_b: str = Body(...
         `userid_b` (`str`) = userB's Spotify ID
 
     Returns:
-        * list: of Artist names that userA and userB mutually like
+        `list`: of Artist names that userA and userB mutually like
     """
     result = neo_db.get_shared_artists(userid_a, userid_b)
     return result
@@ -379,7 +385,7 @@ async def get_shared_tracks(userid_a: str = Body(...), userid_b: str = Body(...)
         `userid_b` (`str`) = userB's Spotify ID
 
     Returns:
-        * list: of Track names that userA and userB mutually like
+        `list`: of Track names that userA and userB mutually like
     """
     result = neo_db.get_shared_tracks(userid_a, userid_b)
     return result
@@ -391,10 +397,10 @@ async def updateUserFacts(facts: Dict[str, Optional[str]] = Body(...), email: st
     PUT route for updating a user's information.
 
     Parameters:
-       * `facts` (Dict[str, str]) - dictionary of tidbits and QAs mapped to their values.
+       * `facts` (`Dict[str, str]`) - dictionary of tidbits and QAs mapped to their values.
         Every single tidbit and QA should be included with a string or null. If a string is null, this fact is deleted from the user's profile.
-        The require fields are: "life_goal", "believe_or_not", "life_peaked", "feel_famous", "biggest_risk", "desired_relationship", "education", "occupation", "sexual_orientation", "location", "political_view", "height"
-       * `email` (str) - user's email
+        The required fields are: "life_goal", "believe_or_not", "life_peaked", "feel_famous", "biggest_risk", "desired_relationship", "education", "occupation", "sexual_orientation", "location", "political_view", "height"
+       * `email` (`str`) - user's email
 
     Returns:
         * Dictionary either containing `User` properties (if user exists)

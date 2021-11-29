@@ -32,7 +32,7 @@ def test_create_spotify_user(test_app, test_db, monkeypatch):
 
     response = test_app.post("/createUserFromAccessToken", json={"access_token": "test_access_token", "refresh_token": "test_refresh_token"})
     response = json.loads(response.text)
-    print(response.keys())
+    
     assert response['name'] == 'test-name'
     assert response['email'] == 'test@gmail.com'
     assert response['top_artists'] == ["artist1","artist2"]

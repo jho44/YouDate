@@ -242,24 +242,6 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         user_id=basic_info["id"]
     )
 
-    '''
-    # FOR TESTING
-    new_spotify_user = User(
-        name="Christie Ho",
-        email="christieho@gmail.com",
-        pronouns=spotify_req.pronouns,
-        birth_month=spotify_req.birth_month,
-        description=spotify_req.description,
-        pic=spotify_req.pic,
-        tidbits=spotify_req.tidbits,
-        qas=spotify_req.qas,
-        top_artists = ["ILLENIUM", "Justin Bieber", "Drake", "Marshmello", "Ed Sheeran", "Travis Scott"],
-        top_songs = ["Dynasty", "They Ain't You", "Just the way you are", "Happier"],
-        refresh_token = spotify_req.refresh_token,
-        user_id=basic_info["id"]
-    )
-    '''
-
     # STATUS 403: Access token does not contain necessary scope
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
 

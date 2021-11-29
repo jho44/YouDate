@@ -5,6 +5,7 @@ import { AuthContext } from "../../Context";
 import { processUserInfo } from "../../helpers";
 import { createEditInfoItems, factsData } from "../../helpers";
 import InputForm from "./InputForm";
+import { backendUrl } from "../../firebase";
 
 /**
  * EditInfo sub-component used by Profile component.
@@ -49,7 +50,7 @@ const EditInfo = () => {
       email: user.email,
     };
 
-    fetch("http://localhost:8000/updateUserFacts", {
+    fetch(`${backendUrl}/updateUserFacts`, {
       method: "PUT",
       mode: "cors",
       credentials: "same-origin",

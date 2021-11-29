@@ -44,8 +44,6 @@ def test_user_create(test_app, test_db, monkeypatch):
     async def mock_create_user_does_not_exist():
         return None
     
-    # Needs test case for when user already exists
-    
     monkeypatch.setattr(test_db, "create_user", mock_create_user_does_not_exist)
 
     response = test_app.post("/createUser", json={"name": "test", "email": "test@gmail.com", "top_artists": [], "top_songs": []})
@@ -57,8 +55,6 @@ def test_user_delete(test_app, test_db, monkeypatch):
     async def mock_delete_user_exists():
         return None
     
-    # Needs test case for when user doesn't exist
-    
     monkeypatch.setattr(test_db, "delete_user", mock_delete_user_exists)
 
     response = test_app.post("/deleteUser", json={"email": "test@gmail.com"})
@@ -69,8 +65,6 @@ def test_user_dislike(test_app, test_db, monkeypatch):
 
     async def mock_dislike_both_users_exist():
         return None
-    
-    # Needs test case for when a user doesn't exist
     
     monkeypatch.setattr(test_db, "dislike", mock_dislike_both_users_exist)
 

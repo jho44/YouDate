@@ -8,6 +8,7 @@ import EditInfo from "./common/EditInfo";
 import SpotifyDataBlock from "./common/SpotifyDataBlock";
 import { AuthContext } from "../Context";
 import { Typography } from "antd";
+import { backendUrl } from "../firebase";
 
 const { Title } = Typography;
 
@@ -89,7 +90,7 @@ const Profile = () => {
        */
       onOk() {
         // delete acc
-        fetch("http://localhost:8000/deleteUser", {
+        fetch(`${backendUrl}/deleteUser`, {
           method: "POST",
           mode: "cors",
           credentials: "same-origin",

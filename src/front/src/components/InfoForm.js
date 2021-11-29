@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { processUserInfo } from "../helpers";
 import { createInfoItems, tidbitData, QAData } from "../helpers";
 import InputForm from "./common/InputForm";
+import { backendUrl } from "../firebase";
 
 const { Title, Paragraph } = Typography;
 
@@ -123,7 +124,7 @@ const InfoForm = () => {
       refresh_token: tokens.refreshToken,
     };
 
-    fetch("http://localhost:8000/createUserFromAccessToken", {
+    fetch(`${backendUrl}/createUserFromAccessToken`, {
       method: "POST",
       mode: "cors",
       credentials: "same-origin",

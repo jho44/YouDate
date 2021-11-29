@@ -16,15 +16,5 @@ for row in table.find_all('tr'):
     payload = dict(name=columns[1].get_text())
     print(payload)
     r = requests.post("http://127.0.0.1:8000/createArtist", json = payload)
-    '''
-    for j in range(len(columns)):
-        if j == 1:
-            # Name of the top 1000 artist
-            print(columns[j])
-            paylod = dict(name=columns[j].get_text())
-            r = requests.post("https://127.0.0.1:8000/createArtist", data = payload)
-        new_table.iat[row_marker,column_marker] = columns[j].get_text()
-        column_marker += 1
-    '''
 
 print(new_table.shape)

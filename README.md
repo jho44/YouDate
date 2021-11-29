@@ -301,14 +301,14 @@ Virtual env with required dependencies must be active
 │   │       ├── prettify-jsdoc.css
 │   │       └── prettify-tomorrow.css
 │   ├── index.html
-│   └── main.html
-└── src
-    ├── back                                    # backend code
+│   └── main.html                               # backend documentation generated from pdoc
+└── src                                         # source code
+    ├── back                                    # backend
     │   ├── config.py
     │   ├── conftest.py
     │   ├── main.py
     │   ├── match_pool.py
-    │   ├── postman
+    │   ├── postman                             # backend Postman tests
     │   │   └── datify.postman_collection.json
     │   ├── requirements.txt
     │   ├── scripts
@@ -316,7 +316,7 @@ Virtual env with required dependencies must be active
     │   │   └── top_artists.py
     │   ├── spotify.py
     │   └── test_main.py
-    └── front                                   # frontend code
+    └── front                                   # frontend
         ├── cypress                             # frontend testing
         │   ├── fixtures
         │   │   └── example.json
@@ -333,7 +333,7 @@ Virtual env with required dependencies must be active
         ├── cypress.json
         ├── jsconf.json
         ├── package.json
-        ├── public
+        ├── public                             # images/logo
         │   ├── EducationIcon.png
         │   ├── LookingIcon.png
         │   ├── favicon.ico
@@ -342,14 +342,14 @@ Virtual env with required dependencies must be active
         │   ├── logo512.png
         │   ├── manifest.json
         │   └── robots.txt
-        ├── src                 
+        ├── src                             # frontend source code                 
         │   ├── API_README.md
         │   ├── App.css
-        │   ├── App.js
+        │   ├── App.js                      # App.js performs the routing
         │   ├── App.test.js
         │   ├── Context.js
         │   ├── PrivateRoute.js
-        │   ├── components                  # components are here
+        │   ├── components                  # components in this dir
         │   │   ├── InfoForm.js
         │   │   ├── Landing.js
         │   │   ├── Matched.js
@@ -372,7 +372,7 @@ Virtual env with required dependencies must be active
         │   ├── gotham-bold-webfont.woff2
         │   ├── gotham-light-webfont.woff
         │   ├── gotham-light-webfont.woff2
-        │   ├── helpers.js
+        │   ├── helpers.js                   # stores helper functions for Tidbit and QA sections
         │   ├── index.css
         │   ├── index.js
         │   ├── reportWebVitals.js

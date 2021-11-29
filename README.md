@@ -214,3 +214,171 @@ Virtual env with required dependencies must be active
 
 **Other unit tests test the same routes as integration tests**
 - Ensures ONLY that the API contract is valid (aka unchanged from a previous valid execution). This is useful when refactoring to ensure there are no service disruptions.
+
+## Directory Structure
+```
+.
+├── README.md
+├── docs                                # documentation
+│   ├── front                           # frontend documentation generated from JSDoc
+│   │   ├── About.html
+│   │   ├── App.html
+│   │   ├── App.js.html
+│   │   ├── Context.js.html
+│   │   ├── ContextProvider.html
+│   │   ├── EditInfo.html
+│   │   ├── InfoForm.html
+│   │   ├── InputForm.html
+│   │   ├── Landing.html
+│   │   ├── Login.html
+│   │   ├── Login.js.html
+│   │   ├── Match.html
+│   │   ├── MatchInfo.html
+│   │   ├── Matched.html
+│   │   ├── Matched.js.html
+│   │   ├── Meet.html
+│   │   ├── Meet.js.html
+│   │   ├── Navbar.html
+│   │   ├── Navbar.js.html
+│   │   ├── NavbarBtn.html
+│   │   ├── NotFound.html
+│   │   ├── PrivateRoute.html
+│   │   ├── PrivateRoute.js.html
+│   │   ├── Profile.html
+│   │   ├── Profile.js.html
+│   │   ├── ProfileModal.html
+│   │   ├── QA.html
+│   │   ├── SpotifyDataBlock.html
+│   │   ├── Tidbit.html
+│   │   ├── components_InfoForm.js.html
+│   │   ├── components_Landing.js.html
+│   │   ├── components_Matched.js.html
+│   │   ├── components_Meet.js.html
+│   │   ├── components_Navbar.js.html
+│   │   ├── components_NotFound.js.html
+│   │   ├── components_Profile.js.html
+│   │   ├── components_common_About.js.html
+│   │   ├── components_common_EditInfo.js.html
+│   │   ├── components_common_InputForm.js.html
+│   │   ├── components_common_MatchInfo.js.html
+│   │   ├── components_common_QA.js.html
+│   │   ├── components_common_SpotifyDataBlock.js.html
+│   │   ├── components_common_Tidbit.js.html
+│   │   ├── fakeAuth.authenticate.html
+│   │   ├── fakeAuth.html
+│   │   ├── fakeAuth.js.html
+│   │   ├── fileUpload.js.html
+│   │   ├── fonts
+│   │   │   ├── OpenSans-Bold-webfont.eot
+│   │   │   ├── OpenSans-Bold-webfont.svg
+│   │   │   ├── OpenSans-Bold-webfont.woff
+│   │   │   ├── OpenSans-BoldItalic-webfont.eot
+│   │   │   ├── OpenSans-BoldItalic-webfont.svg
+│   │   │   ├── OpenSans-BoldItalic-webfont.woff
+│   │   │   ├── OpenSans-Italic-webfont.eot
+│   │   │   ├── OpenSans-Italic-webfont.svg
+│   │   │   ├── OpenSans-Italic-webfont.woff
+│   │   │   ├── OpenSans-Light-webfont.eot
+│   │   │   ├── OpenSans-Light-webfont.svg
+│   │   │   ├── OpenSans-Light-webfont.woff
+│   │   │   ├── OpenSans-LightItalic-webfont.eot
+│   │   │   ├── OpenSans-LightItalic-webfont.svg
+│   │   │   ├── OpenSans-LightItalic-webfont.woff
+│   │   │   ├── OpenSans-Regular-webfont.eot
+│   │   │   ├── OpenSans-Regular-webfont.svg
+│   │   │   └── OpenSans-Regular-webfont.woff
+│   │   ├── global.html
+│   │   ├── helpers.js.html
+│   │   ├── index.html
+│   │   ├── scripts
+│   │   │   ├── linenumber.js
+│   │   │   └── prettify
+│   │   │       ├── Apache-License-2.0.txt
+│   │   │       ├── lang-css.js
+│   │   │       └── prettify.js
+│   │   └── styles
+│   │       ├── jsdoc-default.css
+│   │       ├── prettify-jsdoc.css
+│   │       └── prettify-tomorrow.css
+│   ├── index.html
+│   └── main.html
+└── src
+    ├── back                                    # backend code
+    │   ├── config.py
+    │   ├── conftest.py
+    │   ├── main.py
+    │   ├── match_pool.py
+    │   ├── postman
+    │   │   └── datify.postman_collection.json
+    │   ├── requirements.txt
+    │   ├── scripts
+    │   │   ├── extract.py
+    │   │   └── top_artists.py
+    │   ├── spotify.py
+    │   └── test_main.py
+    └── front                                   # frontend code
+        ├── cypress                             # frontend testing
+        │   ├── fixtures
+        │   │   └── example.json
+        │   ├── integration
+        │   │   ├── matched.test.js
+        │   │   ├── meet.test.js
+        │   │   ├── navbar.test.js
+        │   │   └── profile.test.js
+        │   ├── plugins
+        │   │   └── index.js
+        │   └── support
+        │       ├── commands.js
+        │       └── index.js
+        ├── cypress.json
+        ├── jsconf.json
+        ├── package.json
+        ├── public
+        │   ├── EducationIcon.png
+        │   ├── LookingIcon.png
+        │   ├── favicon.ico
+        │   ├── index.html
+        │   ├── logo192.png
+        │   ├── logo512.png
+        │   ├── manifest.json
+        │   └── robots.txt
+        ├── src                 
+        │   ├── API_README.md
+        │   ├── App.css
+        │   ├── App.js
+        │   ├── App.test.js
+        │   ├── Context.js
+        │   ├── PrivateRoute.js
+        │   ├── components                  # components are here
+        │   │   ├── InfoForm.js
+        │   │   ├── Landing.js
+        │   │   ├── Matched.js
+        │   │   ├── Meet.js
+        │   │   ├── Navbar.js
+        │   │   ├── NotFound.js
+        │   │   ├── Profile.js
+        │   │   ├── common                  # common subcomponents shared between multiple components
+        │   │   │   ├── About.js
+        │   │   │   ├── EditInfo.js
+        │   │   │   ├── InputForm.js
+        │   │   │   ├── MatchInfo.js
+        │   │   │   ├── QA.js
+        │   │   │   ├── SpotifyDataBlock.js
+        │   │   │   └── Tidbit.js
+        │   │   └── fakeData.json
+        │   ├── datifyLogo.png
+        │   ├── fileUpload.js
+        │   ├── gotham-bold-webfont.woff
+        │   ├── gotham-bold-webfont.woff2
+        │   ├── gotham-light-webfont.woff
+        │   ├── gotham-light-webfont.woff2
+        │   ├── helpers.js
+        │   ├── index.css
+        │   ├── index.js
+        │   ├── reportWebVitals.js
+        │   ├── service-worker.js
+        │   ├── serviceWorkerRegistration.js
+        │   ├── setupTests.js
+        │   └── spotify.js
+        └── yarn.lock
+```

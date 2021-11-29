@@ -38,7 +38,7 @@ const Meet = () => {
     /**
      * `ContextProvider` state of index of the next unmet user to appear
      * on Meet page.
-     * @type {Object}
+     * @type {Number}
      * @memberof Meet
      */
     unmetListInd,

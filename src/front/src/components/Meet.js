@@ -4,6 +4,19 @@ import "../App.css";
 import MatchInfo from "./common/MatchInfo";
 import { AuthContext } from "../Context";
 import { processUserInfo } from "../helpers";
+import {
+  School as SchoolIcon,
+  Search as SearchIcon,
+  Work as WorkIcon,
+  Favorite as FavoriteIcon,
+  LocationOn as LocationOnIcon,
+  AccountBalance as AccountBalanceIcon,
+  Height as HeightIcon,
+} from "@mui/icons-material";
+import { Typography } from "antd";
+import { backendUrl } from "../firebase";
+
+const { Title } = Typography;
 
 /**
  * Component for the Meet page
@@ -86,7 +99,7 @@ const Meet = () => {
   const getNextUser = useCallback(() => {
     setLoading(true);
     // get more unmet users
-    fetch(`http://localhost:8000/getUnmet?email=${user.email}`)
+    fetch(`${backendUrl}/getUnmet?email=${user.email}`)
       .then((data) => data.json())
       .then((data) => {
         if (data[1] !== 200) {
@@ -128,7 +141,7 @@ const Meet = () => {
    */
   function like() {
     // create LIKES relationship from user to unmetUser
-    fetch("http://localhost:8000/like", {
+    fetch(`${backendUrl}/like`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -160,7 +173,7 @@ const Meet = () => {
    */
   function dislike() {
     // create DISLIKES relationship from user to unmetUser
-    fetch("http://localhost:8000/dislike", {
+    fetch(`${backendUrl}/dislike`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

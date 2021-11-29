@@ -1,0 +1,67 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+        "S3B4WJX": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {},
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "5ca0ef4c-10bc-4dc8-ad84-c286f3daaad9"
+                }
+            }
+        },
+        "S3BP45IK7": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+                "Bucket": {
+                    "Ref": "S3B4WJX"
+                },
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "PublicReadGetObject",
+                            "Effect": "Allow",
+                            "Principal": "*",
+                            "Action": [
+                                "s3:GetObject"
+                            ],
+                            "Resource": [
+                                "arn:aws:s3:::S3B4WJX/*"
+                            ]
+                        }
+                    ]
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "384825dc-f6a8-49fb-b15d-0feaf3c89f15"
+                }
+            }
+        },
+        "EC2IJVA2": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {},
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "5c2aa1c5-1964-41f4-915b-9ecfc27d9092"
+                }
+            }
+        },
+        "EC2SG18UV0": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "SecurityGroupEgress" : [ "0.0.0.0/0" ],
+                "SecurityGroupIngress" : [ "0.0.0.0/0" ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "16e48a07-f636-4473-bf4c-ce2a28154c00"
+                }
+            },
+            "DependsOn": [
+                "EC2IJVA2"
+            ]
+        }
+    }
+}

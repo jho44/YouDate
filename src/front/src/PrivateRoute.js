@@ -4,6 +4,7 @@ import Landing from "./components/Landing";
 import { AuthContext } from "./Context";
 import { useNavigate } from "react-router-dom";
 import { processUserInfo } from "./helpers";
+import { frontendUrl, backendUrl } from "./firebase";
 
 /**
  * Private route wrapper that checks whether the user is logged in
@@ -85,7 +86,7 @@ const PrivateRoute = ({ children }) => {
       setUser(user);
     } else if (tokens === null && code) {
       fetch(
-        `http://localhost:8000/accessToken?code=${code}&redirect=http://localhost:3000${location.pathname}`
+        `${backendUrl}/accessToken?code=${code}&redirect=${frontendUrl}${location.pathname}`
       )
         .then((res) => res.json())
         .then((res) => {
@@ -96,7 +97,7 @@ const PrivateRoute = ({ children }) => {
           localToken = res.access_token;
 
           // check if this user has a Datify account
-          return fetch(`http://localhost:8000/getUser?token=${localToken}`);
+          return fetch(`${backendUrl}/getUser?token=${localToken}`);
         })
         .then((data) => data.json())
         .then((data) => {

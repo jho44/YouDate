@@ -5,6 +5,7 @@ import "../App.css";
 import { AuthContext } from "../Context";
 import { Person as PersonIcon } from "@mui/icons-material";
 import { Typography } from "antd";
+import { backendUrl } from "../firebase";
 import { processUserInfo } from "../helpers";
 import MatchInfo from "./common/MatchInfo";
 
@@ -124,7 +125,7 @@ const Match = ({
        */
       onOk() {
         // DISLIKE this user
-        fetch("http://localhost:8000/dislike", {
+        fetch(`${backendUrl}/dislike`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -268,7 +269,7 @@ const Matched = () => {
   const [matchList, setMatchList] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/getMatched?email=${user.email}`)
+    fetch(`${backendUrl}/getMatched?email=${user.email}`)
       .then((data) => data.json())
       .then((data) => {
         if (data[1] === 200) {

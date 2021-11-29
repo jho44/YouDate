@@ -270,24 +270,6 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         user_id=basic_info[&#34;id&#34;]
     )
 
-    &#39;&#39;&#39;
-    # FOR TESTING
-    new_spotify_user = User(
-        name=&#34;Christie Ho&#34;,
-        email=&#34;christieho@gmail.com&#34;,
-        pronouns=spotify_req.pronouns,
-        birth_month=spotify_req.birth_month,
-        description=spotify_req.description,
-        pic=spotify_req.pic,
-        tidbits=spotify_req.tidbits,
-        qas=spotify_req.qas,
-        top_artists = [&#34;ILLENIUM&#34;, &#34;Justin Bieber&#34;, &#34;Drake&#34;, &#34;Marshmello&#34;, &#34;Ed Sheeran&#34;, &#34;Travis Scott&#34;],
-        top_songs = [&#34;Dynasty&#34;, &#34;They Ain&#39;t You&#34;, &#34;Just the way you are&#34;, &#34;Happier&#34;],
-        refresh_token = spotify_req.refresh_token,
-        user_id=basic_info[&#34;id&#34;]
-    )
-    &#39;&#39;&#39;
-
     # STATUS 403: Access token does not contain necessary scope
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks
 
@@ -698,24 +680,6 @@ async def create_spotify_user(spotify_req: SpotifyUserRequest):
         refresh_token = spotify_req.refresh_token,
         user_id=basic_info[&#34;id&#34;]
     )
-
-    &#39;&#39;&#39;
-    # FOR TESTING
-    new_spotify_user = User(
-        name=&#34;Christie Ho&#34;,
-        email=&#34;christieho@gmail.com&#34;,
-        pronouns=spotify_req.pronouns,
-        birth_month=spotify_req.birth_month,
-        description=spotify_req.description,
-        pic=spotify_req.pic,
-        tidbits=spotify_req.tidbits,
-        qas=spotify_req.qas,
-        top_artists = [&#34;ILLENIUM&#34;, &#34;Justin Bieber&#34;, &#34;Drake&#34;, &#34;Marshmello&#34;, &#34;Ed Sheeran&#34;, &#34;Travis Scott&#34;],
-        top_songs = [&#34;Dynasty&#34;, &#34;They Ain&#39;t You&#34;, &#34;Just the way you are&#34;, &#34;Happier&#34;],
-        refresh_token = spotify_req.refresh_token,
-        user_id=basic_info[&#34;id&#34;]
-    )
-    &#39;&#39;&#39;
 
     # STATUS 403: Access token does not contain necessary scope
     # TODO: play around with the limit: number of returned results for both top artists and top top tracks

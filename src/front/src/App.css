@@ -126,6 +126,10 @@ h1.ant-typography,
   font-size: calc(1vw + 1vh + 0.5vmin);
 }
 
+button > span {
+  font-size: inherit;
+}
+
 .ant-btn.ant-btn-primary > span {
   color: white;
 }

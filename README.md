@@ -126,7 +126,17 @@ so something shows on the Matched page.
 
 ### Backend (Integration tests via Postman)
 
-Postman tests must be imported as a collection into Postman in order to run them. They are saved as a JSON file in our repository. Spotify credentials must be imported manually.
+Postman tests must be imported as a collection into Postman in order to run them. They are saved as a JSON file in our repository. Spotify credentials must be imported manually. The tests are not idempotent, so we run them in an order that makes clean-up unnecessary (ex. run the create user test then delete user test). The oracle in these tests are the postman assertions.
+
+**Backend is reachable**
+- Get any response from backend server
+- Input: null
+    1. assert that response code is 200
+
+**Frontend is accessible**
+- Get any response from frontend deployment
+- Input: null
+    1. assert that response code is 200
 
 **Create User from Spotify Profile**
 - Create a valid, previously unseen user from their Spotify credentials
@@ -207,13 +217,48 @@ Postman tests must be imported as a collection into Postman in order to run them
 
 ### Backend (Unit tests via Pytest and Monkeypatch)
 
-Virtual env with required dependencies must be active
+Virtual env with required dependencies must be active. The tests are idempotent - the only setup needed is handled by pytest fixtures in conftest.py. The oracle are the pytest assertions documented below. While they cover the same routes as the integration tests, they aim to specifically test the json parsing logic of these routes, which may be missed when simply testing the output of the API. 
 
-**Create User from Spotify Token**
-- Ensures the logic to parse the json object returned by spotify is accurate and robust
+**test_create_spotify_user**
+- Process user data from Spotify API accurately
+- Input: Fixture of sample response from Spotify API {top_tracks: [...], top_artists: [...], ...}
+    1. assert that retrieved name is correct
+    2. assert that retrieved email is correct
+    3. assert that top_artists is correct
+    4. assert that top_songs is correct
 
-**Other unit tests test the same routes as integration tests**
-- Ensures ONLY that the API contract is valid (aka unchanged from a previous valid execution). This is useful when refactoring to ensure there are no service disruptions.
+**test_user_create**
+- Store user data from Spotify API correctly
+- Input: Fixture of sample response from Spotify API {top_tracks: [...], top_artists: [...], ...}
+    1. assert that stored, then retrieved, name is same as API response
+    2. assert that stored, then retrieved, email is same as API response
+    3. assert that stored, then retrieved, top_artists are same as API response
+    4. assert that stored, then retrieved, top_songs are same as API response
+ 
+**test_user_like - SUCCESS**
+- Like user when both users exist
+- Input: email of user to like, email of user performing the like
+    1. assert that status code is 200 (200 code branch reached implies no JSON parsing errors)
+
+**test_user_like - FAILURE**
+- Like user when one or more users don't exist
+- Input: email of user to dislike, email of user performing the dislike
+    1. assert that status code is not 200 (404 code branch reached implies error was caught)
+
+**test_user_dislike - SUCCESS**
+- Dislike user when both users exist
+- Input: email of user to dislike, email of user performing the dislike
+    1. assert that status code is 200 (200 code branch reached implies no JSON parsing errors)
+
+**test_user_dislike - FAILURE**
+- Dislike user when one or more users don't exist 
+- Input: email of user to dislike, email of user performing the dislike
+    1. assert that status code is not 200 (404 code branch reached implies error was caught)
+
+**test_get_matched**
+- Get user's matched list
+- Input: email of user's matches to retrieve
+    1. assert that returned list is accurate and status code is 200 (200 code branch reached implies no JSON parsing errors)
 
 ## Directory Structure
 ```
